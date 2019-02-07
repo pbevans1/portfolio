@@ -1,22 +1,16 @@
 CFLAGS =-std=c11
 
-# make: dynamicArray.o
-# 	gcc $(CFLAGS) main.c dynamicArray.o
+make: bin/vector.o bin/customString.o
+	gcc $(CFLAGS) src/project/main.c bin/vector.o bin/customString.o -o bin/main.out
 
-# dynamicArray.o: ../library/dynamicArray.h ../library/dynamicArray.c
-# 	gcc $(CFLAGS) -c ../library/dynamicArray.c
+bin/vector.o: src/library/vector.h src/library/vector.c
+	gcc $(CFLAGS) -c src/library/vector.c -o bin/vector.o
 
-make: vector.o customString.o
-	gcc $(CFLAGS) main.c vector.o customString.o -o main.out
-
-vector.o: ../library/vector.h ../library/vector.c
-	gcc $(CFLAGS) -c ../library/vector.c
-
-customString.o: ../library/customString.h ../library/customString.c
-	gcc $(CFLAGS) -c ../library/customString.c
+bin/customString.o: src/library/customString.h src/library/customString.c
+	gcc $(CFLAGS) -c src/library/customString.c -o bin/customString.o
 
 test: make
-	./main.out
+	bin/main.out
 
 clean:
-	rm *.o main.out
+	rm bin/*
