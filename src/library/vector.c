@@ -1,25 +1,24 @@
 #include<stdio.h>
+#include <string.h>
 #include<stdlib.h> 
 #include "vector.h"
 
-#ifndef __VECTOR_INT_H
-#define __VECTOR_INT_H
+#ifndef __VECTOR_INT_C
+#define __VECTOR_INT_C
 
 vector* newVector() {
     vector* new = malloc(sizeof(vector));
     new->size = 0;
     new->capacity = 1;
-    new->contents = malloc(sizeof(int) * new->capacity);
+    new->contents = malloc(sizeof(void*) * new->capacity);
     return new;
 }
  
-void pushToVec(vector* vec, int value) {
+void pushToVec(vector* vec, void* value) {
     if (vec->size == vec->capacity) {
-        vec->capacity *= 2;
-        int* temp_contents = malloc(sizeof(int) * (vec)->capacity);
-        for (int i = 0; i < vec->size; i++) {
-            temp_contents[i] = vec->contents[i];
-        }
+        vec->capacity *= 2; 
+        void** temp_contents = malloc(sizeof(void*) * (vec)->capacity);
+        memcpy(temp_contents, vec->contents, sizeof(void*) * vec->capacity / 2);
         free(vec->contents);
         vec->contents = temp_contents;
     }
@@ -27,15 +26,13 @@ void pushToVec(vector* vec, int value) {
     vec->size++;
 }
 
-int popFromVec(vector* vec) {
-    if (vec->size == 0) return -99999999;
-    int last = vec->contents[--vec->size];
+void* popFromVec(vector* vec) {
+    if (vec->size == 0) return NULL;
+    void* last = vec->contents[--vec->size];
     if (vec->size <= (vec->capacity / 4)) {
         vec->capacity /= 2;
-        int* temp_contents = malloc(sizeof(int) * (vec)->capacity);
-        for (int i = 0; i < vec->size; i++) {
-            temp_contents[i] = vec->contents[i];
-        }
+        void** temp_contents = malloc(sizeof(void*) * (vec)->capacity);
+        memcpy(temp_contents, vec->contents, sizeof(void*) * vec->capacity / 2);
         free(vec->contents);
         vec->contents = temp_contents;
     }
@@ -48,22 +45,6 @@ vector* destroyVec(vector* vec) {
     return NULL;
 }
 
-void test_vector() {
-    vector* vec = newVector();
-    int iters = 20;
-    for (int i = 0; i < iters; i++) {
-        pushToVec(vec, i);
-    }
-    for (int i = 0; i < iters; i++) {
-        printf("%d, ", vec->contents[i]);
-    }
-    printf("\nDownward!\n");
-    for (int i = 0; i < iters; i++) {
-        printf("%d, ", popFromVec(vec));
-    }
-    printf("\nShould now see -99999999\n");
-    printf("%d, ", popFromVec(vec));
-}
 
 // int main() {
 //     test_vector();

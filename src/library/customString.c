@@ -1,18 +1,17 @@
 #include<stdio.h>
 #include<stdlib.h> 
-// #include<stdbool.h> 
 #include<string.h>
 #include "customString.h"
 
-#ifndef __STRING_CUST_H
-#define __STRING_CUST_H
+#ifndef __STRING_CUST_C
+#define __STRING_CUST_C
 
 string* newString() {
     string* new = malloc(sizeof(string));
     new->size = 0;
-    new->capacity = 1;
+    new->capacity = 2;
     new->contents = malloc(sizeof(char) * new->capacity);
-    new->contents[0] = '\0';
+    new->contents[1] = '\0';
     return new;
 }
 
@@ -33,11 +32,22 @@ void printStr(string* str) {
     for (int i = 0; i < str->size; i++) {
         printf("%c", str->contents[i]);
     }
-    printf("\n");
+}
+
+string* strFrom(char* str) {
+    string* new = newString();
+    int i;
+    i = 0;
+    while (str[i] != '\0') {
+        pushToStr(new, str[i]);
+        i++;
+    }
+    return new;
 }
  
 void pushToStr(string* str, char value) {
-    if (str->size == str->capacity) {
+    // If adding a character would overwrite the last null
+    if ((str->size + 1) == str->capacity) {
         str->capacity *= 2;
         char* temp_contents = malloc(sizeof(char) * (str)->capacity);
         for (int i = 0; i < str->size; i++) {

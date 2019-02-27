@@ -1,11 +1,17 @@
+
+#ifndef __VECTOR_INT_H
+#define __VECTOR_INT_H
+
 typedef struct _vector {
     int size;
     int capacity;
-    int *contents;
+    void **contents;
 } vector;
 
 vector* newVector();
-void pushToVec(vector*, int);
-int popFromVec(vector*);
+void pushToVec(vector*, void*);
+void* popFromVec(vector*);
 vector* destroyVec(vector*);
-void test_vector();
+
+
+#endif

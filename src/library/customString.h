@@ -1,4 +1,6 @@
 #include<stdbool.h>
+#ifndef __STRING_CUST_H
+#define __STRING_CUST_H
 typedef struct _string {
     int size;
     int capacity;
@@ -14,3 +16,6 @@ bool strEquals(string*, string*);
 bool strComesBefore(string*, string*);
 void printStr(string*);
 string* copyStr(string*);
+string* strFrom(char*);
+
+#endif
