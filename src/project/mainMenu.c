@@ -4,85 +4,77 @@
 #include "../library/displayHelper.h"
 #include "mainMenu.h"
 
+
 #ifndef __MAIN__MENU__C
 #define __MAIN__MENU__C
 
+
+
 void displayMainMenu()  {
-
-
     // From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html
-    int ch;
-    int screenRows, screenCols;
 
+    MEVENT event;
+    WINDOW *menu_win;
+    int c, choice = 0;
+
+    char *choices[] = { 	"Choice 1",
+			"Choice 2",
+			"Choice 3",
+			"Choice 4",
+			"Exit",
+		  };
+
+    int n_choices = sizeof(choices) / sizeof(char *);
+    
+    int startx, starty, width, height;
+	int ch;
     char str[23];
 
-    initscr();			/* Start curses mode 		  */
-    keypad(stdscr, TRUE);
-    getmaxyx(stdscr,screenRows,screenCols);
-    cbreak();
-    noecho();			/* Don't echo() while we do getch */
-    char message[] = "Enter a String:\n";
-	mvprintw(screenRows/2, centerHoriz(message, screenCols), message);
-    getstr(str);
-	mvprintw(screenRows/2 +1, centerHoriz(message, screenCols), "You entered: %s", str);
-    mvprintw(screenRows-2,0,"This screen has %d rows and %d columns\n",screenRows,screenCols);
-    printw("Try resizing your window(if possible) and then run this program again");
-    refresh();
-    
-	// ch = getch();			/* Wait for user input */
+    initscr();			    /* Start curses mode */
+    start_color();			/* Start color functionality */
+    keypad(stdscr, TRUE);   /* Accept keyboard input  */
+    cbreak();               /* Don't wait for newline when reading characters */
+    noecho();			    /* Don't echo while we do getch */
 
-    // if (ch == KEY_F(1)) printw("F1 was pressed");
-    // else
-	// {	printw("The pressed key is ");
-	// 	attron(A_BOLD);
-	// 	printw("%c", ch);
-	// 	attroff(A_BOLD);
-	// }
+    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+
+    attron(A_REVERSE);
+	mvprintw(23, 1, "Click exit to quit");
     refresh();
+    attroff(A_REVERSE);
+
+    starty = (LINES - 10) / 2;
+    startx = (COLS - 30) / 2;
+
+    menu_win = newwin(10, 30, starty, startx);
+    print_menu(menu_win, 1, choices, n_choices);
+	/* Get all the mouse events */
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+	keypad(menu_win, TRUE);
+	refresh();
+
+	while(1){ 
+	c = wgetch(menu_win);
+		if (c == KEY_MOUSE) {
+			if(getmouse(&event) == OK){	/* When the user clicks left mouse button */
+				if(event.bstate & BUTTON1_PRESSED) {	
+                    // break;
+                    report_choice(event.x + 1, event.y + 1, startx, starty, &choice, n_choices, choices);
+					if(choice == -1) break; // Exit
+                    mvprintw(22, 1, "Choice made is : %d String Chosen is \"%10s\"", choice, choices[choice - 1]);
+					refresh(); 
+				}
+			}
+			print_menu(menu_win, choice, choices, n_choices);
+			break;
+		}
+	}
+		
+	mvprintw(23, 0, "You chose choice %d with choice string %s\n", choice, choices[choice - 1]);
+	clrtoeol();
+
     getch();
 	endwin();			/* End curses mode		  */
-
-
-    // /* Curses initialization boilerplate from https://invisible-island.net/ncurses/ncurses-intro.html#using */
-    // int num = 0;
-
-    // /* initialize your non-curses data structures here */
-
-    // (void) signal(SIGINT, finish);      /* arrange interrupts to terminate */
-
-    // (void) initscr();      /* initialize the curses library */
-    // keypad(stdscr, TRUE);  /* enable keyboard mapping */
-    // leaveok(stdscr, TRUE);  /* leave cursor in place on refresh */
-    // (void) nonl();         /* tell curses not to do NL->CR/NL on output */
-    // // cbreak();       /* take input chars one at a time, no wait for \n */
-    // (void) echo();         /* echo input - in color */
-    // if (has_colors())
-    // {
-    //     start_color();
-
-    //     /*
-    //      * Simple color assignment, often all we need.  Color pair 0 cannot
-    //      * be redefined.  This example uses the same value for the color
-    //      * pair as for the foreground color, though of course that is not
-    //      * necessary:
-    //      */
-    //     init_pair(1, COLOR_RED,     COLOR_BLACK);
-    //     init_pair(2, COLOR_GREEN,   COLOR_BLACK);
-    //     init_pair(3, COLOR_YELLOW,  COLOR_BLACK);
-    //     init_pair(4, COLOR_BLUE,    COLOR_BLACK);
-    //     init_pair(5, COLOR_CYAN,    COLOR_BLACK);
-    //     init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
-    //     init_pair(7, COLOR_WHITE,   COLOR_BLACK);
-    // }
-    // for (int i = 1;1<10;i++)
-    //     {
-    //         int c = getch();     /* refresh, accept single keystroke of input */
-    //         attrset(COLOR_PAIR(num % 8));
-    //         num++;
-    //         /* process the command keystroke */
-    //     }
-
-    //     finish(0);               /* we're done */
 }
 
     

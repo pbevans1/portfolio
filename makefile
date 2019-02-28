@@ -1,16 +1,32 @@
 CFLAGS =-std=c11
+LIB = src/library
+PROJ = src/project
+BIN = bin
 
-make: bin/vector.o bin/customString.o
-	gcc $(CFLAGS) src/project/main.c bin/vector.o bin/customString.o -o bin/main.out
+LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o
+PROJ_OBJS = $(BIN)/mainMenu.o $(PROJ)/main.c
 
-bin/vector.o: src/library/vector.h src/library/vector.c
-	gcc $(CFLAGS) -c src/library/vector.c -o bin/vector.o
+make: $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c
+	gcc $(CFLAGS) -lncurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
 
-bin/customString.o: src/library/customString.h src/library/customString.c
-	gcc $(CFLAGS) -c src/library/customString.c -o bin/customString.o
+# Library Files
+$(BIN)/customString.o: $(LIB)/customString.h $(LIB)/customString.c
+	gcc $(CFLAGS) -c $(LIB)/customString.c -o $(BIN)/customString.o
 
-test: make
-	bin/main.out
+$(BIN)/displayHelper.o: $(LIB)/displayHelper.c $(LIB)/displayHelper.h
+	gcc $(CFLAGS) -c $(LIB)/displayHelper.c -o $(BIN)/displayHelper.o
 
+$(BIN)/vector.o: $(LIB)/vector.h $(LIB)/vector.c
+	gcc $(CFLAGS) -c $(LIB)/vector.c -o $(BIN)/vector.o
+
+# Project Files
+$(BIN)/mainMenu.o: $(PROJ)/mainMenu.h $(PROJ)/mainMenu.c
+	gcc $(CFLAGS) -c $(PROJ)/mainMenu.c -o $(BIN)/mainMenu.o
+
+
+# General 
+test: make 
+	$(BIN)/main.out
+	
 clean:
-	rm bin/*
+	rm $(BIN)/*.o $(BIN)/*.out
