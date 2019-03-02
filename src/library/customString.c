@@ -29,9 +29,10 @@ bool strComesBefore(string* str1, string* str2) {
 
 
 void printStr(string* str) {
-    for (int i = 0; i < str->size; i++) {
-        printf("%c", str->contents[i]);
-    }
+    printf("%s", str->contents);
+    // for (int i = 0; i < str->size; i++) {
+    //     printf("%c", str->contents[i]);
+    // }
 }
 
 string* strFrom(char* str) {

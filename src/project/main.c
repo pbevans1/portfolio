@@ -5,7 +5,7 @@
 #include "../library/vector.h"
 #include "../library/customString.h"
 #include "../library/read.c"
-#include "players.h"
+#include "products.h"
 #include "mainMenu.h"
 
 
@@ -13,7 +13,10 @@
 int main() {
     // FILE* fp;
     // fp = fopen("../../data/Products.csv", "r");
-    vector* vec = readPlayerFile("data/Products.csv");
+    vector* products = readProductFile("data/Products.csv");
+    Product* first = (Product*) popFromVec(products);
+    prettyPrintProduct(first);
+
     // FILE* fp = fopen("data/Products.csv", "r");
     // if (fp == NULL) {
     //     printf("Error opening file!\n");
@@ -25,6 +28,8 @@ int main() {
 
     
     // displayMainMenu();
+
+
     return 0;
 
 } 
