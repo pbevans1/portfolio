@@ -56,13 +56,15 @@ void print_menu(WINDOW *menuWIndow, int highlight, char* choices[], int numChoic
 
 /* Report the choice according to mouse position */
 void report_choice(int mouse_x, int mouse_y, int start_x, int start_y, int *choiceNum, int numChoices, char* choices[])
-{	int i,j, choice;
-
+{	
+	int i,j, choice;
+ 
 	i = start_x + 2;
 	j = start_y + 3;
 	for(choice = 0; choice < numChoices; ++choice)
 		if(mouse_y == j + choice && mouse_x >= i && mouse_x <= i + strlen(choices[choice]))
-		{	if(choice == numChoices - 1)
+		{	
+			if(choice == (numChoices - 1)) //if exit, return -1
 				*choiceNum = -1;		
 			else
 				*choiceNum = choice + 1;	

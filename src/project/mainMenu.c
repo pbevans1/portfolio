@@ -57,21 +57,22 @@ void displayMainMenu()  {
 	c = wgetch(menu_win);
 		if (c == KEY_MOUSE) {
 			if(getmouse(&event) == OK){	/* When the user clicks left mouse button */
-				if(event.bstate & BUTTON1_PRESSED) {	
+                mvprintw(0, 0, "if 2");
+				//if(event.bstate & BUTTON1_PRESSED) {	
                     // break;
-                    report_choice(event.x + 1, event.y + 1, startx, starty, &choice, n_choices, choices);
-					if(choice == -1) break; // Exit
-                    mvprintw(22, 1, "Choice made is : %d String Chosen is \"%10s\"", choice, choices[choice - 1]);
-					refresh(); 
-				}
+                report_choice(event.x + 1, event.y + 1, startx, starty, &choice, n_choices, choices);
+                if(choice == -1) break; // Exit
+                //mvprintw(22, 1, "Choice made is : %d String Chosen is \"%10s\"", choice, choices[choice - 1]);
+                //refresh(); 
+				//}
 			}
 			print_menu(menu_win, choice, choices, n_choices);
 			break;
 		}
 	}
 		
-	mvprintw(23, 0, "You chose choice %d with choice string %s\n", choice, choices[choice - 1]);
-	clrtoeol();
+	mvprintw(29, 0, "You chose choice %d with choice string %s", choice, choices[choice - 1]);
+	// clrtoeol();
 
     getch();
 	endwin();			/* End curses mode		  */

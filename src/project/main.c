@@ -4,17 +4,27 @@
 #include<stdlib.h>
 #include "../library/vector.h"
 #include "../library/customString.h"
-#include "../library/read.h"
+#include "../library/read.c"
 #include "players.h"
 #include "mainMenu.h"
 
 
 
 int main() {
-    
-    // vector* players = readPlayerFile();
-    // printPlayer(players->contents[players->size - 1]);
+    // FILE* fp;
+    // fp = fopen("../../data/Products.csv", "r");
+    vector* vec = readPlayerFile("data/Products.csv");
+    // FILE* fp = fopen("data/Products.csv", "r");
+    // if (fp == NULL) {
+    //     printf("Error opening file!\n");
+    //     return -1;
+    // }
+    // char buffer[700];
+    // fgets(buffer, 700, fp);
+    // printf("%s", buffer);
 
-    displayMainMenu();
+    
+    // displayMainMenu();
+    return 0;
 
 } 
