@@ -14,9 +14,11 @@ int main() {
     // FILE* fp;
     // fp = fopen("../../data/Products.csv", "r");
     vector* products = readProductFile("data/Products.csv");
+    // printf("Back to main\n");
     Product* first = (Product*) popFromVec(products);
-    printf("Back to main\n");
-    prettyPrintProduct(first);
+    // printf("Popped in main\n");
+    printf("Main: %s\n", first->name->contents);
+    // if (first != NULL) prettyPrintProduct(first);
 
     // FILE* fp = fopen("data/Products.csv", "r");
     // if (fp == NULL) {

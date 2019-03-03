@@ -1,5 +1,5 @@
 #include "read.h"
-#include "../project/products.c"
+#include "../project/products.h"
 #include<string.h>
 
 #ifndef __READ_CUST_C
@@ -11,20 +11,26 @@ vector* readProductFile(char location[]) {
         printf("Error opening file!\n");
         return NULL;
     }
-    char buffer[700];
-    fgets(buffer, 700, fp);
-    printf("%s", buffer);
-    fgets(buffer, 700, fp);
-    printf("%s\n\n", buffer);
-    Product* firstProd = getProductFromString(buffer);
-    // printf("%s\n%s\n", strtok(buffer, ","), strtok(NULL, ","));
+    char buffer[1000];
+    fgets(buffer, 1000, fp); // read header row
+    fgets(buffer, 1000, fp); // read first data row
     vector* products = newVector();
+    printf("%s\n", buffer);
+    // fgets(buffer, 1000, fp);
+    Product* firstProd = getProductFromString(buffer);
+    printf("\nRead: %s\n", firstProd->name->contents);
+    // printf("Pushing..\n");
     pushToVec(products, firstProd);
+    // firstProd = getProductFromString(buffer);
+    // pushToVec(products, firstProd);
+    // firstProd = getProductFromString(buffer);
+    // pushToVec(products, firstProd);
+    int count = 0;
+    // printf("%d ", count++);
 
-    // for(int i = 0; i< 2218; i++) {
-    
-    // while (fgets(buffer, 700, fp)) {
-    //     pushToVec(products, getPlayer(buffer));
+    // while (fgets(buffer, 1000, fp)) {
+    //     printf("%d", count++);
+    //     pushToVec(products, getProductFromString(buffer));
     // }
     return products;
 }

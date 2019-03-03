@@ -3,11 +3,11 @@
 #ifndef __PRODUCTS__H 
 #define __PRODUCTS__H 
 
-enum source {
-    GDSN = 0,
-    LI =  1,
-    UNKNOWN = 2,
-};
+// enum source {
+//     GDSN = 0,
+//     LI =  1,
+//     UNKNOWN = 2,
+// };
 
 typedef struct __product {
     int NDB_Number;
@@ -24,5 +24,6 @@ typedef struct __product {
 
 Product* getProductFromString(char*);
 char *strtokm(char*, const char*);
+void prettyPrintProduct(Product*);
 
 #endif

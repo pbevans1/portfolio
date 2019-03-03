@@ -4,7 +4,7 @@ PROJ = src/project
 BIN = bin
 
 LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o
-PROJ_OBJS = $(BIN)/mainMenu.o $(PROJ)/main.c
+PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(PROJ)/main.c
 
 make: $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c
 	gcc $(CFLAGS) -lncurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
@@ -22,6 +22,9 @@ $(BIN)/vector.o: $(LIB)/vector.h $(LIB)/vector.c
 # Project Files
 $(BIN)/mainMenu.o: $(PROJ)/mainMenu.h $(PROJ)/mainMenu.c
 	gcc $(CFLAGS) -c $(PROJ)/mainMenu.c -o $(BIN)/mainMenu.o
+
+$(BIN)/products.o: 	$(PROJ)/products.h $(PROJ)/products.c
+	gcc $(CFLAGS) -c $(PROJ)/products.c -o $(BIN)/products.o
 
 
 # General 
