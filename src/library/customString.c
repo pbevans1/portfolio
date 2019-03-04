@@ -29,22 +29,10 @@ bool strComesBefore(string* str1, string* str2) {
 
 
 void printStr(string* str) {
-    // printf("%s", str->contents);
-    for (int i = 0; i < str->size; i++) {
-        printf("%c", str->contents[i]);
-    }
+    printf("%s", str->contents);
 }
 
 string* strFrom(char* str) {
-    // string* new = newString();
-    // int i;
-    // i = 0;
-    // while (str[i] != '\0') {
-    //     pushToStr(new, str[i]);
-    //     i++;
-    // }
-    // return new;
-
     string* new = malloc(sizeof(string));
     int capacity = strlen(str) + 1;
     int size = capacity - 1;
@@ -66,7 +54,7 @@ void pushToStr(string* str, char value) {
         for (int i = str->size; i < str->capacity; i++) {
             temp_contents[i] = '\0';
         }
-        // free(str->contents); FIXME: Memory leak
+        free(str->contents);
         str->contents = temp_contents;
     }
     str->contents[str->size] = value;

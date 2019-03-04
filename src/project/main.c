@@ -15,9 +15,18 @@ int main() {
     // fp = fopen("../../data/Products.csv", "r");
     vector* products = readProductFile("data/Products.csv");
     // printf("Back to main\n");
-    Product* first = (Product*) popFromVec(products);
+    Product* current;
+    int count = products->size;
+    // for (int i = 0; i < products->size; ++i) {
+    // while ((current = (Product*) popFromVec(products))){
+    //     // current = (Product*) popFromVec(products);
+    //     printf("%d: ", count); prettyPrintProduct(current);
+    //     printf("\n");
+    //     count--;
+    // }
+    // Product* first = (Product*) popFromVec(products);
     // printf("Popped in main\n");
-    printf("Main: %s\n", first->name->contents);
+
     // if (first != NULL) prettyPrintProduct(first);
 
     // FILE* fp = fopen("data/Products.csv", "r");
