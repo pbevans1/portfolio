@@ -17,5 +17,6 @@ bool strComesBefore(string*, string*);
 void printStr(string*);
 string* copyStr(string*);
 string* strFrom(char*);
+char *strtokm(char *str, const char *delim);
 
 #endif

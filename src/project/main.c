@@ -4,44 +4,19 @@
 #include<stdlib.h>
 #include "../library/vector.h"
 #include "../library/customString.h"
-#include "../library/read.c"
+#include "read.h"
 #include "products.h"
+#include "serving.h"
 #include "mainMenu.h"
 
 
 
 int main() {
-    // FILE* fp;
-    // fp = fopen("../../data/Products.csv", "r");
     vector* products = readProductFile("data/Products.csv");
-    // printf("Back to main\n");
     Product* current;
+    vector* servings = readServingFile("data/Serving_size.csv");
     int count = products->size;
-    // for (int i = 0; i < products->size; ++i) {
-    // while ((current = (Product*) popFromVec(products))){
-    //     // current = (Product*) popFromVec(products);
-    //     printf("%d: ", count); prettyPrintProduct(current);
-    //     printf("\n");
-    //     count--;
-    // }
-    // Product* first = (Product*) popFromVec(products);
-    // printf("Popped in main\n");
-
-    // if (first != NULL) prettyPrintProduct(first);
-
-    // FILE* fp = fopen("data/Products.csv", "r");
-    // if (fp == NULL) {
-    //     printf("Error opening file!\n");
-    //     return -1;
-    // }
-    // char buffer[700];
-    // fgets(buffer, 700, fp);
-    // printf("%s", buffer);
-
-    
-    // displayMainMenu();
-
-
+    prettyPrintServing((Serving*) popFromVec(servings));
+    printf("\n%d\n", servings->size);
     return 0;
-
 } 

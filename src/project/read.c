@@ -1,5 +1,6 @@
 #include "read.h"
 #include "../project/products.h"
+#include "../project/serving.h"
 #include<string.h>
 
 
@@ -25,4 +26,24 @@ vector* readProductFile(char location[]) {
 
     return products;
 }
+
+vector* readServingFile(char location[]) {
+    FILE* fp = fopen(location, "r");
+    if (fp == NULL) {
+        printf("Error opening file!\n");
+        return NULL;
+    }
+
+    const int BUFFER_SIZE = 5000;
+    char buffer[BUFFER_SIZE];
+    vector* servings = newVector();
+
+    fgets(buffer, BUFFER_SIZE, fp); // read header row
+    while (fgets(buffer, BUFFER_SIZE, fp)) {
+        pushToVec(servings, getServingFromString(buffer));
+    }
+
+    return servings;
+}
+
 #endif

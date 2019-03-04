@@ -31,7 +31,7 @@ Product* getProductFromString(char* buffer) {
     nextField = strtokm(NULL, delimiter);
     // printf("%s\n", nextField);
     if (strcmp(nextField, "LI") == 0) {
-        product->source = 1;
+        product->source = LI;
         
     } else if (strcmp(nextField, "GDSN") == 0) {
         product->source = GDSN;
@@ -89,28 +89,6 @@ void prettyPrintProduct(Product* product) {
     printf("\tIngredients: "); printStr(product->ingredients); printf("\n");
 }
 
-// From https://stackoverflow.com/questions/29847915/implementing-strtok-whose-delimiter-has-more-than-one-character
-char *strtokm(char *str, const char *delim)
-{ 
-    static char *tok;
-    static char *next;
-    char *m;
 
-    if (delim == NULL) return NULL;
-
-    tok = (str) ? str : next;
-    if (tok == NULL) return NULL;
-
-    m = strstr(tok, delim);
-
-    if (m) {
-        next = m + strlen(delim);
-        *m = '\0';
-    } else {
-        next = NULL;
-    }
-
-    return tok;
-}
 
 #endif 
