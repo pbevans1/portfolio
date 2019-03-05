@@ -12,6 +12,7 @@ vector* newVector();
 void pushToVec(vector*, void*);
 void* popFromVec(vector*);
 vector* destroyVec(vector*);
+void doubleVecSize(vector* );
 
 
 #endif

@@ -46,4 +46,5 @@ vector* readServingFile(char location[]) {
     return servings;
 }
 
+
 #endif

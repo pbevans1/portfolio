@@ -11,19 +11,29 @@ vector* newVector() {
     new->size = 0;
     new->capacity = 1;
     new->contents = malloc(sizeof(void*) * new->capacity);
+    for (int i = 0; i < new->capacity; ++i) {
+        new->contents[i] = NULL;
+    }
     return new;
 }
  
 void pushToVec(vector* vec, void* value) {
-    if (vec->size == vec->capacity) {
-        vec->capacity *= 2; 
+    if (vec->size >= vec->capacity) {
+        doubleVecSize(vec);
+    }
+    vec->contents[vec->size] = value;
+    vec->size++;
+}
+
+void doubleVecSize(vector* vec) { 
+     vec->capacity *= 2; 
         void** temp_contents = malloc(sizeof(void*) * (vec)->capacity);
         memcpy(temp_contents, vec->contents, sizeof(void*) * vec->capacity / 2);
         free(vec->contents);
         vec->contents = temp_contents;
-    }
-    vec->contents[vec->size] = value;
-    vec->size++;
+        for (int i = vec->size; i < vec->capacity; ++i) {
+            vec->contents[i] = NULL;
+        }
 }
 
 void* popFromVec(vector* vec) {
