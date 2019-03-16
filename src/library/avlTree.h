@@ -14,6 +14,7 @@ struct Node
     Product* product;
     struct Node *left; 
     struct Node *right; 
+    struct Node *parent;
     int height; 
 }; 
 

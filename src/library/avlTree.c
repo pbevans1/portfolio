@@ -34,6 +34,7 @@ struct Node* newNode(Product* product)
     node->product = product;
     node->left   = NULL; 
     node->right  = NULL; 
+    node->parent = NULL;
     node->height = 1;  // new node is initially added at leaf 
     return(node); 
 } 
@@ -93,10 +94,16 @@ struct Node* insert(struct Node* node, Product* prod)
         return(newNode(prod)); 
     char* key = prod->name->contents;
   
-    if (strcmp(key,  node->key) < 0)
+    if (strcmp(key,  node->key) < 0) {
         node->left  = insert(node->left, prod); 
-    else if (strcmp(key,  node->key) > 0)
+        node->left->parent = node;
+        // printf(" %s left of %s\n", node->)
+    }
+        
+    else if (strcmp(key,  node->key) > 0) {
         node->right = insert(node->right, prod); 
+        node->right->parent = node;
+    }
     else // Equal keys are not allowed in BST 
         return node; 
   
@@ -113,7 +120,7 @@ struct Node* insert(struct Node* node, Product* prod)
     // there are 4 cases 
   
     // Left Left Case 
-    if (balance > 1 &&  (strcmp(key, node->left->key) < 0)) // balance > 1 && key < node->left->key 
+    if (balance > 1 &&  (strcmp(key, node->left->key) < 0)) // (balance > 1 && key < node->left->key)
         return rightRotate(node); 
   
     // Right Right Case 
@@ -121,14 +128,14 @@ struct Node* insert(struct Node* node, Product* prod)
         return leftRotate(node); 
   
     // Left Right Case 
-    if (balance > 1 && (strcmp(key, node->left->key) > 0)) // (balance > 1 && key > node->left->key) 
+    if (balance > 1 && (strcmp(key, node->left->key) > 0)) // (balance > 1 && key > node->left->key)
     { 
         node->left =  leftRotate(node->left); 
         return rightRotate(node); 
     } 
   
     // Right Left Case 
-    if (balance < -1 && (strcmp(key, node->right->key) < 0)) //(balance < -1 && key < node->right->key) 
+    if (balance < -1 && (strcmp(key, node->right->key) < 0)) //(balance < -1 && key < node->right->key)
     { 
         node->right = rightRotate(node->right); 
         return leftRotate(node); 
@@ -158,11 +165,89 @@ void inOrder(struct Node *root)
 { 
     if(root != NULL) 
     { 
-        preOrder(root->left); 
+        inOrder(root->left); 
         printf("%s \n", root->key);
-        preOrder(root->right); 
+        inOrder(root->right); 
     } 
 } 
+
+
+
+
+
+
+// struct Node * minValue(struct Node* node) { 
+//   struct Node* current = node; 
+   
+//   /* loop down to find the leftmost leaf */
+//   while (current->left != NULL) { 
+//     current = current->left; 
+//   } 
+//   return current; 
+// } 
+
+// struct Node * maxValue(struct Node* node) { 
+//   struct Node* current = node; 
+   
+//   /* loop down to find the leftmost leaf */
+//   while (current->right != NULL) { 
+//     current = current->right; 
+//   } 
+//   return current; 
+// } 
+  
+  
+// struct Node* successorChild(struct Node *n) 
+// { 
+//   // step 1 of the above algorithm  
+//   if( n->right != NULL ) 
+//     return minValue(n->right); 
+  
+//   // step 2 of the above algorithm 
+//   return NULL;
+// } 
+
+// struct Node* predChild(struct Node *n) 
+// { 
+//   // step 1 of the above algorithm  
+//   if( n->left != NULL ) 
+//     return maxValue(n->right); 
+  
+//   // step 2 of the above algorithm 
+//   return NULL;
+// } 
+
+// void checkBSTForward(struct Node *root) {
+//     if (root == NULL) return;
+//     //FIXME using predecessor/successor
+//     struct Node* s = successorChild(root);
+//     if (s == NULL) return;
+//     if(strcmp(root->key, s->key) > 0) {
+//         printf("Error: %s after %s\n", root->key, s->key);
+//     } else {
+//         printf("Good: %s before %s\n", root->key, s->key);
+//     }
+//     checkBSTForward(root->left);
+//     checkBSTForward(root->right);
+//     return;
+
+// }
+
+// void checkBSTback(struct Node *root) {
+//     if (root == NULL) return;
+//     //FIXME using predecessor/successor
+//     struct Node* s = predChild(root);
+//     if (s == NULL) return;
+//     if(strcmp(root->key, s->key) > 0) {
+//         printf("Error: %s before %s\n", root->key, s->key);
+//     } else {
+//         printf("Good: %s before %s\n", root->key, s->key);
+//     }
+//     checkBSTback(root->left);
+//     checkBSTback(root->right);
+//     return;
+
+// }
   
 /* Drier program to test above function*/
 int testAVL(vector* products)  
@@ -170,12 +255,25 @@ int testAVL(vector* products)
   struct Node *root = NULL; 
   
   /* Constructing tree given in the above figure */
-  root = insert(root, (Product*) popFromVec(products)); 
-  root = insert(root, (Product*) popFromVec(products)); 
-  root = insert(root, (Product*) popFromVec(products)); 
-  root = insert(root, (Product*) popFromVec(products)); 
-  root = insert(root, (Product*) popFromVec(products)); 
-  root = insert(root, (Product*) popFromVec(products)); 
+  Product* p;
+  p = (Product*) popFromVec(products);
+  printf("Inserting: %s\n", p->name->contents);
+  root = insert(root, p); 
+  p = (Product*) popFromVec(products);
+  printf("Inserting: %s\n", p->name->contents);
+  root = insert(root, p); 
+  p = (Product*) popFromVec(products);
+  printf("Inserting: %s\n", p->name->contents);
+  root = insert(root, p); 
+  p = (Product*) popFromVec(products);
+  printf("Inserting: %s\n", p->name->contents);
+  root = insert(root, p); 
+  p = (Product*) popFromVec(products);
+  printf("Inserting: %s\n", p->name->contents);
+  root = insert(root, p); 
+  p = (Product*) popFromVec(products);
+  printf("Inserting: %s\n", p->name->contents);
+  root = insert(root, p);  
   
   /* The constructed AVL Tree would be 
             30 
@@ -193,6 +291,9 @@ int testAVL(vector* products)
          " tree is \n"); 
   inOrder(root); 
   
+//   checkBSTForward(root);
+//   printf("\n");
+//   checkBSTback(root);
   return 0; 
 }
 
