@@ -11,68 +11,74 @@
 #ifndef __PRODUCTS__C
 #define __PRODUCTS__C
 
-Product* getProductFromString(char* buffer) {
+Product* getProductFromString(char* line) {
     Product* product = malloc(sizeof(Product));
     char* nextField;
-    const char* delimiter = "\",\"";
+    const char* delimiter = "~";
 
-    nextField = strtokm(buffer, delimiter);
-    ++nextField; //remove leading quote
-    // printf("\n\n\n\n%s\n", nextField);
+    
+    nextField = strsep(&line, delimiter);
     if (strlen(nextField)) {
-        product->NDB_Number = atoi(nextField);
+        product->product_id = atoi(nextField);
     } else {
-        product->NDB_Number = -1;
+        product->product_id = -1;
     }
 
-    nextField = strtokm(NULL, delimiter);
+    nextField = strsep(&line, delimiter);
     product->name = strFrom(nextField);
 
-    nextField = strtokm(NULL, delimiter);
-    // printf("%s\n", nextField);
-    if (strcmp(nextField, "LI") == 0) {
-        product->source = LI;
-        
-    } else if (strcmp(nextField, "GDSN") == 0) {
-        product->source = GDSN;
-    } else {
-        product->source = UNKNOWN;
-    }
-
-
-    nextField = strtokm(NULL, delimiter);
-    // printf("%s\n", nextField);
-    if (strlen(nextField)) {
-        product->gtin_upc = atoi(nextField);
-    } else {
-        product->gtin_upc = -1;
-    }
-
-    nextField = strtokm(NULL, delimiter);
-    // printf("%s\n", nextField);
+    nextField = strsep(&line, delimiter);
     product->manufacturer = strFrom(nextField);
 
-
-
-    nextField = strtokm(NULL, delimiter);
-    // printf("%s\n", nextField);
+    nextField = strsep(&line, delimiter);
     if (strlen(nextField)) {
-        strncpy(product->date_modified, nextField, 10);
-        product->date_modified[10] = '\0';
-    } 
+        product->energy_units = atof(nextField);
+    } else {
+        product->energy_units = 0.0;
+    }
 
-    nextField = strtokm(NULL, delimiter);
-    // printf("%s\n", nextField);
+    nextField = strsep(&line, delimiter);
     if (strlen(nextField)) {
-        strncpy(product->date_available, nextField, 10);
-        product->date_available[10] = '\0';
-    } 
+        product->carb_units = atof(nextField);
+    } else {
+        product->carb_units = 0.0;
+    }
 
-    nextField = strtokm(NULL, delimiter);
-    if (strlen(nextField) > 1) nextField[strlen(nextField) -3] = '\0'; // If there is a string, remove the trailing quote
-    product->ingredients = strFrom(nextField);
-    // printStr(product->ingredients);
+    nextField = strsep(&line, delimiter);
+    if (strlen(nextField)) {
+        product->fat_units = atof(nextField);
+    } else {
+        product->fat_units = 0.0;
+    }
 
+    nextField = strsep(&line, delimiter);
+    if (strlen(nextField)) {
+        product->protein_units = atof(nextField);
+    } else {
+        product->protein_units = 0.0;
+    }
+    // printf("2\n");
+
+    nextField = strsep(&line, delimiter);
+    if (strlen(nextField)) {
+        product->ml_g_size = atof(nextField);
+    } else {
+        product->ml_g_size = 0.0;
+    }
+    // printf("3\n");
+
+    nextField = strsep(&line, delimiter);
+    strcpy(product->ml_g, nextField);
+
+    nextField = strsep(&line, delimiter);
+    if (strlen(nextField)) {
+        product->serving_size = atoi(nextField);
+    } else {
+        product->serving_size = 0.0;
+    }
+    
+    nextField = strsep(&line, delimiter);
+    product->serving_units = strFrom(nextField);
 
     return product;
     
@@ -82,11 +88,12 @@ void prettyPrintProduct(Product* product) {
     if (product == NULL) return;
     printf("Name: "); printStr(product->name); printf("\n");
     printf("\tManufacturer: "); printStr(product->manufacturer); printf("\n");
-    printf("\tNDB Number: %d\n", product->NDB_Number);
-    printf("\tUPC: %d\n", product->gtin_upc);
-    printf("\tAvailable: %s\n", product->date_available);
-    printf("\tModified: %s\n", product->date_modified);
-    printf("\tIngredients: "); printStr(product->ingredients); printf("\n");
+    printf("\tEnergy: %f\n", product->energy_units);
+    printf("\tCarbs: %f\n", product->carb_units);
+    printf("\tFat: %f\n", product->fat_units);
+    printf("\tProtein: %f\n", product->protein_units);
+    printf("\tServing Volume: %f%s\n", product->ml_g_size, product->ml_g);
+    printf("\tServing Size: %f %s\n", product->serving_size, product->serving_units->contents);
 }
 
 

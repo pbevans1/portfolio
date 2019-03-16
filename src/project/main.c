@@ -8,15 +8,27 @@
 #include "products.h"
 #include "serving.h"
 #include "mainMenu.h"
+#include "hashTable.h"
 
 
 
 int main() {
-    vector* products = readProductFile("data/Products.csv");
-    Product* current;
-    vector* servings = readServingFile("data/Serving_size.csv");
-    int count = products->size;
-    prettyPrintServing((Serving*) popFromVec(servings));
-    printf("\n%d\n", servings->size);
+    vector* products = readProductFile("data/food_nutrient_db.csv");
+    // Product* current;
+    // vector* servings = readServingFile("data/food_nutrient_db.csv");
+    prettyPrintProduct(products->contents[0]);
+    // printf("\n%d\n", servings->size);
+    // int count = products->size;
+    // hashTable* servingInfo = servingTableFrom(servings);
+    // prettyPrintServing((Serving*) popFromVec(servings));
+
+    // printf("\n%d\n", servingInfo->size);
+
+    // Serving* test = malloc(sizeof(Serving));
+    // unsigned long testhash = hashServing(test);
+    // insertServingHash(servingInfo, testhash, test);
+    // printf("\n%d\n", servingInfo->size);  
+ 
+
     return 0;
 } 

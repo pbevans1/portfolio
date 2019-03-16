@@ -5,7 +5,8 @@
 
 hashTable* servingTableFrom(vector* src) {
     hashTable* table = malloc(sizeof(hashTable));
-    table->size = src->size;
+    table->size = 0;
+    // table->size = src->size;
     table->capacity = src->size;
     table->contents = malloc(sizeof(Serving*) * table->capacity);
     Serving* currentServing;
@@ -17,7 +18,8 @@ hashTable* servingTableFrom(vector* src) {
 
 void insertServingHash(hashTable* table, unsigned long hash, Serving* node) {
     // If hash table is at 70% load factor, expand
-    if(((table->size * 100) / 70) >= table->capacity) {
+    if(((table->size * 100) / 70) >= table->capacity) { //FIXME: table won't double without this
+    // if(((table->size * 100) / 95) >= table->capacity) { //FIXME: table won't double without this
         doubleVecSize(table);
     }
     // insert with linear probing
@@ -33,6 +35,14 @@ void insertServingHash(hashTable* table, unsigned long hash, Serving* node) {
 
 unsigned long hashServing(Serving* serving) {
     return serving->NDB_Number - 45001524;
+}
+
+Serving* getServingWithCode(hashTable* table, int NDB_Number) {
+    int currentIndex = NDB_Number - 45001524;
+    while (((Serving*) table->contents[currentIndex])->NDB_Number != NDB_Number) {
+        return NULL; //fixme
+    }
+    return NULL; // fixme
 }
 
 

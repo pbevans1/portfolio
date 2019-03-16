@@ -15,12 +15,25 @@ vector* readProductFile(char location[]) {
     }
 
 
-    const int BUFFER_SIZE = 5000;
+    const int BUFFER_SIZE = 9000;
     char buffer[BUFFER_SIZE];
     vector* products = newVector();
+    int count = 0;
+    char *line;
+    // fgets(buffer, BUFFER_SIZE, fp); // read header row
+    // for (int i = 0; i < 1742; i++) {
+    //     fgets(buffer, BUFFER_SIZE, fp);
+    //     line = buffer;
+    //     printf("%d\n", count++);
+    //     pushToVec(products, getProductFromString(line));
+    // }
+    // fgets(buffer, BUFFER_SIZE, fp);
+    // printf("%s", buffer);
 
-    fgets(buffer, BUFFER_SIZE, fp); // read header row
+    // pushToVec(products, getProductFromString(buffer));
     while (fgets(buffer, BUFFER_SIZE, fp)) {
+        line = buffer;
+        printf("%d\n", count++);
         pushToVec(products, getProductFromString(buffer));
     }
 
