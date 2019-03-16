@@ -9,14 +9,16 @@
 #include "serving.h"
 #include "mainMenu.h"
 #include "hashTable.h"
-
+#include "../library/avlTree.h"
 
 
 int main() {
     vector* products = readProductFile("data/food_nutrient_db.csv");
-    // Product* current;
+
+    testAVL(products); 
+    // Product* current; 
     // vector* servings = readServingFile("data/food_nutrient_db.csv");
-    prettyPrintProduct(products->contents[0]);
+    // prettyPrintProduct(products->contents[0]);
     // printf("\n%d\n", servings->size);
     // int count = products->size;
     // hashTable* servingInfo = servingTableFrom(servings);

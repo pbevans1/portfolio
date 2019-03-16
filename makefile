@@ -3,7 +3,7 @@ LIB = src/library
 PROJ = src/project
 BIN = bin
 
-LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o
+LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o $(BIN)/avlTree.o
 PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/serving.o $(BIN)/read.o $(BIN)/hashTable.o $(PROJ)/main.c
 
 make: $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c
@@ -18,6 +18,9 @@ $(BIN)/displayHelper.o: $(LIB)/displayHelper.c $(LIB)/displayHelper.h
 
 $(BIN)/vector.o: $(LIB)/vector.h $(LIB)/vector.c
 	gcc $(CFLAGS) -c $(LIB)/vector.c -o $(BIN)/vector.o
+
+$(BIN)/avlTree.o: $(LIB)/avlTree.h $(LIB)/avlTree.c
+	gcc $(CFLAGS) -c $(LIB)/avlTree.c -o $(BIN)/avlTree.o
 
 # Project Files
 $(BIN)/mainMenu.o: $(PROJ)/mainMenu.h $(PROJ)/mainMenu.c

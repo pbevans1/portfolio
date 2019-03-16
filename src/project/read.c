@@ -33,7 +33,7 @@ vector* readProductFile(char location[]) {
     // pushToVec(products, getProductFromString(buffer));
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
-        printf("%d\n", count++);
+        // printf("%d\n", count++);
         pushToVec(products, getProductFromString(buffer));
     }
 

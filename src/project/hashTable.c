@@ -40,9 +40,9 @@ unsigned long hashServing(Serving* serving) {
 Serving* getServingWithCode(hashTable* table, int NDB_Number) {
     int currentIndex = NDB_Number - 45001524;
     while (((Serving*) table->contents[currentIndex])->NDB_Number != NDB_Number) {
-        return NULL; //fixme
+        return NULL; //FIXME
     }
-    return NULL; // fixme
+    return NULL; // FIXME
 }
 
 
