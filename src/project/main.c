@@ -13,9 +13,26 @@
 
 
 int main() {
-    vector* products = readProductFile("data/food_nutrient_db.csv");
+    // vector* products = readProductFile("data/food_nutrient_db.csv");
+    char searchString[500];
+    struct Node* products = readProductFile("data/food_nutrient_db.csv");
+    printf("Enter an item to look for: ");
+    scanf("%s", searchString);
+    uppercase(searchString);
+    struct Node* bestResult = findClosestNode(products, searchString);
+    if (bestResult->key == searchString) {
+        prettyPrintProduct(bestResult->product);
+    } else {
+        printf("We couldn't find anything named '%s'. Did you mean any of these?\n", searchString);
+        printf("\t%s\n", bestResult->key);
+        printf("\t%s\n", predecessor(bestResult)->key);  
+        printf("\t%s\n", successor(bestResult)->key); 
 
-    testAVL(products); 
+    }
+
+    // printf("Enter a product to search")
+    // inOrder(root);
+    // testAVL(products); 
     // Product* current; 
     // vector* servings = readServingFile("data/food_nutrient_db.csv");
     // prettyPrintProduct(products->contents[0]);

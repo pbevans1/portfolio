@@ -1,4 +1,5 @@
 #include<stdbool.h>
+#include <ctype.h> 
 #ifndef __STRING_CUST_H
 #define __STRING_CUST_H
 typedef struct _string {
@@ -19,5 +20,6 @@ string* copyStr(string*);
 string* strFrom(char*);
 char *strtokm(char *str, const char *delim);
 unsigned long hashStr(string* name);
+void uppercase(char []);
 
 #endif

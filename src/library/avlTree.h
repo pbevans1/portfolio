@@ -27,6 +27,9 @@ int getBalance(struct Node *N);
 struct Node* insert(struct Node* node, Product* prod);
 void preOrder(struct Node *root);
 void inOrder(struct Node *root);
+struct Node* findClosestNode(struct Node* root, char* key);
+struct Node* predecessor(struct Node *n) ;
+struct Node* successor(struct Node *n);
 int testAVL();
 
 

@@ -92,7 +92,7 @@ void prettyPrintProduct(Product* product) {
     printf("\tCarbs: %f\n", product->carb_units);
     printf("\tFat: %f\n", product->fat_units);
     printf("\tProtein: %f\n", product->protein_units);
-    printf("\tServing Volume: %f%s\n", product->ml_g_size, product->ml_g);
+    printf("\tServing Volume: %f %s\n", product->ml_g_size, product->ml_g);
     printf("\tServing Size: %f %s\n", product->serving_size, product->serving_units->contents);
 }
 

@@ -2,12 +2,14 @@
 #include "serving.h"
 #include "../library/vector.h"
 #include<stdio.h>
+#include "../library/avlTree.h"
+
 
 
 #ifndef __READ_CUST_H
 #define __READ_CUST_H
 
-vector* readProductFile(char[]);
+struct Node* readProductFile(char[]);
 vector* readServingFile(char[]);
 
 #endif

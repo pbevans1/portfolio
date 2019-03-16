@@ -174,48 +174,78 @@ void inOrder(struct Node *root)
 
 
 
+//Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/
 
-
-// struct Node * minValue(struct Node* node) { 
-//   struct Node* current = node; 
+struct Node * minValue(struct Node* node) { 
+  struct Node* current = node; 
    
-//   /* loop down to find the leftmost leaf */
-//   while (current->left != NULL) { 
-//     current = current->left; 
-//   } 
-//   return current; 
-// } 
+  /* loop down to find the leftmost leaf */
+  while (current->left != NULL) { 
+    current = current->left; 
+  } 
+  return current; 
+} 
 
-// struct Node * maxValue(struct Node* node) { 
-//   struct Node* current = node; 
+struct Node * maxValue(struct Node* node) { 
+  struct Node* current = node; 
    
-//   /* loop down to find the leftmost leaf */
-//   while (current->right != NULL) { 
-//     current = current->right; 
-//   } 
-//   return current; 
-// } 
+  /* loop down to find the rightmost leaf */
+  while (current->right != NULL) { 
+    current = current->right; 
+  } 
+  return current; 
+} 
   
   
-// struct Node* successorChild(struct Node *n) 
-// { 
-//   // step 1 of the above algorithm  
-//   if( n->right != NULL ) 
-//     return minValue(n->right); 
+struct Node* successor(struct Node *n) 
+{ 
+  if(n == NULL) return NULL;
+  //if n has a bigger children, return the smallest
+  if( n->right != NULL ) 
+    return minValue(n->right); 
   
-//   // step 2 of the above algorithm 
-//   return NULL;
-// } 
 
-// struct Node* predChild(struct Node *n) 
-// { 
-//   // step 1 of the above algorithm  
-//   if( n->left != NULL ) 
-//     return maxValue(n->right); 
+  //Otherwise, travel up the tree until you find a left child or the root. Return it
+  struct Node *p = n->parent; 
+  while(p != NULL && n == p->right) 
+  { 
+     n = p; 
+     p = p->parent; 
+  } 
+  return p; 
+} 
+
+struct Node* predecessor(struct Node *n) 
+{ 
+  if(n == NULL) return NULL;
+  //if n has smaller children, return the biggest
+  if( n->left != NULL ) 
+    return maxValue(n->left); 
   
-//   // step 2 of the above algorithm 
-//   return NULL;
-// } 
+  //Otherwise, travel up the tree until you find a right child or the root. Return it
+  struct Node *p = n->parent; 
+  while(p != NULL && n == p->left) 
+  { 
+     n = p; 
+     p = p->parent; 
+  } 
+  return p; 
+} 
+
+struct Node* findClosestNode(struct Node* root, char* key) {
+    if (root == NULL) return NULL;
+    if (strcmp(key, root->key) == 0) return root;
+    if (strcmp(key, root->key) < 0) {
+        //search left
+        if (root->left == NULL) return root;
+        return findClosestNode(root->left, key);
+    }
+    else {
+        if (root->right == NULL) return root;
+        return findClosestNode(root->right, key);
+    }
+
+}
 
 // void checkBSTForward(struct Node *root) {
 //     if (root == NULL) return;

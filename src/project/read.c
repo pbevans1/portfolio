@@ -7,7 +7,7 @@
 #ifndef __READ_CUST_C
 #define __READ_CUST_C
 
-vector* readProductFile(char location[]) {
+struct Node* readProductFile(char location[]) {
     FILE* fp = fopen(location, "r");
     if (fp == NULL) {
         printf("Error opening file!\n");
@@ -17,7 +17,7 @@ vector* readProductFile(char location[]) {
 
     const int BUFFER_SIZE = 9000;
     char buffer[BUFFER_SIZE];
-    vector* products = newVector();
+    struct Node* products = NULL;
     int count = 0;
     char *line;
     // fgets(buffer, BUFFER_SIZE, fp); // read header row
@@ -34,30 +34,30 @@ vector* readProductFile(char location[]) {
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
         // printf("%d\n", count++);
-        pushToVec(products, getProductFromString(buffer));
+        products = insert(products, getProductFromString(buffer));
     }
 
     return products;
 }
 
-vector* readServingFile(char location[]) {
-    FILE* fp = fopen(location, "r");
-    if (fp == NULL) {
-        printf("Error opening file!\n");
-        return NULL;
-    }
+// vector* readServingFile(char location[]) {
+//     FILE* fp = fopen(location, "r");
+//     if (fp == NULL) {
+//         printf("Error opening file!\n");
+//         return NULL;
+//     }
 
-    const int BUFFER_SIZE = 5000;
-    char buffer[BUFFER_SIZE];
-    vector* servings = newVector();
+//     const int BUFFER_SIZE = 5000;
+//     char buffer[BUFFER_SIZE];
+//     vector* servings = newVector();
 
-    fgets(buffer, BUFFER_SIZE, fp); // read header row
-    while (fgets(buffer, BUFFER_SIZE, fp)) {
-        pushToVec(servings, getServingFromString(buffer));
-    }
+//     fgets(buffer, BUFFER_SIZE, fp); // read header row
+//     while (fgets(buffer, BUFFER_SIZE, fp)) {
+//         pushToVec(servings, getServingFromString(buffer));
+//     }
 
-    return servings;
-}
+//     return servings;
+// }
 
 
 #endif

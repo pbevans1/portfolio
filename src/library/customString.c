@@ -125,30 +125,10 @@ void test_string() {
     printf("Finished testing customstring... All tests passed\n");
 }
 
-
-
-
-// From https://stackoverflow.com/questions/29847915/implementing-strtok-whose-delimiter-has-more-than-one-character
-char *strtokm(char *str, const char *delim)
-{ 
-    static char *tok;
-    static char *next;
-    char *m;
-
-    if (delim == NULL) return NULL;
-
-    tok = (str) ? str : next;
-    if (tok == NULL) return NULL;
-
-    m = strstr(tok, delim);
-
-    if (m) {
-        next = m + strlen(delim);
-        *m = '\0';
-    } else {
-        next = NULL;
+void uppercase(char target[]) {
+    int size = strlen(target);
+    for(int i=0; i<size;i++) {
+        target[i] = toupper(target[i]);
     }
-
-    return tok;
 }
 #endif
