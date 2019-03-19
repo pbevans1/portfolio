@@ -9,7 +9,7 @@ void destroyWindow(WINDOW*);
 int report_choice(int mouse_x, int mouse_y, int x, int y, int numChoices, char* choices[]);
 void print_menu(WINDOW *menuWIndow, int highlight, char* choices[], int numChoices);
 void printCentered(int, char*);
-void readString(string*, char);
+string* readString(int, char);
 int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices);
 void highlightChoice(WINDOW* menuWindow, int y, int x, char** choices, int numChoices, int highlight);
 #endif

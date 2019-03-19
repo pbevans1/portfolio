@@ -42,7 +42,7 @@ struct Node* readProductFile(char location[]) {
 }
 
 int logFileExists(char* username) {
-    char location[550] = {'\0'};
+    char location[100] = {'\0'};
     strcpy(location, "data/");
     strcat(location, username);
     strcat(location, ".log");
@@ -54,24 +54,9 @@ int logFileExists(char* username) {
     return 1;
 }
 
-// vector* readServingFile(char location[]) {
-//     FILE* fp = fopen(location, "r");
-//     if (fp == NULL) {
-//         printf("Error opening file!\n");
-//         return NULL;
-//     }
-
-//     const int BUFFER_SIZE = 5000;
-//     char buffer[BUFFER_SIZE];
-//     vector* servings = newVector();
-
-//     fgets(buffer, BUFFER_SIZE, fp); // read header row
-//     while (fgets(buffer, BUFFER_SIZE, fp)) {
-//         pushToVec(servings, getServingFromString(buffer));
-//     }
-
-//     return servings;
-// }
+void readDiary(char* username) {
+    
+}
 
 
 #endif

@@ -60,11 +60,12 @@ int report_choice(int mouse_x, int mouse_y, int x, int y, int numChoices, char* 
 {	
 	int choice;
  
-	for(choice = 0; choice < numChoices; ++choice)
+	for(choice = 0; choice < numChoices; ++choice) {
 		if(mouse_y == (y + choice) && mouse_x >= x && mouse_x <= (x + strlen(choices[choice])))
 		{	
 			return choice;	
 		} 
+	}
 	return -1;
 }
 
@@ -105,10 +106,10 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 		}
 		if (input == KEY_UP)  if (--choice < 0) choice = numChoices - 1;
 		if (input == KEY_DOWN) choice = (choice + 1) % numChoices;
-		if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 49; // if input is 0:numChoices, return int input
+		if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
 		if (input == 10) return choice; // Enter
 	}
-	return choice;
+	return choice + 1; // return the choice, converted to one-indexed.
 }
 
 void highlightChoice(WINDOW* menuWindow, int y, int x, char** choices, int numChoices, int highlight) {
@@ -137,27 +138,35 @@ void highlightChoice(WINDOW* menuWindow, int y, int x, char** choices, int numCh
 	refresh();
 }
 
-void readString(string* input, char delimiter) {
-	// string* input = newString();
+string* readString(int maxLength, char delimiter) {
+	noecho();
+	string* input = newString();
 	char ch;
-    while ( ch != delimiter )
+	int x, y;
+	int count = 0;
+    while (1) 
     {
+		ch = getch();
+		if (ch == delimiter && input->size != 0) break;
 		if (ch == 127 || ch == 8) { //backspace or delete
 			popFromStr(input);
-		} else if (ch == '\n') {
-			continue;
-		}
-		else {
+			getyx(stdscr, y, x);
+			mvprintw(y, x-1, " ");
+			mvprintw(y, x-1, "\0");
+		} else if (ch >= 97 && ch <= 122 && input->size < maxLength) {
 			pushToStr(input, ch);
+			addch(ch);
+		} else if (ch >= 65 && ch <= 90 && input->size < maxLength) {
+			ch += 32;
+			pushToStr(input, ch);
+			addch(ch);
 		}
-        ch = getch();
+		refresh();
     }
 
     // // restore your cbreak / echo settings here
 	// trimStr(input);
-	printf("%s", input->contents);
-	getch();
-    // return input;
+    return input;
 	// return NULL;
 }
 

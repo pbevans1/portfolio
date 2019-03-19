@@ -9,9 +9,9 @@
 #ifndef __MAIN__MENU__C
 #define __MAIN__MENU__C
 
+string* display_start_menu();
 
-
-void displayMainMenu()  {
+string* displayMainMenu()  {
     // From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html
 
     WINDOW *menu_win;
@@ -30,7 +30,7 @@ void displayMainMenu()  {
 	int ch;
     char str[23];
     // string* username = newString();
-    char* username[550] = {"\0"};
+    char username[550] = {"\0"};
 
     initscr();			    /* Start curses mode */
     start_color();			/* Start color functionality */
@@ -49,7 +49,9 @@ void displayMainMenu()  {
     startx = (COLS - 30) / 2;
 
     // menu_win = newwin(0, 0, LINES, COLS);
-    WINDOW* start_menu = display_start_menu(username); 
+    string* name = display_start_menu(username); 
+    endwin();
+    return name;
     
 
     // print_menu(menu_win, 1, choices, n_choices);
@@ -83,45 +85,41 @@ void displayMainMenu()  {
 	endwin();			/* End curses mode		  */
 }
 
-WINDOW* display_start_menu(char* username) {
+string* display_start_menu() {
     //Open Welcome Screen
     WINDOW* start_menu = newwin(0, 0, LINES, COLS);
     char welcome[] = "Welcome to Nutrition Tracker Pro!";
     int welcome_y = LINES / 6;
-    
-    printCentered(welcome_y, welcome);
-
-    //Get Username
-    echo();	
-    while (1){
+    int choice;
+    string* username;
+    while (1) {
+        clear();
+        printCentered(welcome_y, welcome);
+        //Get Username	
         char instructions[] = "Enter a username to continue: ";
         mvprintw(welcome_y+3, ((COLS - 40) / 2), instructions);
-        scanw("%s", username);
-        trim(username);
-        if (strlen(username) != 0) break;
-    }
-    // readString(username, '\n');
-    // trimStr('');
-    move(welcome_y+3, 0);
-    clrtoeol();
-    // int startx = (COLS - username->size - 8) / 2;
-    int startx = (COLS - strlen(username) - 8) / 2;
-    mvprintw(welcome_y+3, startx, "Hello %s!", username);
+        username = readString(50, '\n');
+        
+        move(welcome_y+3, 0);
+        clrtoeol();
+        int startx = (COLS - username->size - 8) / 2;
+        mvprintw(welcome_y+3, startx, "Hello %s!", username->contents);
 
-    // return start_menu;
-
-    //Check for log file
-    int choice = 0;
-    if (!logFileExists(username)) {
-        printCentered(welcome_y+4, "We couldn't find any old log files for you");
-        char* options[] = {"1. Start a new diary", "2. Enter a different username"};
-        choice = selectFromChoices(start_menu, welcome_y+5, (COLS - 30) / 2, options, 2);
-
-        // printCentered(welcome_y+5, "Press any key to continue.");
-    } else {
-        printCentered(welcome_y+4, "We found your last save! Would you like to ");
-        char* options[] = {"1. Open it", "2. Overwrite it", "3. Enter a different username"};
-        choice = selectFromChoices(start_menu, welcome_y+5, (COLS - 30) / 2, options, 3);
+        
+        //Check for log file
+        if (!logFileExists(username->contents)) {
+            printCentered(welcome_y+4, "We couldn't find any old log files for you");
+            char* options[] = {"1. Start a new diary", "2. Enter a different username"};
+            choice = selectFromChoices(start_menu, welcome_y+5, (COLS - 30) / 2, options, 2);
+            if (choice == 2) continue;
+            // printCentered(welcome_y+5, "Press any key to continue.");
+        } else {
+            printCentered(welcome_y+4, "We found your last save! Would you like to ");
+            char* options[] = {"1. Open it", "2. Overwrite it", "3. Enter a different username"};
+            choice = selectFromChoices(start_menu, welcome_y+5, (COLS - 30) / 2, options, 3);
+            if (choice == 3) continue;
+            if (choice == 1) readDiary(username->contents);
+        }
     }
     for(int i = 5; i < 8; i++) {
         move(welcome_y+i, 0);
@@ -131,7 +129,7 @@ WINDOW* display_start_menu(char* username) {
     mvprintw(welcome_y+5,  (COLS - 20) /2, "You selected %d", choice);
     getch();
 
-    return start_menu;
+    return username;
 } 
 
 

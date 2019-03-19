@@ -14,9 +14,10 @@
 
 int main() {
     // vector* products = readProductFile("data/food_nutrient_db.csv");
-    displayMainMenu();
-    char searchString[500];
-    struct Node* products = readProductFile("data/food_nutrient_db.csv");
+    string* username = displayMainMenu();
+    printStr(username);
+    // char searchString[500];
+    // struct Node* products = readProductFile("data/food_nutrient_db.csv");
     
     // printf("Enter an item to look for: ");
     // scanf("%s", searchString);
