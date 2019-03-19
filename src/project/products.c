@@ -81,19 +81,38 @@ Product* getProductFromString(char* line) {
     product->serving_units = strFrom(nextField);
 
     return product;
-    
+}
+
+double gramsCaloriesPerServing(Product* product) {
+    double portionSizeAdjustment = product->ml_g_size / 100.0;
+    return product->energy_units * portionSizeAdjustment;
+}
+
+double gramsProteinPerServing(Product* product) {
+    double portionSizeAdjustment = product->ml_g_size / 100.0;
+    return product->protein_units * portionSizeAdjustment;
+}
+
+double gramsFatPerServing(Product* product) {
+    double portionSizeAdjustment = product->ml_g_size / 100.0;
+    return product->fat_units * portionSizeAdjustment;
+}
+
+double gramsCarbsPerServing(Product* product) {
+    double portionSizeAdjustment = product->ml_g_size / 100.0;
+    return product->carb_units * portionSizeAdjustment;
 }
 
 void prettyPrintProduct(Product* product) {
     if (product == NULL) return;
     printf("Name: "); printStr(product->name); printf("\n");
     printf("\tManufacturer: "); printStr(product->manufacturer); printf("\n");
-    printf("\tEnergy: %f\n", product->energy_units);
-    printf("\tCarbs: %f\n", product->carb_units);
-    printf("\tFat: %f\n", product->fat_units);
-    printf("\tProtein: %f\n", product->protein_units);
-    printf("\tServing Volume: %f %s\n", product->ml_g_size, product->ml_g);
-    printf("\tServing Size: %f %s\n", product->serving_size, product->serving_units->contents);
+    printf("\tEnergy: %.1f\n", product->energy_units);
+    printf("\tCarbs: %.1f\n", product->carb_units);
+    printf("\tFat: %.1f\n", product->fat_units);
+    printf("\tProtein: %.1f\n", product->protein_units);
+    printf("\tServing Volume: %.1f %s\n", product->ml_g_size, product->ml_g);
+    printf("\tServing Size: %.1f %s\n", product->serving_size, product->serving_units->contents);
 }
 
 

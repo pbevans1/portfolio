@@ -36,8 +36,22 @@ struct Node* readProductFile(char location[]) {
         // printf("%d\n", count++);
         products = insert(products, getProductFromString(buffer));
     }
+    fclose(fp);
 
     return products;
+}
+
+int logFileExists(char* username) {
+    char location[550] = {'\0'};
+    strcpy(location, "data/");
+    strcat(location, username);
+    strcat(location, ".log");
+    // printf("Looking in: %s\n", location);
+    FILE* logFile;
+    logFile = fopen(location, "r");
+    if (logFile == NULL) return 0;
+    fclose(logFile);
+    return 1;
 }
 
 // vector* readServingFile(char location[]) {

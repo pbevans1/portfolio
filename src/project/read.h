@@ -11,5 +11,5 @@
 
 struct Node* readProductFile(char[]);
 vector* readServingFile(char[]);
-
+int logFileExists(char*);
 #endif

@@ -1,5 +1,6 @@
 #include "displayHelper.h"
 #include <string.h>
+#include <stdlib.h>
 
 #ifndef __DISPLAY__HELP__C
 #define __DISPLAY__HELP__C
@@ -55,21 +56,109 @@ void print_menu(WINDOW *menuWIndow, int highlight, char* choices[], int numChoic
 }
 
 /* Report the choice according to mouse position */
-void report_choice(int mouse_x, int mouse_y, int start_x, int start_y, int *choiceNum, int numChoices, char* choices[])
+int report_choice(int mouse_x, int mouse_y, int x, int y, int numChoices, char* choices[])
 {	
-	int i,j, choice;
+	int choice;
  
-	i = start_x + 2;
-	j = start_y + 3;
 	for(choice = 0; choice < numChoices; ++choice)
-		if(mouse_y == j + choice && mouse_x >= i && mouse_x <= i + strlen(choices[choice]))
+		if(mouse_y == (y + choice) && mouse_x >= x && mouse_x <= (x + strlen(choices[choice])))
 		{	
-			if(choice == (numChoices - 1)) //if exit, return -1
-				*choiceNum = -1;		
-			else
-				*choiceNum = choice + 1;	
-			break;
+			return choice;	
+		} 
+	return -1;
+}
+
+void printCentered(int y, char* message) {
+	int x = (COLS - strlen(message)) / 2;
+	mvprintw(y, x, message);
+	refresh();
+}
+
+int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices) {
+	cbreak();               /* Don't wait for newline when reading characters */
+    noecho();
+	MEVENT event;
+	int input, choice;
+	/* Get all the mouse events */
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+	keypad(win, TRUE);
+	
+	for (int i = 0; i < numChoices; i++) {
+		mvprintw(y+i, x, choices[i]);
+	}
+	refresh();
+	choice = 0;
+	while(1){ 
+		highlightChoice(win, y, x, choices, numChoices, choice);
+		// input = wgetch(win);
+		input = getch();
+		if (input == KEY_MOUSE) {
+			if(getmouse(&event) == OK){
+			// printf("Bueller?");
+				int mouseChoice = report_choice(event.x, event.y, x, y, numChoices, choices);
+				// printf("Mouse at: %d, %d\n", event.y, event.x);
+				// printf("Choice at: %d, %d\n", y, x);
+				if (mouseChoice < 0) continue;
+				choice = mouseChoice;
+				return choice;
+			}
 		}
+		if (input == KEY_UP)  if (--choice < 0) choice = numChoices - 1;
+		if (input == KEY_DOWN) choice = (choice + 1) % numChoices;
+		if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 49; // if input is 0:numChoices, return int input
+		if (input == 10) return choice; // Enter
+	}
+	return choice;
+}
+
+void highlightChoice(WINDOW* menuWindow, int y, int x, char** choices, int numChoices, int highlight) {
+	// printf("Highlighting!");
+	// for(int i = 0; i < numChoices; ++i)
+	// {	if(highlight == (i + 1))
+	// 	{	wattron(menuWindow, A_REVERSE); 
+	// 		mvwprintw(menuWindow, y, x, "%s", choices[i]);
+	// 		wattroff(menuWindow, A_REVERSE);
+	// 	}
+	// 	else
+	// 		mvwprintw(menuWindow, y, x, "%s", choices[i]);
+	// 	++y;
+	// }
+	highlight = highlight % numChoices;
+	for(int i = 0; i < numChoices; ++i)
+	{	if(highlight == i)
+		{	attron(A_REVERSE); 
+			mvprintw(y + i, x, "%s", choices[i]);
+			attroff(A_REVERSE);
+		}
+		else
+			mvprintw(y + i, x, "%s", choices[i]);
+	}
+	// wrefresh(menuWindow);
+	refresh();
+}
+
+void readString(string* input, char delimiter) {
+	// string* input = newString();
+	char ch;
+    while ( ch != delimiter )
+    {
+		if (ch == 127 || ch == 8) { //backspace or delete
+			popFromStr(input);
+		} else if (ch == '\n') {
+			continue;
+		}
+		else {
+			pushToStr(input, ch);
+		}
+        ch = getch();
+    }
+
+    // // restore your cbreak / echo settings here
+	// trimStr(input);
+	printf("%s", input->contents);
+	getch();
+    // return input;
+	// return NULL;
 }
 
 #endif

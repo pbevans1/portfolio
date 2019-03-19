@@ -131,4 +131,22 @@ void uppercase(char target[]) {
         target[i] = toupper(target[i]);
     }
 }
+
+void trim(char target[]) {
+    int size = strlen(target);
+    int lastIndex = 0;
+    for(int i=0; i<size;i++) {
+        if (target[i] != ' ' && target[i] != '\n' && target[i] != '\t') lastIndex = i;
+    }
+    target[lastIndex + 1] = '\0';
+}
+void trimStr(string* target) {
+    //FIXME: Double check that size is correct
+    int lastIndex = 0;
+    for(int i=0; i<target->size;i++) {
+        if (target->contents[i] != ' ' && target->contents[i] != '\n' && target->contents[i] != '\t') lastIndex = i;
+    }
+    target->contents[lastIndex + 1] = '\0';
+    target->size = lastIndex+1;
+}
 #endif

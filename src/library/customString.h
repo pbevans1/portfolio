@@ -21,5 +21,7 @@ string* strFrom(char*);
 char *strtokm(char *str, const char *delim);
 unsigned long hashStr(string* name);
 void uppercase(char []);
+void trim(char[]);
+void trimStr(string* target);
 
 #endif
