@@ -4,6 +4,7 @@
 #include "products.h"
 
 typedef struct __entry {
+    int isDeleted;
     string* username;
     string* productName;
     Product* product;

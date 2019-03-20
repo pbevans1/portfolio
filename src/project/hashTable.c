@@ -3,6 +3,53 @@
 #ifndef __HASHTABLE__C
 #define __HASHTABLE__C
 
+hashTable* newTable() {
+    hashTable* new = malloc(sizeof(hashTable));
+    new->size = 0;
+    new->capacity = 30;
+    new->contents = malloc(sizeof(void*) * new->capacity);
+    for (int i = 0; i < new->capacity; i++) {
+        new->contents[i] = NULL;
+    }
+    return new;
+}
+
+void insertEntry(hashTable* table, entry* new) { 
+    if (table->size * 10 > table->capacity * 7) {
+        doubleEntryTable(table);
+    }
+    unsigned long hash = hashEntry(new);
+    int key = hash % table->capacity;
+    while(table->contents[key] != NULL) {
+        entry* currentEntry = (entry*) table->contents[key];
+        if(currentEntry->isDeleted) {
+            break;
+        }
+        key = (key + 1) % table->capacity;
+    }
+    table->contents[key] = new;
+}
+
+unsigned long hashEntry(entry* new) {
+    // FIXME
+    return 1;
+}
+
+void doubleEntryTable(hashTable* table) {
+    table->capacity *= 2;
+    table->size = 0;
+    void** temp = table->contents;
+    table->contents = malloc(sizeof(void*) * table->capacity);
+    for(int i = 0; i < (table->capacity / 2); i++) {
+        if (temp[i] != NULL) {
+            entry* current = (entry*) temp[i];
+            if (current->isDeleted) continue;
+            insertEntry(table, current);
+        }
+    }
+    free(temp);
+}
+
 hashTable* servingTableFrom(vector* src) {
     hashTable* table = malloc(sizeof(hashTable));
     table->size = 0;
