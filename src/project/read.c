@@ -47,9 +47,19 @@ int fileExists(char* filename) {
     return 1;
 }
 
-void readDiary(char* username) {
-    
+entry* readDiary(char* username) {
+    user
 }
+
+// typedef struct __entry {
+//     string* username;
+//     string* productName;
+//     Product* product;
+//     string* date;
+//     double servings;
+//     struct __entry* next;
+//     struct __entry* prev;
+// } entry;
 
 
 #endif

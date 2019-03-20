@@ -4,6 +4,7 @@
 #include "mainMenu.h"
 #include "string.h"
 #include "read.h"
+#include "diary.h"
 
 
 #ifndef __MAIN__MENU__C
@@ -64,18 +65,13 @@ string* getUsernameMenu() {
             char* options[] = {"1. Open it", "2. Overwrite it", "3. Enter a different username"};
             choice = selectFromChoices(start_menu, welcome_y+5, (COLS - 30) / 2, options, 3);
             if (choice == 1) {
-                readDiary(username->contents);
+                entry* diary = readDiary(username->contents);
                 break;
             }
             if (choice == 3) continue;
         }
     }
-    for(int i = 5; i < 8; i++) {
-        move(welcome_y+i, 0);
-        clrtoeol();
-    }
-    refresh();
-    mvprintw(welcome_y+5,  (COLS - 20) /2, "You selected %d", choice);
+    
     getch();
 
     return username;

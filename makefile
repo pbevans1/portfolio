@@ -72,3 +72,6 @@ build-all: download database make
 
 test-all: build-all
 	$(BIN)/main.out
+
+run: make
+	$(BIN)/main.out
