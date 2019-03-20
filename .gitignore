@@ -3,3 +3,15 @@ data/*
 .DS_Store
 launch.json
 .vscode
+dataBuilder/*
+# dataBuilder/carbs
+# dataBuilder/ec
+# dataBuilder/energy
+# dataBuilder/fat
+# dataBuilder/fp
+# dataBuilder/nutrients
+# dataBuilder/pn
+# dataBuilder/fp
+# dataBuilder/product
+# dataBuilder/protein
+# dataBuilder/serving

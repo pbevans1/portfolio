@@ -4,7 +4,7 @@
 #include "../library/customString.h"
 
 string* displayMainMenu();
-static void finish(int);
+void finish(int);
 // WINDOW* display_start_menu();
 
 

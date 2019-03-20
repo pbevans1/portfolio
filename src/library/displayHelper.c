@@ -143,7 +143,6 @@ string* readString(int maxLength, char delimiter) {
 	string* input = newString();
 	char ch;
 	int x, y;
-	int count = 0;
     while (1) 
     {
 		ch = getch();

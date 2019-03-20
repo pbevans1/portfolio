@@ -13,4 +13,5 @@ struct Node* readProductFile(char[]);
 vector* readServingFile(char[]);
 void readDiary(char*);
 int logFileExists(char*);
+int fileExists(char*);
 #endif

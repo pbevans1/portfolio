@@ -1,13 +1,15 @@
-CFLAGS =-std=c11 -g
+CFLAGS =-std=c11 -g -Wall
 LIB = src/library
 PROJ = src/project
 BIN = bin
+DATA = data/food_database.csv
+DOWNLOADS = dataBuilder/Nutrients.csv dataBuilder/Serving_size.csv dataBuilder/Products.csv
 # PROJ_OBJS missing $(BIN)/serving.o 
 
 LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o $(BIN)/avlTree.o
 PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/hashTable.o $(PROJ)/main.c
 
-make: $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c
+make: $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c $(DATA)
 	gcc $(CFLAGS) -lncurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
 
 # Library Files
@@ -39,10 +41,34 @@ $(BIN)/read.o: 	$(PROJ)/read.h $(PROJ)/read.c
 $(BIN)/hashTable.o:  $(PROJ)/hashTable.h $(PROJ)/hashTable.c
 	gcc $(CFLAGS) -c $(PROJ)/hashTable.c -o $(BIN)/hashTable.o
 
+# data 
+$(DATA): $(DOWNLOADS)
+	$(info echo "data/food_database.csv is missing. Add it or use 'make database' to build it.")
+	$(error missing data file)
+
+$(DOWNLOADS):
+	$(info Data files (Nutrients.csv, Products.csv, Serving_size.csv) are missing from dataBuilder/)
+	$(info Add them to the directory or use 'make download 'to download them.)
+	$(error missing data file)
 
 # General 
+database: $(DOWNLOADS)
+	./shellScripts/buildData.sh
+
+download:
+	./shellScripts/download.sh
+
 test: make 
 	$(BIN)/main.out
 	
 clean:
 	rm $(BIN)/*.o $(BIN)/*.out
+
+clean-all: 
+	rm $(BIN)/*.o $(BIN)/*.out
+	rm data/* dataBuilder/*
+
+build-all: download database make
+
+test-all: build-all
+	$(BIN)/main.out

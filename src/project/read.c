@@ -13,27 +13,12 @@ struct Node* readProductFile(char location[]) {
         printf("Error opening file!\n");
         return NULL;
     }
-
-
     const int BUFFER_SIZE = 9000;
     char buffer[BUFFER_SIZE];
     struct Node* products = NULL;
-    int count = 0;
     char *line;
-    // fgets(buffer, BUFFER_SIZE, fp); // read header row
-    // for (int i = 0; i < 1742; i++) {
-    //     fgets(buffer, BUFFER_SIZE, fp);
-    //     line = buffer;
-    //     printf("%d\n", count++);
-    //     pushToVec(products, getProductFromString(line));
-    // }
-    // fgets(buffer, BUFFER_SIZE, fp);
-    // printf("%s", buffer);
-
-    // pushToVec(products, getProductFromString(buffer));
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
-        // printf("%d\n", count++);
         products = insert(products, getProductFromString(buffer));
     }
     fclose(fp);
@@ -51,6 +36,14 @@ int logFileExists(char* username) {
     logFile = fopen(location, "r");
     if (logFile == NULL) return 0;
     fclose(logFile);
+    return 1;
+}
+
+int fileExists(char* filename) {
+    FILE* file;
+    file = fopen(filename, "r");
+    if (file == NULL) return 0;
+    fclose(file);
     return 1;
 }
 
