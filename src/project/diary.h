@@ -2,23 +2,18 @@
 #define __DIARY__H
 #include "../library/customString.h"
 #include "products.h"
+#include "stdlib.h"
+#include "../library/avlTree.h"
 
 typedef struct __entry {
     int isDeleted;
+    string* date;
     string* username;
     string* productName;
     Product* product;
-    string* date;
     double servings;
-    struct __entry* next;
-    struct __entry* prev;
 } entry;
 
-
-
-
-
-
-
-
+entry* newEntry(string*, string*, string*, int, struct Node*);
+char* formatEntry(entry*);
 #endif

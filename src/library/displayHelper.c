@@ -66,7 +66,20 @@ int report_choice(int mouse_x, int mouse_y, int x, int y, int numChoices, char* 
 			return choice;	
 		} 
 	}
-	return -1;
+	return -2;
+}
+
+int reportDiaryChoice(int mouse_x, int mouse_y, int x, int y, int numChoices, char* choices[]) //corrects for double spacing
+{	
+	int choice;
+ 
+	for(choice = 0; choice < numChoices; ++choice) {
+		if(mouse_y == (y + (choice * 2)) && mouse_x >= x && mouse_x <= (x + strlen(choices[choice])))
+		{	
+			return choice;	
+		} 
+	}
+	return -2;
 }
 
 void printCentered(int y, char* message) {
@@ -90,26 +103,61 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 	refresh();
 	choice = 0;
 	while(1){ 
-		highlightChoice(win, y, x, choices, numChoices, choice);
+		// highlightChoice(win, y, x, choices, numChoices, choice);
 		// input = wgetch(win);
 		input = getch();
 		if (input == KEY_MOUSE) {
 			if(getmouse(&event) == OK){
-			// printf("Bueller?");
 				int mouseChoice = report_choice(event.x, event.y, x, y, numChoices, choices);
-				// printf("Mouse at: %d, %d\n", event.y, event.x);
-				// printf("Choice at: %d, %d\n", y, x);
 				if (mouseChoice < 0) continue;
 				choice = mouseChoice;
 				return choice;
 			}
 		}
-		if (input == KEY_UP)  if (--choice < 0) choice = numChoices - 1;
-		if (input == KEY_DOWN) choice = (choice + 1) % numChoices;
+		// if (input == KEY_UP)  if (--choice < 0) choice = numChoices - 1;
+		// if (input == KEY_DOWN) choice = (choice + 1) % numChoices;
 		if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
-		if (input == 10) return choice; // Enter
+		// if (input == 10) return choice; // Enter
 	}
-	return choice + 1; // return the choice, converted to one-indexed.
+	return choice; // return the choice
+}
+
+int selectFromDiary(WINDOW* win, int y, int x, char** choices, int numChoices) {
+	cbreak();               /* Don't wait for newline when reading characters */
+    noecho();
+	MEVENT event;
+	int input, choice;
+	/* Get all the mouse events */
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+	keypad(win, TRUE);
+	attron(A_REVERSE); 
+	mvprintw(y, x, "%s", choices[0]);
+	attroff(A_REVERSE);
+	
+	
+	for (int i = 1; i < numChoices; i++) {
+		mvprintw(y+(i*2), x, choices[i]); //double space
+	}
+	refresh();
+	choice = 0;
+	while(1){ 
+		// highlightChoice(win, y, x, choices, numChoices, choice);
+		// input = wgetch(win);
+		input = getch();
+		if (input == KEY_MOUSE) {
+			if(getmouse(&event) == OK){
+				int mouseChoice = reportDiaryChoice(event.x, event.y, x, y, numChoices, choices);
+				if (mouseChoice < 0) continue;
+				choice = mouseChoice;
+				return choice;
+			}
+		}
+		// if (input == KEY_UP)  if (--choice < 0) choice = numChoices - 1;
+		// if (input == KEY_DOWN) choice = (choice + 1) % numChoices;
+		if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
+		// if (input == 10) return choice; // Enter
+	}
+	return choice; // return the choice
 }
 
 void highlightChoice(WINDOW* menuWindow, int y, int x, char** choices, int numChoices, int highlight) {

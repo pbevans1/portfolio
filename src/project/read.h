@@ -7,10 +7,11 @@
 #include<stdio.h>
 #include "../library/avlTree.h"
 #include "diary.h"
+#include "hashTable.h"
 
 struct Node* readProductFile(char[]);
 vector* readServingFile(char[]);
-entry* readDiary(char*);
+hashTable* readDiary(char*);
 int logFileExists(char*);
 int fileExists(char*);
 #endif

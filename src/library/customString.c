@@ -1,10 +1,10 @@
+#ifndef __STRING_CUST_C
+#define __STRING_CUST_C
+
 #include<stdio.h>
 #include<stdlib.h> 
 #include<string.h>
 #include "customString.h"
-
-#ifndef __STRING_CUST_C
-#define __STRING_CUST_C
 
 string* newString() {
     string* new = malloc(sizeof(string));
@@ -15,15 +15,15 @@ string* newString() {
     return new;
 }
 
-int len(string* str) {
+int len(string* str) { 
     return str->size;
 }
 
-bool strEquals(string* str1, string* str2) {
+int strEquals(string* str1, string* str2) {
     return (strcmp(str1->contents, str2->contents) == 0);
 }
 
-bool strComesBefore(string* str1, string* str2) {
+int strComesBefore(string* str1, string* str2) {
     return (strcmp(str1->contents, str2->contents) < 0);
 }
 
@@ -128,7 +128,8 @@ void test_string() {
 void uppercase(char target[]) {
     int size = strlen(target);
     for(int i=0; i<size;i++) {
-        target[i] = toupper(target[i]);
+        if (target[i] >= 97 && target[i] <= 122)
+            target[i] = target[i] - 32;
     }
 }
 
@@ -148,5 +149,10 @@ void trimStr(string* target) {
     }
     target->contents[lastIndex + 1] = '\0';
     target->size = lastIndex+1;
+}
+
+void freeStr(string* target) {
+    free(target->contents);
+    free(target);
 }
 #endif

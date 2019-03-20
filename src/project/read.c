@@ -47,8 +47,10 @@ int fileExists(char* filename) {
     return 1;
 }
 
-entry* readDiary(char* username) {
-    user
+hashTable* readDiary(char* username) {
+    // FIXME;
+    return NULL;
+    // user
 }
 
 // typedef struct __entry {

@@ -1,7 +1,7 @@
-#include<stdbool.h>
-#include <ctype.h> 
 #ifndef __STRING_CUST_H
 #define __STRING_CUST_H
+// #include <ctype.h> 
+
 typedef struct _string {
     int size;
     int capacity;
@@ -13,8 +13,8 @@ void pushToStr(string*, char);
 char popFromStr(string*);
 void test_string();
 int len(string*);
-bool strEquals(string*, string*);
-bool strComesBefore(string*, string*);
+int strEquals(string*, string*);
+int strComesBefore(string*, string*);
 void printStr(string*);
 string* copyStr(string*);
 string* strFrom(char*);
@@ -22,6 +22,6 @@ char *strtokm(char *str, const char *delim);
 unsigned long hashStr(string* name);
 void uppercase(char []);
 void trim(char[]);
-void trimStr(string* target);
-
+void trimStr(string*);
+void freeStr(string*);
 #endif
