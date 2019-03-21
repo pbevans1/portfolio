@@ -11,7 +11,7 @@
 
 struct Node* readProductFile(char[]);
 vector* readServingFile(char[]);
-hashTable* readDiary(char*);
+vector* readDiary(char*, struct Node*);
 int logFileExists(char*);
 int fileExists(char*);
 #endif

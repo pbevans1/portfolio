@@ -7,13 +7,17 @@
 
 typedef struct __entry {
     int isDeleted;
+    string* key;
     string* date;
-    string* username;
     string* productName;
     Product* product;
     double servings;
 } entry;
 
-entry* newEntry(string*, string*, string*, int, struct Node*);
+entry* newEntry(string*, string*, double, struct Node*);
 char* formatEntry(entry*);
+void swapEntriesAt(vector*, int, int);
+void insertIntoDiary(vector*, entry*);
+int binarySearchDiary(vector* diary, string* key, int low, int high);
+entry* entryFromString(char*, struct Node*);
 #endif

@@ -18,8 +18,8 @@ int main() {
         return 1;
     }
     
-    // struct Node* products = readProductFile("data/food_database.csv");
-    displayMainMenu();
+    struct Node* products = readProductFile("data/food_database.csv");
+    displayMainMenu(products);
     
     // printStr(username);
     // char searchString[500];

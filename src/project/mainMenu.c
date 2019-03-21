@@ -10,9 +10,12 @@
 #ifndef __MAIN__MENU__C
 #define __MAIN__MENU__C
 
-hashTable* getUserDiaryMenu();
-void diaryCrudMenu(hashTable* diary);
-string* displayMainMenu()  {
+vector* getUserDiaryMenu();
+void diaryCrudMenu(vector* diary, struct Node*);
+char** formatNextTenEntries(vector* diary, int startNum, char* button);
+int numEntries(char** formattedEntries);
+
+string* displayMainMenu(struct Node* productRoot)  {
     // From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html
 
 
@@ -26,46 +29,71 @@ string* displayMainMenu()  {
     
 
     // menu_win = newwin(0, 0, LINES, COLS);
-    hashTable* userDiary = getUserDiaryMenu();
-    diaryCrudMenu(userDiary);
+    vector* userDiary = getUserDiaryMenu();
+    diaryCrudMenu(userDiary, productRoot);
     finish(0);
     // FIXME
     return newString();
 }
 
-void diaryCrudMenu(hashTable* diary) {
+void diaryAddMenu(vector* diary, struct Node* productRoot) {
+    int instructionHeight = LINES / 6;
+    char instructions[] = "What kind of food did you eat? ";
+    printCentered(instructionHeight, instructions);
+    mvprintw(instructionHeight + 1, COLS/2 - 20, "Item Name: ");
+    
+    clear();
+}
+
+void diaryCrudMenu(vector* diary, struct Node* productRoot) {
     int instructionHeight = LINES / 6;
     char instructions[] = "Click any entry view, modify, or delete it, or press the button to add a new one.";
-    int currentEntry = 0;
-    char addButton[] = "New Entry";
+    int lastEntryDisplayed = 0;
+    char addButton[] = " New Entry";
+    char** currentPage;
     while(1) {
         clear();
         printCentered(instructionHeight, instructions);
-
+        currentPage = formatNextTenEntries(diary, lastEntryDisplayed, addButton);
+        int numToDisplay = numEntries(currentPage);
+        int x = (COLS / 5);
+        int choice = selectFromDiary(instructionHeight + 2, x, currentPage, numToDisplay + 1);
+        if (choice == 0) diaryAddMenu(diary, productRoot);
         getch();
         break;
     }
 }
 
-char** formatNextTenEntries(hashTable* diary, entry* lastDisplayed, int* numRetrieved, char* button) {
-    char** formattedEntries = malloc(sizeof(char*) * 11);
-    formattedEntries[0] = button;
-    int start = getEntryLocation(diary, lastDisplayed);
-    numRetrieved = 0;
-    for (int i = start; i < diary->capacity; i++) {
-        if (diary->contents[i] != NULL) {
-            entry* currentEntry = diary->contents[i];
-            if (currentEntry->isDeleted) continue;
-            char* next = formatEntry(currentEntry);
-            numRetrieved++;
-            formattedEntries[*numRetrieved] = next;
-            if (*numRetrieved >= 10) return formattedEntries;
-        }
-    }
-    return NULL;
+void diaryAddMenu(vector* diary, struct Node* productRoot) {
+
 }
 
-hashTable* getUserDiaryMenu() {
+int numEntries(char** formattedEntries) {
+    int i;
+    for (i = 1; i < 11; i++) {
+        if (formattedEntries[i] == NULL) break;
+    }
+    return i - 1;
+}
+
+char** formatNextTenEntries(vector* diary, int startNum, char* button) {
+    char** formattedEntries = malloc(sizeof(char*) * 11);
+    formattedEntries[0] = button;
+    int entriesIndex = 1;
+    // Fill up to 10 empty slots
+    for (int i = startNum; i < diary->size && entriesIndex < 11; i++) {
+        entry* currentEntry = (entry*) diary->contents[i];
+        formattedEntries[entriesIndex] = formatEntry(currentEntry);
+        entriesIndex++;
+    }
+    // Write NULLs to empty slots
+    for (int i = entriesIndex; i < 11; i++) {
+        formattedEntries[i] = NULL;
+    }
+    return formattedEntries;
+}
+
+vector* getUserDiaryMenu(struct Node* productRoot) {
     //Open Welcome Screen
     WINDOW* start_menu = newwin(0, 0, LINES, COLS);
     char welcome[] = "Welcome to Nutrition Tracker Pro!";
@@ -89,26 +117,26 @@ hashTable* getUserDiaryMenu() {
         //Check for log file
         if (!logFileExists(username->contents)) {
             printCentered(welcomeHeight+4, "We couldn't find any old log files for you");
-            char* options[] = {"1. Start a new diary", "2. Enter a different username"};
+            char* options[] = {"Start a new diary", "Enter a different username"};
             choice = selectFromChoices(start_menu, welcomeHeight+5, (COLS - 30) / 2, options, 2);
-            choice++; // Convert choice from index to number;
+            choice++; // Convert choice from index to counting number;
             if (choice == 1) {
                 destroyWindow(start_menu);
-                return newTable();
+                return newVector();
             }    
             if (choice == 2) continue;
-            // printCentered(welcomeHeight+5, "Press any key to continue.");
+
         } else {
             printCentered(welcomeHeight+4, "We found your last save! Would you like to ");
-            char* options[] = {"1. Open it", "2. Overwrite it", "3. Enter a different username"};
+            char* options[] = {"Open it", "Overwrite it", "Enter a different username"};
             choice = selectFromChoices(start_menu, welcomeHeight+5, (COLS - 30) / 2, options, 3);
             if (choice == 1) {
                 destroyWindow(start_menu);
-                return readDiary(username->contents);
+                return readDiary(username->contents, productRoot);
             }
             if (choice == 2) {
                 destroyWindow(start_menu);
-                return newTable();
+                return newVector();
             }
             if (choice == 3) continue;
         }
@@ -120,7 +148,7 @@ hashTable* getUserDiaryMenu() {
     getch();
     destroyWindow(start_menu);
 
-    return newTable();
+    return newVector();
 } 
 
 

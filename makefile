@@ -7,7 +7,7 @@ DOWNLOADS = dataBuilder/Nutrients.csv dataBuilder/Serving_size.csv dataBuilder/P
 # PROJ_OBJS missing $(BIN)/serving.o 
 
 LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o $(BIN)/avlTree.o
-PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/hashTable.o $(PROJ)/main.c
+PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/diary.o $(PROJ)/main.c
 
 make: $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c $(DATA)
 	gcc $(CFLAGS) -lncurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
@@ -32,22 +32,19 @@ $(BIN)/mainMenu.o: $(PROJ)/mainMenu.h $(PROJ)/mainMenu.c
 $(BIN)/products.o: 	$(PROJ)/products.h $(PROJ)/products.c
 	gcc $(CFLAGS) -c $(PROJ)/products.c -o $(BIN)/products.o
 
-# $(BIN)/serving.o: 	$(PROJ)/serving.h $(PROJ)/serving.c
-# 	gcc $(CFLAGS) -c $(PROJ)/serving.c -o $(BIN)/serving.o
-
 $(BIN)/read.o: 	$(PROJ)/read.h $(PROJ)/read.c
 	gcc $(CFLAGS) -c $(PROJ)/read.c -o $(BIN)/read.o
 
-$(BIN)/hashTable.o:  $(PROJ)/hashTable.h $(PROJ)/hashTable.c
-	gcc $(CFLAGS) -c $(PROJ)/hashTable.c -o $(BIN)/hashTable.o
+$(BIN)/diary.o:  $(PROJ)/diary.h $(PROJ)/diary.c
+	gcc $(CFLAGS) -c $(PROJ)/diary.c -o $(BIN)/diary.o
 
 # data 
 $(DATA): $(DOWNLOADS)
-	$(info echo "data/food_database.csv is missing. Add it or use 'make database' to build it.")
+	$(info echo 'data/food_database.csv' is missing. Add it or use 'make database' to build it.")
 	$(error missing data file)
 
 $(DOWNLOADS):
-	$(info Data files (Nutrients.csv, Products.csv, Serving_size.csv) are missing from dataBuilder/)
+	$(info Data files (Nutrients.csv, Products.csv, Serving_size.csv) are missing from 'dataBuilder/')
 	$(info Add them to the directory or use 'make download 'to download them.)
 	$(error missing data file)
 

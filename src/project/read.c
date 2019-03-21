@@ -1,6 +1,6 @@
 #include "read.h"
 #include "../project/products.h"
-#include "../project/serving.h"
+#include "diary.h"
 #include<string.h>
 
 
@@ -47,11 +47,29 @@ int fileExists(char* filename) {
     return 1;
 }
 
-hashTable* readDiary(char* username) {
-    // FIXME;
-    return NULL;
-    // user
+vector* readDiary(char* username, struct Node* productRoot) {
+    vector* diary = newVector();
+    char location[100] = {'\0'};
+    const int BUFFER_SIZE = 1000;
+    char buffer[BUFFER_SIZE];
+    char *line;
+   
+    strcpy(location, "data/");
+    strcat(location, username);
+    strcat(location, ".log");
+
+    FILE* fp;
+    fp = fopen(location, "r");
+    if (fp == NULL) return diary;
+    
+    while (fgets(buffer, BUFFER_SIZE, fp)) {
+        line = buffer;
+        insertIntoDiary(diary, entryFromString(line, productRoot));
+    }
+    
+    return diary;
 }
+
 
 // typedef struct __entry {
 //     string* username;

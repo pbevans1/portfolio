@@ -155,4 +155,25 @@ void freeStr(string* target) {
     free(target->contents);
     free(target);
 }
+
+string* joinStr(string* s1, string* s2, char* separator) {
+    if (s1 == NULL || s2 == NULL) return NULL;
+    int size = s1->size + s2->size + strlen(separator);
+    string* new = malloc(sizeof(string));
+    new->size = size;
+    new->capacity = size + 1;
+    new->contents = malloc(sizeof(char) * new->capacity);
+    // Copy str1
+    for (int i = 0; i < s1->size; i++) {
+        new->contents[i] = s1->contents[i];
+    }
+    for (int i = 0; i < strlen(separator); i++) {
+        new->contents[i + s1->size] = separator[i];
+    }
+    for (int i = 0; i < s2->size; i++) {
+        new->contents[i + s1->size + strlen(separator)] = s2->contents[i];
+    }
+    new->contents[new->size] = '\0';
+    return new;
+}
 #endif

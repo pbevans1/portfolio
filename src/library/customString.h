@@ -24,4 +24,5 @@ void uppercase(char []);
 void trim(char[]);
 void trimStr(string*);
 void freeStr(string*);
+string* joinStr(string*, string*, char*);
 #endif
