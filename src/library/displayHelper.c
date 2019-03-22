@@ -1,7 +1,5 @@
 #include "displayHelper.h"
-#include <string.h>
-#include <stdlib.h>
-#include "../library/avlTree.h"
+
 
 #ifndef __DISPLAY__HELP__C
 #define __DISPLAY__HELP__C
@@ -91,8 +89,8 @@ int report_choice(int mouse_x, int mouse_y, int startx, int endx, int y, int num
 int reportDiaryChoice(int mouse_x, int mouse_y, int startx, int endx , int y, int numChoices, char* choices[]) //corrects for double spacing
 {	
 	int choice;
- 
-	for(choice = 0; choice < numChoices; ++choice) {
+	if(mouse_y == y && mouse_x >= (COLS / 2) - 5  && mouse_x <= (COLS / 2) + 5) return 0; // handle add button
+	for(choice = 1; choice < numChoices; ++choice) {
 		if(mouse_y == (y + (choice * 2)) && mouse_x >= startx && mouse_x <= endx)
 		{	
 			return choice;	
@@ -228,20 +226,45 @@ void highlightChoice(WINDOW* menuWindow, int y, int x, char** choices, int numCh
 }
 
 Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
+	clear();
+	char instructions[] = "Click a product to select it, or back to search again.";
+	printCentered(y, instructions);
 	struct Node* nearestProducts[5];
+	char* productNames[6];
 	nearestProducts[1] = predecessor(closest);
-	nearestProducts[0] = predecessor(nearestProducts[1]);
-	nearestProducts[2] = closest;
+	nearestProducts[2] = predecessor(nearestProducts[1]);
+	nearestProducts[0] = closest;
 	nearestProducts[3] = successor(closest);
 	nearestProducts[4] = successor(nearestProducts[3]);
+	int maxLength = 0;
+	char backButton[] = "   Back   ";
+	productNames[0] = backButton;
+	for (int i = 0; i < 5; i++) {
+		char* name = nearestProducts[i]->product->name->contents;
+		// printw("%d: %s\n", i, name);
+		int nameLen = strlen(name);
+		if (nameLen > maxLength) maxLength = nameLen;
+		productNames[i + 1] = name;
+	}
+	int choice = selectFromDiary(y + 4, x, productNames, 6);
+	choice--; // convert to index into products
+	if (choice < 0) return NULL;
+	return nearestProducts[choice]->product;
+
 }
 
 
-Product* readProductName(int x, int y, int maxLength, char delimiter, struct Node* productRoot) {
-	noecho();
+string* readProductName(int startx, int starty, int maxLength, char delimiter, struct Node* productRoot) {
+	noecho(); 
 	string* input = newString();
-	char ch;
+	int ch;
 	int x, y;
+	MEVENT event;
+	char button[] = "  Search  ";
+	attron(A_REVERSE);
+	mvprintw(starty, startx, button);
+	attroff(A_REVERSE);
+	move(starty - 2, startx - 4);
     while (1) 
     {
 		ch = getch();
@@ -261,17 +284,21 @@ Product* readProductName(int x, int y, int maxLength, char delimiter, struct Nod
 		} else if (ch >= 48 && ch <= 57 && input->size < maxLength) {
 			pushToStr(input, ch);
 			addch(ch);
+		} else if (ch == '\n' && input->size != 0) {
+			break;
+		} else if (ch == KEY_MOUSE && input->size != 0) {
+			if(getmouse(&event) == OK){
+				// printw("x, %d, y: %d", event.x, event.y);
+				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
+				break;
+			}
 		}
 		
-		struct Node* closest = findClosestNode(productRoot, input->contents);
-
-		selectFromNearbyProducts(closest);
-		refresh();
     }
+	return input;
 
     // // restore your cbreak / echo settings here
 	// trimStr(input);
-    return input;
 	// return NULL;
 }
 

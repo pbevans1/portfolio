@@ -1,14 +1,6 @@
-#include <signal.h>
-#include <stdlib.h>
-#include "../library/displayHelper.h"
-#include "mainMenu.h"
-#include "string.h"
-#include "read.h"
-#include "diary.h"
-
-
 #ifndef __MAIN__MENU__C
 #define __MAIN__MENU__C
+#include "mainMenu.h"
 
 vector* getUserDiaryMenu();
 void diaryCrudMenu(vector* diary, struct Node*);
@@ -26,8 +18,6 @@ string* displayMainMenu(struct Node* productRoot)  {
     noecho();			    /* Don't echo while we do getch */
     init_pair(1, COLOR_CYAN, COLOR_BLACK);
 
-    
-
     // menu_win = newwin(0, 0, LINES, COLS);
     vector* userDiary = getUserDiaryMenu();
     diaryCrudMenu(userDiary, productRoot);
@@ -37,12 +27,24 @@ string* displayMainMenu(struct Node* productRoot)  {
 }
 
 void diaryAddMenu(vector* diary, struct Node* productRoot) {
+    
+    string* name;
     int instructionHeight = LINES / 6;
     char instructions[] = "What kind of food did you eat? ";
-    printCentered(instructionHeight, instructions);
-    mvprintw(instructionHeight + 1, COLS/2 - 20, "Item Name: ");
-    
+    Product* product = NULL;
+    while (1) {
+        clear();
+        printCentered(instructionHeight, instructions);
+        mvprintw(instructionHeight + 1, COLS/2 - 20, "Item Name: ");
+        name = readProductName((COLS / 2) - 5, instructionHeight + 3, 100, '\n', productRoot);
+        struct Node* nearestNode = findClosestNode(productRoot, name->contents);
+        product = selectFromNearbyProducts(COLS / 3, instructionHeight, nearestNode);
+        if (product != NULL) break;
+    }
     clear();
+    printCentered(5, product->name->contents);
+    getch();
+
 }
 
 void diaryCrudMenu(vector* diary, struct Node* productRoot) {
@@ -56,16 +58,12 @@ void diaryCrudMenu(vector* diary, struct Node* productRoot) {
         printCentered(instructionHeight, instructions);
         currentPage = formatNextTenEntries(diary, lastEntryDisplayed, addButton);
         int numToDisplay = numEntries(currentPage);
-        int x = (COLS / 5);
+        int x = (COLS / 4);
         int choice = selectFromDiary(instructionHeight + 2, x, currentPage, numToDisplay + 1);
         if (choice == 0) diaryAddMenu(diary, productRoot);
         getch();
         break;
     }
-}
-
-void diaryAddMenu(vector* diary, struct Node* productRoot) {
-
 }
 
 int numEntries(char** formattedEntries) {
@@ -117,8 +115,8 @@ vector* getUserDiaryMenu(struct Node* productRoot) {
         //Check for log file
         if (!logFileExists(username->contents)) {
             printCentered(welcomeHeight+4, "We couldn't find any old log files for you");
-            char* options[] = {"Start a new diary", "Enter a different username"};
-            choice = selectFromChoices(start_menu, welcomeHeight+5, (COLS - 30) / 2, options, 2);
+            char* options[] = {"Start a new diary ", "Enter a different username"};
+            choice = selectFromChoices(start_menu, welcomeHeight+6, (COLS - 30) / 2, options, 2);
             choice++; // Convert choice from index to counting number;
             if (choice == 1) {
                 destroyWindow(start_menu);
