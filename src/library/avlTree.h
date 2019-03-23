@@ -7,7 +7,6 @@
 #include "vector.h"
 
 
-// An AVL tree node 
 struct Node 
 { 
     char* key;

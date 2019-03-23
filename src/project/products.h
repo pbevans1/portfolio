@@ -6,20 +6,9 @@
 enum units {
     g = 0,
     ml =  1,
-    UNKNOWN = 2,
+    UNKNOWN = 2
 };
 
-// typedef struct __product {
-//     int NDB_Number;
-//     string* name;
-//     int source;
-//     int gtin_upc;
-//     string* manufacturer;
-//     char date_modified[11];
-//     char date_available[11];
-//     string* ingredients;
-    
-// } Product;
 
 typedef struct __product {
     int product_id;
@@ -39,5 +28,9 @@ typedef struct __product {
 Product* getProductFromString(char*);
 char *strtokm(char*, const char*);
 void prettyPrintProduct(Product*);
+double gramsCaloriesPerServing(Product*);
+double gramsCarbsPerServing(Product*);
+double gramsFatPerServing(Product*);
+double gramsProteinPerServing(Product*);
 
 #endif

@@ -3,11 +3,6 @@
 #ifndef __SERVING__H 
 #define __SERVING__H 
 
-// enum source {
-//     GDSN = 0,
-//     LI =  1,
-//     UNKNOWN = 2,
-// };
 
 typedef struct __serving {
     int NDB_Number;
@@ -20,7 +15,6 @@ typedef struct __serving {
 
 
 Serving* getServingFromString(char*);
-// char *strtokm(char*, const char*);
 void prettyPrintServing(Serving*);
 
 #endif

@@ -3,14 +3,14 @@
 
 #include "avlTree.h"
 
-// C program to insert a node in AVL tree 
+/*  C program to insert a node in AVL tree */
 #include<stdio.h> 
 #include<stdlib.h> 
 
   
 
   
-// A utility function to get the height of the tree 
+/* A utility function to get the height of the tree */
 int height(struct Node *N) 
 { 
     if (N == NULL) 
@@ -18,7 +18,7 @@ int height(struct Node *N)
     return N->height; 
 } 
   
-// A utility function to get maximum of two integers 
+/* A utility function to get maximum of two integers */
 int max(int a, int b) 
 { 
     return (a > b)? a : b; 
@@ -40,49 +40,46 @@ struct Node* newNode(Product* product)
     node->left   = NULL; 
     node->right  = NULL; 
     node->parent = NULL;
-    node->height = 1;  // new node is initially added at leaf 
+    node->height = 1;  /* new node is initially added at leaf */
     return(node); 
 } 
   
-// A utility function to right rotate subtree rooted with y 
-// See the diagram given above. 
+/* A utility function to right rotate subtree rooted with y 
+  See the diagram given above. */
 struct Node *rightRotate(struct Node *y) 
 { 
     struct Node *x = y->left; 
     struct Node *T2 = x->right; 
   
-    // Perform rotation 
     x->right = y; 
     y->left = T2; 
   
-    // Update heights 
     y->height = max(height(y->left), height(y->right))+1; 
     x->height = max(height(x->left), height(x->right))+1; 
   
-    // Return new root 
     return x; 
 } 
   
-// A utility function to left rotate subtree rooted with x 
-// See the diagram given above. 
+/* A utility function to left rotate subtree rooted with x 
+ See the diagram given above. */
 struct Node *leftRotate(struct Node *x) 
 { 
     struct Node *y = x->right; 
     struct Node *T2 = y->left; 
   
-    // Perform rotation 
+    /* Perform rotation */
     y->left = x; 
     x->right = T2; 
   
-    //  Update heights 
+    /*  Update heights */
     x->height = max(height(x->left), height(x->right))+1; 
     y->height = max(height(y->left), height(y->right))+1; 
   
-    // Return new root 
+    /* Return new root */
     return y; 
 } 
   
-// Get Balance factor of node N 
+/* Get Balance factor of node N */
 int getBalance(struct Node *N) 
 { 
     if (N == NULL) 
@@ -90,8 +87,8 @@ int getBalance(struct Node *N)
     return height(N->left) - height(N->right); 
 } 
   
-// Recursive function to insert a key in the subtree rooted 
-// with node and returns the new root of the subtree. 
+/* Recursive function to insert a key in the subtree rooted 
+   with node and returns the new root of the subtree. */
 struct Node* insert(struct Node* node, Product* prod) 
 { 
     /* 1.  Perform the normal BST insertion */
@@ -102,14 +99,14 @@ struct Node* insert(struct Node* node, Product* prod)
     if (strcmp(key,  node->key) < 0) {
         node->left  = insert(node->left, prod); 
         node->left->parent = node;
-        // printf(" %s left of %s\n", node->)
+        /* printf(" %s left of %s\n", node->) */
     }
         
     else if (strcmp(key,  node->key) > 0) {
         node->right = insert(node->right, prod); 
         node->right->parent = node;
     }
-    else // Equal keys are not allowed in BST 
+    else /* Equal keys are not allowed in BST */
         return node; 
   
     /* 2. Update height of this ancestor node */
@@ -121,26 +118,26 @@ struct Node* insert(struct Node* node, Product* prod)
           unbalanced */
     int balance = getBalance(node); 
   
-    // If this node becomes unbalanced, then 
-    // there are 4 cases 
+    /*If this node becomes unbalanced, then 
+     there are 4 cases */
   
-    // Left Left Case 
-    if (balance > 1 &&  (strcmp(key, node->left->key) < 0)) // (balance > 1 && key < node->left->key)
+    /*  Left Left Case */
+    if (balance > 1 &&  (strcmp(key, node->left->key) < 0)) /* (balance > 1 && key < node->left->key) */
         return rightRotate(node); 
   
-    // Right Right Case 
-    if (balance < -1 && (strcmp(key, node->right->key) > 0))  //(balance < -1 && key > node->right->key) 
+    /* Right Right Case */
+    if (balance < -1 && (strcmp(key, node->right->key) > 0))  /*(balance < -1 && key > node->right->key) */
         return leftRotate(node); 
   
-    // Left Right Case 
-    if (balance > 1 && (strcmp(key, node->left->key) > 0)) // (balance > 1 && key > node->left->key)
+    /* Left Right Case  */
+    if (balance > 1 && (strcmp(key, node->left->key) > 0)) /* (balance > 1 && key > node->left->key) */
     { 
         node->left =  leftRotate(node->left); 
         return rightRotate(node); 
     } 
   
-    // Right Left Case 
-    if (balance < -1 && (strcmp(key, node->right->key) < 0)) //(balance < -1 && key < node->right->key)
+    /* Right Left Case  */
+    if (balance < -1 && (strcmp(key, node->right->key) < 0)) /* (balance < -1 && key < node->right->key)*/
     { 
         node->right = rightRotate(node->right); 
         return leftRotate(node); 
@@ -150,9 +147,9 @@ struct Node* insert(struct Node* node, Product* prod)
     return node; 
 } 
   
-// A utility function to print preorder traversal 
-// of the tree. 
-// The function also prints height of every node 
+/* A utility function to print preorder traversal 
+  of the tree. 
+  The function also prints height of every node */
 void preOrder(struct Node *root) 
 { 
     if(root != NULL) 
@@ -163,9 +160,9 @@ void preOrder(struct Node *root)
     } 
 } 
 
-// A utility function to print inorder traversal 
-// of the tree. 
-// The function also prints height of every node 
+/* A utility function to print inorder traversal 
+ of the tree. 
+The function also prints height of every node */
 void inOrder(struct Node *root) 
 { 
     if(root != NULL) 
@@ -179,7 +176,7 @@ void inOrder(struct Node *root)
 
 
 
-//Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/
+/*Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/ */
 
 struct Node * minValue(struct Node* node) { 
   struct Node* current = node; 
@@ -205,12 +202,12 @@ struct Node * maxValue(struct Node* node) {
 struct Node* successor(struct Node *n) 
 { 
   if(n == NULL) return NULL;
-  //if n has bigger children, return the smallest
+  /*if n has bigger children, return the smallest*/
   if( n->right != NULL ) 
     return minValue(n->right); 
   
 
-  //Otherwise, travel up the tree until you find a left child or the root. Return it
+  /*Otherwise, travel up the tree until you find a left child or the root. Return it*/
   struct Node *p = n->parent; 
   while(p != NULL && n == p->right) 
   { 
@@ -223,11 +220,11 @@ struct Node* successor(struct Node *n)
 struct Node* predecessor(struct Node *n) 
 { 
   if(n == NULL) return NULL;
-  //if n has smaller children, return the biggest
+  /*if n has smaller children, return the biggest*/
   if( n->left != NULL ) 
     return maxValue(n->left); 
   
-  //Otherwise, travel up the tree until you find a right child or the root. Return it
+  /* Otherwise, travel up the tree until you find a right child or the root. Return it */
   struct Node *p = n->parent; 
   while(p != NULL && n == p->left) 
   { 
@@ -251,38 +248,6 @@ struct Node* findClosestNode(struct Node* root, char* key) {
     }
 
 }
-
-// void checkBSTForward(struct Node *root) {
-//     if (root == NULL) return;
-//     //FIXME using predecessor/successor
-//     struct Node* s = successorChild(root);
-//     if (s == NULL) return;
-//     if(strcmp(root->key, s->key) > 0) {
-//         printf("Error: %s after %s\n", root->key, s->key);
-//     } else {
-//         printf("Good: %s before %s\n", root->key, s->key);
-//     }
-//     checkBSTForward(root->left);
-//     checkBSTForward(root->right);
-//     return;
-
-// }
-
-// void checkBSTback(struct Node *root) {
-//     if (root == NULL) return;
-//     //FIXME using predecessor/successor
-//     struct Node* s = predChild(root);
-//     if (s == NULL) return;
-//     if(strcmp(root->key, s->key) > 0) {
-//         printf("Error: %s before %s\n", root->key, s->key);
-//     } else {
-//         printf("Good: %s before %s\n", root->key, s->key);
-//     }
-//     checkBSTback(root->left);
-//     checkBSTback(root->right);
-//     return;
-
-// }
   
 /* Drier program to test above function*/
 int testAVL(vector* products)  

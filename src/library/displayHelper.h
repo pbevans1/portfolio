@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "../library/avlTree.h"
+#include "../project/diary.h"
 
 typedef struct __button {
     char* text;
@@ -38,4 +39,5 @@ int previousButtonClicked(int input, MEVENT event);
 int nextButtonClicked(int input, MEVENT event);
 void printUpdateMenuButtons();
 int updateMenuButtonClicked(int input, MEVENT event);
+void printEntry(entry*);
 #endif

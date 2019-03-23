@@ -44,14 +44,16 @@ string* strFrom(char* str) {
 }
  
 void pushToStr(string* str, char value) {
+    int i;
+    char* temp_contents ;
+    if ((str->size + 1) == str->capacity) { 
     // If adding a character would overwrite the last null
-    if ((str->size + 1) == str->capacity) {
         str->capacity *= 2;
-        char* temp_contents = malloc(sizeof(char) * (str)->capacity);
-        for (int i = 0; i < str->size; i++) {
+        temp_contents = malloc(sizeof(char) * (str)->capacity);
+        for (i = 0; i < str->size; i++) {
             temp_contents[i] = str->contents[i];
         }
-        for (int i = str->size; i < str->capacity; i++) {
+        for (i = str->size; i < str->capacity; i++) {
             temp_contents[i] = '\0';
         }
         free(str->contents);
@@ -62,23 +64,25 @@ void pushToStr(string* str, char value) {
 }
 
 string* copyStr(string* str) {
+    int i;
     string* new = newString();
-    for (int i = 0; i < str->size; i++) {
+    for (i = 0; i < str->size; i++) {
         pushToStr(new, str->contents[i]);
     }
     return new;
 }
 
 char popFromStr(string* str) {
+    int i;
     if (str->size == 0) return '\0';
     char last = str->contents[--str->size];
     if (str->size <= (str->capacity / 4)) {
         str->capacity /= 2;
         char* temp_contents = malloc(sizeof(char) * (str)->capacity);
-        for (int i = 0; i < str->size; i++) {
+        for (i = 0; i < str->size; i++) {
             temp_contents[i] = str->contents[i];
         }
-        for (int i = str->size; i < str->capacity; i++) {
+        for (i = str->size; i < str->capacity; i++) {
             temp_contents[i] = '\0';
         }
         free(str->contents);
@@ -95,14 +99,17 @@ string* destroyStr(string* str) {
 }
 
 void test_string() {
-    string* a = newString();
-    string* b = newString();
+    string* a;
+    string* b;
+    a = newString();
+    b = newString();
+    int i;
 
-    for (int i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i++) {
         pushToStr(a, (char)(i + 97));
     }
     pushToStr(a, 'z');
-    for (int i = 0; i < 80; i++) {
+    for (i = 0; i < 80; i++) {
         pushToStr(b, (char)(i + 97));
     }
     string* c = copyStr(b); 
@@ -111,7 +118,7 @@ void test_string() {
         return;
     }
     
-    for (int i = 0; i < 60; i++) {
+    for (i = 0; i < 60; i++) {
         popFromStr(b);
     }
     
@@ -126,8 +133,9 @@ void test_string() {
 }
 
 void uppercase(char target[]) {
+    int i;
     int size = strlen(target);
-    for(int i=0; i<size;i++) {
+    for(i = 0; i<size;i++) {
         if (target[i] >= 97 && target[i] <= 122)
             target[i] = target[i] - 32;
     }
@@ -136,7 +144,8 @@ void uppercase(char target[]) {
 void trim(char target[]) {
     int size = strlen(target);
     int lastIndex = 0;
-    for(int i=0; i<size;i++) {
+    int i;
+    for(i = 0; i<size;i++) {
         if (target[i] != ' ' && target[i] != '\n' && target[i] != '\t') lastIndex = i;
     }
     target[lastIndex + 1] = '\0';
@@ -157,20 +166,22 @@ void freeStr(string* target) {
 }
 
 string* joinStr(string* s1, string* s2, char* separator) {
+    int i, size;
+    string* new;
     if (s1 == NULL || s2 == NULL) return NULL;
-    int size = s1->size + s2->size + strlen(separator);
-    string* new = malloc(sizeof(string));
+    size = s1->size + s2->size + strlen(separator);
+    new = malloc(sizeof(string));
     new->size = size;
     new->capacity = size + 1;
     new->contents = malloc(sizeof(char) * new->capacity);
     // Copy str1
-    for (int i = 0; i < s1->size; i++) {
+    for (i = 0; i < s1->size; i++) {
         new->contents[i] = s1->contents[i];
     }
-    for (int i = 0; i < strlen(separator); i++) {
+    for (i = 0; i < strlen(separator); i++) {
         new->contents[i + s1->size] = separator[i];
     }
-    for (int i = 0; i < s2->size; i++) {
+    for (i = 0; i < s2->size; i++) {
         new->contents[i + s1->size + strlen(separator)] = s2->contents[i];
     }
     new->contents[new->size] = '\0';

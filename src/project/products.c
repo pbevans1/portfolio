@@ -57,7 +57,6 @@ Product* getProductFromString(char* line) {
     } else {
         product->protein_units = 0.0;
     }
-    // printf("2\n");
 
     nextField = strsep(&line, delimiter);
     if (strlen(nextField)) {
@@ -65,7 +64,6 @@ Product* getProductFromString(char* line) {
     } else {
         product->ml_g_size = 0.0;
     }
-    // printf("3\n");
 
     nextField = strsep(&line, delimiter);
     strcpy(product->ml_g, nextField);

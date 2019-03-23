@@ -12,8 +12,7 @@
 
 string* displayMainMenu();
 void finish(int);
-// WINDOW* display_start_menu();
-
+void saveAndQuit(vector* diary, string* username);
 
 
 

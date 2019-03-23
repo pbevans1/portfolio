@@ -36,8 +36,8 @@ entry* entryFromProduct(Product* prod, string* date, double numServings) {
 
 
 char* formatEntry(entry* ent) {
-    char* name = malloc(sizeof(char) * (ent->productName->size + 1));
-    strcpy(name, ent->productName->contents);
+    char* name = malloc(sizeof(char) * (400));
+    sprintf(name, "%s: %.1f servings of %s", ent->date->contents, ent->servings, ent->product->name->contents);
     return name;
 }
 
@@ -115,10 +115,27 @@ entry* entryFromString(char* line, struct Node* productRoot) {
     return newEntry(productName, date, numServings, productRoot);
 }
 
+void saveEntry(entry* ent, FILE* fp) {
+    fprintf(fp, "%s~%s~%.2f", ent->date->contents, 
+        ent->product->name->contents, ent->servings);
+}
+
+void saveDiary(vector* diary, string* username) {
+    if (diary->size == 0) return;
+    FILE* fp;
+    char location[100] = {'\0'};
+    strcpy(location, "data/");
+    strcat(location, username->contents);
+    strcat(location, ".log");
+
+    fp = fopen(location, "w");
 
 
-
-
-
+    int i;
+    for(i = 0; i < diary->size; i++) {
+        entry* current = (entry*) diary->contents[i];
+        saveEntry(current, fp);
+    }
+}
 
 #endif

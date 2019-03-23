@@ -32,11 +32,11 @@ string* createButtonString(char* text, int size) {
 	new->contents[new->size] = '\0';
 	int textSize = strlen(text);
 	int numSpaces = (size - textSize) / 2;
-	for (int i = 0; i < numSpaces; i++) {
+	for (int i = 0; i <= numSpaces; i++) {
 		new->contents[i] = ' ';
 	}
 	strcat(new->contents, text);
-	for (int i = numSpaces + textSize; i < new->size; i++) {
+	for (int i = numSpaces + textSize + 1; i < new->size; i++) {
 		new->contents[i] = ' ';
 	}
 	return new;
@@ -220,7 +220,7 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 			ch -= 32;
 			pushToStr(input, ch);
 			addch(ch);
-		} else if (ch >= 65 && ch <= 90 && input->size < maxLength) {
+		} else if (((ch == 32) || (ch >= 65 && ch <= 90)) && input->size < maxLength) {
 			pushToStr(input, ch);
 			addch(ch);
 		} else if (ch >= 48 && ch <= 57 && input->size < maxLength) {
@@ -534,5 +534,15 @@ void printUpdateMenuButtons() {
 	attroff(A_REVERSE);
 }
 
+void printEntry(entry* ent) {
+	int y = (LINES / 6 + 10);
+	int x = (COLS / 2 - 8);
+	Product* prod = ent->product;
+	mvprintw(y-1, x-4, "%.1f Servings has: ", ent->servings); 
+	mvprintw(y, x, "Calories: %.1f", gramsCaloriesPerServing(prod) * ent->servings);
+	mvprintw(y+1, x, "Carbs: %.1f g", gramsCarbsPerServing(prod)  * ent->servings);
+	mvprintw(y+2, x, "Fat: %.1f g", gramsFatPerServing(prod)  * ent->servings);
+	mvprintw(y+3, x, "Protein: %.1f g", gramsProteinPerServing(prod)  * ent->servings);
+}
 
 #endif

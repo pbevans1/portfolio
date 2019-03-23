@@ -1,6 +1,5 @@
 #ifndef __STRING_CUST_H
 #define __STRING_CUST_H
-// #include <ctype.h> 
 
 typedef struct _string {
     int size;
