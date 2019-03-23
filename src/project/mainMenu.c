@@ -244,7 +244,7 @@ char** formatNextTenEntries(vector* diary, int startNum, char* button) {
 struct user* getUserDiaryMenu(struct Node* productRoot) {
     /* Open Welcome Screen */
     WINDOW* start_menu = newwin(0, 0, LINES, COLS);
-    char welcome[] = "Welcome to Nutrition Tracker Pro!";
+    char welcome[] = "Welcome to NutritionTracker!";
     int welcomeHeight = LINES / 6;
     int choice, startx;
     char instructions[] = "Enter a username to continue: ";
@@ -266,13 +266,13 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
         clear();
         printExitButton();
         startx = (COLS - username->size - 8) / 2;
-        mvprintw(welcomeHeight+3, startx, "Hello %s!", username->contents);
+        mvprintw(welcomeHeight, startx, "Hello %s!", username->contents);
 
         
         /*Check for log file */
         if (!logFileExists(username->contents)) {
-            printCentered(welcomeHeight+4, "We couldn't find any old log files for you");
-            choice = selectFromChoices(start_menu, welcomeHeight+6, (COLS - 30) / 2, options, 2);
+            printCentered(welcomeHeight+2, "We couldn't find any old log files for you");
+            choice = selectFromChoices(start_menu, welcomeHeight+4, (COLS - 30) / 2, options, 2);
             if (choice == -5) finish(0);
             choice++; /* Convert choice from index to counting number; */
             if (choice == 1) {
@@ -282,8 +282,8 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
             }    
             if (choice == 2) continue;
         } else {
-            printCentered(welcomeHeight+4, "We found your last save! Would you like to... ");
-            choice = selectFromChoices(start_menu, welcomeHeight+5, (COLS - 30) / 2, foundOptions, 3);
+            printCentered(welcomeHeight+2, "We found your last save! Would you like to... ");
+            choice = selectFromChoices(start_menu, welcomeHeight+4, (COLS - 30) / 2, foundOptions, 3);
             if (choice == -5) finish(0);
             choice++; /*  Convert choice from index to counting number; */
             if (choice == 1) {

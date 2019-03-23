@@ -29,9 +29,12 @@ string* createButtonString(char* text, int size) {
 	new->size = size;
 	new->capacity = size + 1;
 	new->contents = malloc(sizeof(char) * new->capacity);
-	new->contents[new->size] = '\0';
 	int textSize = strlen(text);
 	int numSpaces = (size - textSize) / 2;
+	int i;
+	for(i = 0; i < new->capacity; i++) {
+		new->contents[i] = '\0';
+	}
 	for (int i = 0; i <= numSpaces; i++) {
 		new->contents[i] = ' ';
 	}
@@ -450,7 +453,7 @@ void printPreviousButton(vector* diary, int lastDisplayed, int instructionHeight
 void printNextButton(vector* diary, int lastDisplayed, int instructionHeight) {
 	if ((lastDisplayed + 10) < diary->size) {
 		attron(A_REVERSE);
-		mvprintw(instructionHeight + 2, ( 4 * COLS / 7), "   Next   ");
+		mvprintw(instructionHeight + 2, ( 4 * COLS / 7 + 10), "   Next   ");
 		attroff(A_REVERSE);
 	}
 }
@@ -468,7 +471,7 @@ int previousButtonClicked(int input, MEVENT event) {
 }
 
 int nextButtonClicked(int input, MEVENT event) {
-	int x = ( 4 * COLS / 7);
+	int x = ( 4 * COLS / 7 + 10);
 	int y = (LINES / 6 + 2);
 	if (input == KEY_MOUSE) {
 		if(getmouse(&event) == OK){

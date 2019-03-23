@@ -115,10 +115,6 @@ entry* entryFromString(char* line, struct Node* productRoot) {
     return newEntry(productName, date, numServings, productRoot);
 }
 
-void saveEntry(entry* ent, FILE* fp) {
-    fprintf(fp, "%s~%s~%.2f", ent->date->contents, 
-        ent->product->name->contents, ent->servings);
-}
 
 void saveDiary(vector* diary, string* username) {
     if (diary->size == 0) return;
@@ -128,14 +124,14 @@ void saveDiary(vector* diary, string* username) {
     strcat(location, username->contents);
     strcat(location, ".log");
 
-    fp = fopen(location, "w");
-
-
+    fp = fopen(location, "w+");
     int i;
     for(i = 0; i < diary->size; i++) {
         entry* current = (entry*) diary->contents[i];
-        saveEntry(current, fp);
+        fprintf(fp, "%s~%s~%.2f\n", current->date->contents, 
+        current->product->name->contents, current->servings);
     }
+    fclose(fp);
 }
 
 #endif

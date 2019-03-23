@@ -67,19 +67,9 @@ vector* readDiary(char* username, struct Node* productRoot) {
         insertIntoDiary(diary, entryFromString(line, productRoot));
     }
     
+    fclose(fp);
     return diary;
 }
-
-
-// typedef struct __entry {
-//     string* username;
-//     string* productName;
-//     Product* product;
-//     string* date;
-//     double servings;
-//     struct __entry* next;
-//     struct __entry* prev;
-// } entry;
 
 
 #endif
