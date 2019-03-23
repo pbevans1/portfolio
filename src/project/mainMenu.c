@@ -84,7 +84,7 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
         printw("ERROR NULL");
         getch();
     }
-    pushToVec(diary, new);
+    insertIntoDiary(diary, new);
 }
 
 void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string* username) {
@@ -134,6 +134,8 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
                 if (product != NULL) break;
             }
             ent->product = product;
+            freeStr(ent->key);
+            ent->key = joinStr(ent->date, ent->product->name, ": ");
         } 
         if (choice == -10) {
             /*  Get new date */
@@ -148,6 +150,8 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
             }
             freeStr(ent->date);
             ent->date = date;
+            freeStr(ent->key);
+            ent->key = joinStr(ent->date, ent->product->name, ": ");
         }
         if (choice == -9) {
             /* Get new servings*/

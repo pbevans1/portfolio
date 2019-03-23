@@ -64,7 +64,7 @@ void insertIntoDiary(vector* diary, entry* new) {
     // insertionSort the newest entry
     while(previousIndex >= 0) {
         entry* previousEntry = (entry*) diary->contents[previousIndex];
-        if (strcmp(previousEntry->key->contents, new->key->contents) > 0) {
+        if (strcmp(previousEntry->key->contents, new->key->contents) < 0) {
             //if entries are out of order
             swapEntriesAt(diary, previousIndex, (previousIndex + 1));
             previousIndex--;
