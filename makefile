@@ -1,4 +1,4 @@
-CFLAGS =-std=c11 -g -Wall
+CFLAGS =-std=c11 -g -Wall -pedantic
 LIB = src/library
 PROJ = src/project
 BIN = bin

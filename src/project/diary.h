@@ -15,6 +15,8 @@ typedef struct __entry {
 } entry;
 
 entry* newEntry(string*, string*, double, struct Node*);
+entry* entryFromProduct(Product*, string*, double);
+
 char* formatEntry(entry*);
 void swapEntriesAt(vector*, int, int);
 void insertIntoDiary(vector*, entry*);

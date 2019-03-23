@@ -20,17 +20,6 @@ WINDOW *createWindow(int height, int width, int starty, int startx) {
 // From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html
 void destroyWindow(WINDOW *local_win) {	
 	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' '); // Erase borders
-	/* The parameters taken are 
-	 * 1. win: the window on which to operate
-	 * 2. ls: character to be used for the left side of the window 
-	 * 3. rs: character to be used for the right side of the window 
-	 * 4. ts: character to be used for the top side of the window 
-	 * 5. bs: character to be used for the bottom side of the window 
-	 * 6. tl: character to be used for the top left corner of the window 
-	 * 7. tr: character to be used for the top right corner of the window 
-	 * 8. bl: character to be used for the bottom left corner of the window 
-	 * 9. br: character to be used for the bottom right corner of the window
-	 */
 	wrefresh(local_win);
 	delwin(local_win);
 }
@@ -51,25 +40,6 @@ string* createButtonString(char* text, int size) {
 		new->contents[i] = ' ';
 	}
 	return new;
-}
-
-void print_menu(WINDOW *menuWIndow, int highlight, char* choices[], int numChoices)
-{
-	int x, y, i;
-	x = 2;
-	y = 2;
-	box(menuWIndow, 0, 0);
-	for(i = 0; i < numChoices; ++i)
-	{	if(highlight == i + 1)
-		{	wattron(menuWIndow, A_REVERSE); 
-			mvwprintw(menuWIndow, y, x, "%s", choices[i]);
-			wattroff(menuWIndow, A_REVERSE);
-		}
-		else
-			mvwprintw(menuWIndow, y, x, "%s", choices[i]);
-		++y;
-	}
-	wrefresh(menuWIndow);
 }
 
 /* Report the choice according to mouse position */
@@ -125,10 +95,10 @@ void writeSpacesUntil(int x) {
 int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices) {
 	cbreak();               /* Don't wait for newline when reading characters */
     noecho();
-	MEVENT event;
 	int input, choice;
 	/* Get all the mouse events */
 	mousemask(ALL_MOUSE_EVENTS, NULL);
+	MEVENT event;
 	keypad(win, TRUE);
 	attron(A_REVERSE); 
 	int maxlength = maxLen(choices, numChoices);
@@ -141,10 +111,11 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 	refresh();
 	choice = 0;
 	while(1){ 
-		// highlightChoice(win, y, x, choices, numChoices, choice);
-		// input = wgetch(win);
 		input = getch();
 		if (input == KEY_MOUSE) {
+			if (exitButtonWasClicked(input, event)) {
+				return -5;
+				}
 			if(getmouse(&event) == OK){
 				int mouseChoice = report_choice(event.x, event.y, x, x+maxlength, y, numChoices, choices);
 				if (mouseChoice < 0) continue;
@@ -152,10 +123,7 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 				return choice;
 			}
 		}
-		// if (input == KEY_UP)  if (--choice < 0) choice = numChoices - 1;
-		// if (input == KEY_DOWN) choice = (choice + 1) % numChoices;
 		if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
-		// if (input == 10) return choice; // Enter
 	}
 	return choice; // return the choice
 }
@@ -180,10 +148,11 @@ int selectFromDiary(int y, int x, char** choices, int numChoices) {
 	refresh(); 
 	choice = 0;
 	while(1){ 
-		// highlightChoice(win, y, x, choices, numChoices, choice);
-		// input = wgetch(win);
 		input = getch();
 		if (input == KEY_MOUSE) {
+			if (exitButtonWasClicked(input, event)) return -5;
+			if (previousButtonClicked(input, event)) return -3;
+			if (nextButtonClicked(input, event)) return -1;
 			if(getmouse(&event) == OK){
 				int mouseChoice = reportDiaryChoice(event.x, event.y, x, x + maxlength, y, numChoices, choices);
 				if (mouseChoice < 0) continue;
@@ -191,49 +160,20 @@ int selectFromDiary(int y, int x, char** choices, int numChoices) {
 				return choice;
 			}
 		}
-		// if (input == KEY_UP)  if (--choice < 0) choice = numChoices - 1;
-		// if (input == KEY_DOWN) choice = (choice + 1) % numChoices;
-		// if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
-		// if (input == 10) return choice; // Enter
 	}
 	return choice; // return the choice
 }
 
-void highlightChoice(WINDOW* menuWindow, int y, int x, char** choices, int numChoices, int highlight) {
-	// printf("Highlighting!");
-	// for(int i = 0; i < numChoices; ++i)
-	// {	if(highlight == (i + 1))
-	// 	{	wattron(menuWindow, A_REVERSE); 
-	// 		mvwprintw(menuWindow, y, x, "%s", choices[i]);
-	// 		wattroff(menuWindow, A_REVERSE);
-	// 	}
-	// 	else
-	// 		mvwprintw(menuWindow, y, x, "%s", choices[i]);
-	// 	++y;
-	// }
-	highlight = highlight % numChoices;
-	for(int i = 0; i < numChoices; ++i)
-	{	if(highlight == i)
-		{	attron(A_REVERSE); 
-			mvprintw(y + i, x, "%s", choices[i]);
-			attroff(A_REVERSE);
-		}
-		else
-			mvprintw(y + i, x, "%s", choices[i]);
-	}
-	// wrefresh(menuWindow);
-	refresh();
-}
-
 Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
 	clear();
+	printBackButton();
 	char instructions[] = "Click a product to select it, or back to search again.";
 	printCentered(y, instructions);
 	struct Node* nearestProducts[5];
 	char* productNames[6];
+	nearestProducts[0] = closest;
 	nearestProducts[1] = predecessor(closest);
 	nearestProducts[2] = predecessor(nearestProducts[1]);
-	nearestProducts[0] = closest;
 	nearestProducts[3] = successor(closest);
 	nearestProducts[4] = successor(nearestProducts[3]);
 	int maxLength = 0;
@@ -260,6 +200,8 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 	int ch;
 	int x, y;
 	MEVENT event;
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+
 	char button[] = "  Search  ";
 	attron(A_REVERSE);
 	mvprintw(starty, startx, button);
@@ -269,7 +211,7 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
     {
 		ch = getch();
 		if (ch == delimiter && input->size != 0) break;
-		if (ch == 127 || ch == 8) { //backspace or delete
+		if ((ch == 127 || ch == 8) && input->size > 0) { //backspace or delete
 			popFromStr(input);
 			getyx(stdscr, y, x);
 			mvprintw(y, x-1, " ");
@@ -286,8 +228,57 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 			addch(ch);
 		} else if (ch == '\n' && input->size != 0) {
 			break;
-		} else if (ch == KEY_MOUSE && input->size != 0) {
-			if(getmouse(&event) == OK){
+		} else if (ch == KEY_MOUSE) {
+			if (exitButtonWasClicked(ch, event)) {
+				return NULL;
+			}
+			if(getmouse(&event) == OK && input->size != 0){
+				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
+					break;
+			}
+		}
+    }
+	return input;
+}
+
+string* readDate(int startx, int starty, char delimiter, struct Node* productRoot) {
+	noecho(); 
+	string* input = newString();
+	int ch;
+	int x, y;
+	MEVENT event;
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+
+	char button[] = "  Enter  ";
+	attron(A_REVERSE);
+	mvprintw(starty, startx, button);
+	attroff(A_REVERSE);
+	move(starty - 2, startx + 4);
+    while (1) 
+    {
+		ch = getch();
+		if (ch == delimiter && input->size == 10) break;
+		if ((ch == 127 || ch == 8) && input->size > 0) { //backspace or delete
+			if (input->size == 5 || input->size == 8) {
+				popFromStr(input);
+				getyx(stdscr, y, x);
+				mvprintw(y, x-1, " ");
+				mvprintw(y, x-1, "\0");
+			}
+			popFromStr(input);
+			getyx(stdscr, y, x);
+			mvprintw(y, x-1, " ");
+			mvprintw(y, x-1, "\0");
+		} else if (ch >= 48 && ch <= 57 && input->size < 10) {
+			pushToStr(input, ch);
+			addch(ch);
+			if (input->size == 4 || input->size == 7) {
+				pushToStr(input, '/');
+				addch('/');
+			}
+		} else if (ch == KEY_MOUSE ) {
+			if (exitButtonWasClicked(ch, event)) return NULL;
+			if(getmouse(&event) == OK && input->size == 10){
 				// printw("x, %d, y: %d", event.x, event.y);
 				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
 				break;
@@ -296,22 +287,80 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 		
     }
 	return input;
-
-    // // restore your cbreak / echo settings here
-	// trimStr(input);
-	// return NULL;
 }
 
-string* readString(int maxLength, char delimiter) {
-	noecho();
+double readFloat(int startx, int starty, char delimiter, struct Node* productRoot) {
+	noecho(); 
 	string* input = newString();
-	char ch;
+	int ch;
 	int x, y;
+	MEVENT event;
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+
+	char button[] = "  Enter  ";
+	attron(A_REVERSE);
+	mvprintw(starty, startx, button);
+	attroff(A_REVERSE);
+	move(starty - 2, startx + 4);
     while (1) 
     {
 		ch = getch();
+		if (ch == delimiter && input->size > 0) break;
+		if ((ch == 127 || ch == 8) && input->size > 0) { //backspace or delete
+			popFromStr(input);
+			getyx(stdscr, y, x);
+			mvprintw(y, x-1, " ");
+			mvprintw(y, x-1, "\0");
+		} else if (ch >= 48 && ch <= 57 && input->size < 5) {
+			pushToStr(input, ch);
+			addch(ch);
+		} else if (ch == '.' && input->size != 0) {
+			int containsDecimal = 0;
+			for (int i = 0; i < input->size; i++) { 
+				// only allow one decimal per string 
+				if (input->contents[i] == '.') containsDecimal = 1;
+			}
+			if (!containsDecimal){
+				pushToStr(input, ch);
+				addch('.');
+			}
+		}
+		else if (ch == KEY_MOUSE ) {
+			if (exitButtonWasClicked(ch, event)) return -5;
+			if(getmouse(&event) == OK && input->size != 0){
+				// printw("x, %d, y: %d", event.x, event.y);
+				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
+				break;
+			}
+		}
+		
+    }
+	double num = atof(input->contents);
+	// FIXME
+	freeStr(input);
+	return num;
+}
+
+string* readString(int starty, int startx, int maxLength, char delimiter) {
+	MEVENT event;
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+
+	noecho();
+	string* input = newString();
+	int ch;
+	int x, y;
+	char button[] = "  Enter  ";
+	attron(A_REVERSE);
+	mvprintw(starty, startx, button);
+	attroff(A_REVERSE);
+	move(starty - 2, startx + 15);
+    while (1) 
+	
+    {
+		ch = getch();
+		
 		if (ch == delimiter && input->size != 0) break;
-		if (ch == 127 || ch == 8) { //backspace or delete
+		if ((ch == 127 || ch == 8) && input->size > 0) { //backspace or delete
 			popFromStr(input);
 			getyx(stdscr, y, x);
 			mvprintw(y, x-1, " ");
@@ -323,7 +372,16 @@ string* readString(int maxLength, char delimiter) {
 			ch += 32;
 			pushToStr(input, ch);
 			addch(ch);
-		}
+		} else if (ch == KEY_MOUSE) {
+			if (exitButtonWasClicked(ch, event)) {
+				return NULL;
+			}	
+			if(getmouse(&event) == OK && input->size != 0){
+				// printw("x, %d, y: %d", event.x, event.y);
+				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
+				break;
+			}
+		} 
 		refresh();
     }
 
@@ -332,5 +390,149 @@ string* readString(int maxLength, char delimiter) {
     return input;
 	// return NULL;
 }
+
+
+// void printBackButton() {
+// 	char back[] =  "    Back   ";
+// 	attron(A_REVERSE);
+// 	int x_coordinate = max(0, (COLS / 2  - 50));
+// 	// int x_coordinate = ;
+// 	int y_coordinate = (LINES / 6) + 4;
+// 	mvprintw(y_coordinate, x_coordinate, back);
+// 	attroff(A_REVERSE);
+// }
+
+void printBackButton() {
+	char exit[] =  "   Back   ";
+	attron(A_REVERSE);
+	// int x_coordinate = max(0, (COLS / 2  - 50));
+	int x_coordinate = 0;
+	int y_coordinate = 0;
+	mvprintw(y_coordinate, x_coordinate, exit);
+	attroff(A_REVERSE);
+}
+
+int backButtonWasClicked(int input, MEVENT event) {
+	int backHeight  = (LINES / 6) + 4;
+	int backX = max((COLS / 2  - 30), 0);
+	// int backX = 0;
+	if (input == KEY_MOUSE) {
+		if(getmouse(&event) == OK){
+			if (event.y ==  backHeight && event.x >=  backX && event.x <= backX + 10)
+				return 1;
+		}
+	}
+	return 0;
+}	
+
+int exitButtonWasClicked(int input, MEVENT event) {
+	int backHeight  = 0;
+	// int backX = max((COLS / 2  - 30), 0);
+	int backX = 0;
+	if (input == KEY_MOUSE) {
+		if(getmouse(&event) == OK){
+			// printw("x: %d, y: %d", event.x, event.y);
+
+			if (event.y ==  backHeight && event.x >=  backX && event.x <= backX + 10)
+				return 1;
+		}
+	}
+	return 0;
+}	
+void printPreviousButton(vector* diary, int lastDisplayed, int instructionHeight) {
+	if (lastDisplayed > 0) {
+		attron(A_REVERSE);
+		mvprintw(instructionHeight + 2, ( 2 * COLS / 7), " Previous ");
+		attroff(A_REVERSE);
+	}
+}
+
+void printNextButton(vector* diary, int lastDisplayed, int instructionHeight) {
+	if ((lastDisplayed + 10) < diary->size) {
+		attron(A_REVERSE);
+		mvprintw(instructionHeight + 2, ( 4 * COLS / 7), "   Next   ");
+		attroff(A_REVERSE);
+	}
+}
+
+int previousButtonClicked(int input, MEVENT event) {
+	int x = ( 2 * COLS / 7);
+	int y = (LINES / 6 + 2);
+	if (input == KEY_MOUSE) {
+		if(getmouse(&event) == OK){
+			if (event.y ==  y && event.x >=  x && event.x <= x + 10)
+				return 1;
+		}
+	}
+	return 0;
+}
+
+int nextButtonClicked(int input, MEVENT event) {
+	int x = ( 4 * COLS / 7);
+	int y = (LINES / 6 + 2);
+	if (input == KEY_MOUSE) {
+		if(getmouse(&event) == OK){
+			if (event.y ==  y && event.x >=  x && event.x <= x + 10)
+				return 1;
+		}
+	}
+	return 0;
+}
+
+int updateMenuButtonClicked(int input, MEVENT event) {
+	int y = (LINES / 6 + 2);
+	int itemx = ( 2 * COLS / 7);
+	int datex = (COLS / 2 -8);
+	int servingsx = ( 4 * COLS / 7 + 12);
+	int donex= (COLS / 2 -8);
+	int deletex = (COLS / 2 -8);
+	if (input == KEY_MOUSE) {
+		if(getmouse(&event) == OK){
+			if (event.y ==  y && event.x >=  itemx && event.x <= itemx + 16)
+				return -11;
+			if (event.y ==  y && event.x >=  datex && event.x <= datex + 16)
+				return - 10;
+			if (event.y ==  y && event.x >=  servingsx && event.x <= servingsx + 16)
+				return - 9;
+			if (event.y ==  y + 2 && event.x >=  deletex && event.x <= deletex + 16)
+				return - 8;
+			if (event.y ==  y + 25 && event.x >=  donex && event.x <= donex + 16)
+				return - 7;
+		}
+	}
+	return 0;
+}
+
+void printExitButton() {
+	char exit[] =  "   Exit   ";
+	attron(A_REVERSE);
+	// int x_coordinate = max(0, (COLS / 2  - 50));
+	int x_coordinate = 0;
+	int y_coordinate = 0;
+	mvprintw(y_coordinate, x_coordinate, exit);
+	attroff(A_REVERSE);
+}
+
+void printUpdateMenuButtons() {
+	int y = (LINES / 6 + 2);
+	char item[] =     "    Update Item   ";
+	char date[] =     "    Update Date   ";
+	char servings[] = "  Update Servings ";
+	char delete[]   = "      Delete      ";
+	char done[]   =   "       Done       ";
+	int itemx = ( 2 * COLS / 7);
+	int datex = (COLS / 2 -8);
+	int servingsx = ( 4 * COLS / 7 + 12);
+	int deletex = (COLS / 2 -8);
+	int donex= (COLS / 2 -8);
+	attron(A_REVERSE);
+	mvprintw(y, itemx, item);
+	mvprintw(y, datex, date);
+	mvprintw(y, servingsx, servings);
+	mvprintw(y+2, deletex, delete);
+	mvprintw(y+25,donex, done);
+	attroff(A_REVERSE);
+}
+
 
 #endif

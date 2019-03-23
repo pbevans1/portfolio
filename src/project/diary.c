@@ -1,6 +1,10 @@
 #ifndef __DIARY__C
 #define __DIARY__C
 #include "diary.h"
+// FIXME - remove
+#include <stdio.h>
+#include <ncurses.h>
+
 
 entry* newEntry(string* productName, string* date, double numServings, struct Node* root) {
     
@@ -19,6 +23,17 @@ entry* newEntry(string* productName, string* date, double numServings, struct No
     new->key = joinStr(date, productName, ": ");
     return new;
 }
+entry* entryFromProduct(Product* prod, string* date, double numServings) {
+    entry* new = malloc(sizeof(entry));
+    new->product = prod;
+    new->isDeleted = 0;
+    new->date = date;
+    new->productName = copyStr(prod->name);
+    new->servings = numServings;
+    new->key = joinStr(new->date, new->product->name, ": ");
+    return new;
+}
+
 
 char* formatEntry(entry* ent) {
     char* name = malloc(sizeof(char) * (ent->productName->size + 1));

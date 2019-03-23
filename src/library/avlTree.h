@@ -20,6 +20,7 @@ struct Node
 
 
 int max(int a, int b); 
+int min(int a, int b); 
 struct Node* newNode(Product* product);
 struct Node *rightRotate(struct Node *y);
 struct Node *leftRotate(struct Node *x);

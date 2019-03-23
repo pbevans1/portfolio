@@ -23,6 +23,11 @@ int max(int a, int b)
 { 
     return (a > b)? a : b; 
 } 
+
+int min(int a, int b) 
+{ 
+    return (a < b)? a : b; 
+} 
   
 /* Helper function that allocates a new node with the given key and 
     NULL left and right pointers. */
@@ -200,7 +205,7 @@ struct Node * maxValue(struct Node* node) {
 struct Node* successor(struct Node *n) 
 { 
   if(n == NULL) return NULL;
-  //if n has a bigger children, return the smallest
+  //if n has bigger children, return the smallest
   if( n->right != NULL ) 
     return minValue(n->right); 
   
