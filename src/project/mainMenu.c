@@ -89,6 +89,13 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
     }
     insertIntoDiary(diary, new);
 }
+void reSort(vector*diary, int index, string* username) {
+    entry* ent = diary->contents[index];
+    deleteAtIndex(diary, index);
+    insertIntoDiary(diary, ent);
+    saveDiary(diary, username);
+    if (diary->size == 0) deleteFile(username);
+}
 
 void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string* username) {
     mousemask(ALL_MOUSE_EVENTS, NULL);
@@ -104,6 +111,7 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
     string* date;
     struct Node* nearestNode;
     int numServings;
+    int changeMade = 0;
     while(1) {
         char* itemInfo = malloc(sizeof (char) * 500);
         clear();
@@ -119,6 +127,7 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
             if(getmouse(&event) == OK){
                 choice = exitButtonWasClicked(input, event);
                 if (choice == 1) {
+                    if (changeMade)
                     saveDiary(diary, username);
                     return;
                 }
@@ -129,16 +138,20 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
             /*  Get new product */
             while (1) {
                 clear();
-                printExitButton();
+                printBackButton();
                 printCentered(instructionHeight, instructions);
                 mvprintw(instructionHeight + 1, COLS/2 - 20, "Item Name: ");
                 name = readProductName((COLS / 2) - 5, instructionHeight + 3, 100, '\n', productRoot);
-                if (name == NULL) saveAndQuit(diary, username);
+                if (name == NULL) {
+                    if (changeMade) reSort(diary, index, username);
+                    return;
+                }
                 nearestNode = findClosestNode(productRoot, name->contents);
                 product = selectFromNearbyProducts(COLS / 3, instructionHeight, nearestNode);
                 
                 if (product != NULL) break;
             }
+            changeMade = 1;
             ent->product = product;
             freeStr(ent->key);
             ent->key = joinStr(ent->date, ent->product->name, ": ");
@@ -147,13 +160,17 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
             /*  Get new date */
             while (1) {
                 clear();
-                printExitButton();
+                printBackButton();
                 printCentered(instructionHeight, dateInstructions);
                 mvprintw(instructionHeight + 1, COLS/2 - 20, "Date (yyyy/mm/dd): ");
                 date = readDate((COLS / 2) - 5, instructionHeight + 3, '\n', productRoot);
-                if (date == NULL) saveAndQuit(diary, username);
+                if (date == NULL) {
+                    if (changeMade) reSort(diary, index, username);
+                    return;
+                }
                 break;
             }
+            changeMade = 1;
             freeStr(ent->date);
             ent->date = date;
             freeStr(ent->key);
@@ -172,7 +189,10 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
                 printExitButton();
                 mvprintw(instructionHeight + 1, COLS/2 - 22, "Servings (i.e 1.0): ");
                 numServings = readFloat((COLS / 2) - 5, instructionHeight + 3, '\n', productRoot); 
-                if (numServings < 0) saveAndQuit(diary, username);
+                if (numServings < 0) {
+                    if (changeMade) reSort(diary, index, username);
+                    return;
+                }
                 break;
             }
             ent->servings = numServings;
@@ -180,16 +200,21 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
         if (choice == -8) {
             // Delete
             deleteAtIndex(diary, index);
+            if (diary->size == 0) {
+                deleteFile(username);
+            }
+            saveDiary(diary, username);
             break;
         }
         if (choice == -7) {
-            deleteAtIndex(diary, index);
-            insertIntoDiary(diary, ent);
-            break;
+            if (changeMade) reSort(diary, index, username);
+            return;
         }
     }
 
 }
+
+
 
 void diaryCrudMenu(vector* diary, struct Node* productRoot, string* username) {
     int instructionHeight = LINES / 6;

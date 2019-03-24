@@ -40,4 +40,5 @@ int nextButtonClicked(int input, MEVENT event);
 void printUpdateMenuButtons();
 int updateMenuButtonClicked(int input, MEVENT event);
 void printEntry(entry*);
+void printCancelButton();
 #endif

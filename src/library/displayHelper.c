@@ -514,6 +514,16 @@ void printExitButton() {
 	attroff(A_REVERSE);
 }
 
+void printCancelButton() {
+	char exit[] =  "  Cancel  ";
+	attron(A_REVERSE);
+	// int x_coordinate = max(0, (COLS / 2  - 50));
+	int x_coordinate = 0;
+	int y_coordinate = 0;
+	mvprintw(y_coordinate, x_coordinate, exit);
+	attroff(A_REVERSE);
+}
+
 void printUpdateMenuButtons() {
 	int y = (LINES / 6 + 2);
 	char item[] =     "    Update Item   ";
