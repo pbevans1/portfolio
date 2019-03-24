@@ -72,3 +72,7 @@ test-all: build-all
 
 run: make
 	$(BIN)/main.out
+
+list-users:
+	$(info Here's the list of users:)
+	@ls data/*.log | sed 's/\(.*\)\..*/\1/' | xargs -n 1 basename
