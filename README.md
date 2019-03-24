@@ -2,6 +2,7 @@
 Getting Started: 
 Clone this repository 'git clone https://github.com/pbevans1/portfolio.git'
 
+Change into the 'portfolio/' directory by entering 'cd portfolio'.
 
 Once the download is complete you have several options to build the project.
     1. Recommended: enter 'make build-all' at the command prompt.
@@ -22,6 +23,7 @@ Help:
     General: To use the program, type 'make run' and follow the directions on screen. You can use keyboard and mouse to navigate.
     Quitting: The exit button is in the top left corner.
     Username: If you've forgotten your username try 'make list-users'
+    Help: You can use 'make help' to see these instructions again.
 
 
 
