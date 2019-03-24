@@ -21,7 +21,10 @@ When the project is built, use 'make run' to start the program.
 
 Help: 
     General: To use the program, type 'make run' and follow the directions on screen. You can use keyboard and mouse to navigate.
+    
     Quitting: The exit button is in the top left corner.
+    
     Username: If you've forgotten your username try 'make list-users'
+    
     Help: You can use 'make help' to see these instructions again.
 
