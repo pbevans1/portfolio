@@ -13,7 +13,6 @@ char** formatNextTenEntries(vector* diary, int startNum, char* button);
 int numEntries(char** formattedEntries);
 
 string* displayMainMenu(struct Node* productRoot)  {
-    vector* userDiary;
     /* From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html */
     initscr();			    /* Start curses mode */
     start_color();			/* Start color functionality */
@@ -22,10 +21,14 @@ string* displayMainMenu(struct Node* productRoot)  {
     noecho();			    /* Don't echo while we do getch */
     init_pair(1, COLOR_CYAN, COLOR_BLACK);
     string* username = NULL;
-    struct user* currentUser = getUserDiaryMenu(productRoot);
-    username = currentUser->username;
-    userDiary = currentUser->diary;
-    diaryCrudMenu(userDiary, productRoot, username);
+    vector* userDiary = NULL;
+
+    while (1) {
+        struct user* currentUser = getUserDiaryMenu(productRoot);
+        username = currentUser->username;
+        userDiary = currentUser->diary;
+        diaryCrudMenu(userDiary, productRoot, username);
+    }
     saveAndQuit(userDiary, username);
     return username;
 }
@@ -46,11 +49,11 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
     /*  Get product */
     while (1) {
         clear();
-        printExitButton();
+        printBackButton();
         printCentered(instructionHeight, instructions);
         mvprintw(instructionHeight + 1, COLS/2 - 20, "Item Name: ");
         name = readProductName((COLS / 2) - 5, instructionHeight + 3, 100, '\n', productRoot);
-        if (name == NULL) saveAndQuit(diary, username);
+        if (name == NULL) return; //if the user presses back
         nearestNode = findClosestNode(productRoot, name->contents);
         product = selectFromNearbyProducts(COLS / 3, instructionHeight, nearestNode);
         
@@ -58,11 +61,11 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
     }
     while (1) {
         clear();
-        printExitButton();
+        printBackButton();
         printCentered(instructionHeight, dateInstructions);
         mvprintw(instructionHeight + 1, COLS/2 - 20, "Date (yyyy/mm/dd): ");
         date = readDate((COLS / 2) - 5, instructionHeight + 3, '\n', productRoot);
-        if (date == NULL) saveAndQuit(diary, username);
+        if (date == NULL) return; //if the user presses back
         break;
     }
     while (1) {
@@ -73,10 +76,10 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
         printCentered(instructionHeight - 1, servingInstructions);
         printCentered(instructionHeight, productInfo);
         free(productInfo);
-        printExitButton();
+        printBackButton();
         mvprintw(instructionHeight + 1, COLS/2 - 22, "Servings (i.e 1.0): ");
         numServings = readFloat((COLS / 2) - 5, instructionHeight + 3, '\n', productRoot); 
-        if (numServings < 0) saveAndQuit(diary, username);
+        if (numServings < 0) return; //if the user presses back
         break;
     }
     new = entryFromProduct(product, date, numServings);
@@ -104,7 +107,7 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
     while(1) {
         char* itemInfo = malloc(sizeof (char) * 500);
         clear();
-        printExitButton();
+        printBackButton();
         sprintf(itemInfo,  "On %s you ate %.1f servings of %s.", ent->date->contents, 
                     ent->servings, ent->product->name->contents);
         printCentered(instructionHeight, itemInfo);
@@ -115,7 +118,10 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
         if (input == KEY_MOUSE) {
             if(getmouse(&event) == OK){
                 choice = exitButtonWasClicked(input, event);
-                if (choice == 1) saveAndQuit(diary, username);
+                if (choice == 1) {
+                    saveDiary(diary, username);
+                    return;
+                }
                 choice = updateMenuButtonClicked(input, event);
             }
         }
@@ -172,7 +178,7 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
             ent->servings = numServings;
         }
         if (choice == -8) {
-            /* Get new servings*/
+            // Delete
             deleteAtIndex(diary, index);
             break;
         }
@@ -194,7 +200,7 @@ void diaryCrudMenu(vector* diary, struct Node* productRoot, string* username) {
     int numToDisplay, x, choice;
     while(1) {
         clear();
-        printExitButton();
+        printBackButton();
         printPreviousButton(diary, lastEntryDisplayed, instructionHeight);
         printNextButton(diary, lastEntryDisplayed, instructionHeight);
         printCentered(instructionHeight, instructions);
@@ -203,7 +209,10 @@ void diaryCrudMenu(vector* diary, struct Node* productRoot, string* username) {
          x = (COLS / 4);
         
         choice = selectFromDiary(instructionHeight + 2, x, currentPage, numToDisplay + 1);
-        if (choice == -5) saveAndQuit(diary, username);
+        if (choice == -5) {
+            saveDiary(diary, username);
+            return;
+        }
         if (choice == -3 && lastEntryDisplayed > 0) {
             lastEntryDisplayed = max(lastEntryDisplayed - 10, 0);
             continue;
