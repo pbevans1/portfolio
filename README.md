@@ -11,7 +11,7 @@ Once the download is complete you have several options to build the project.
             Use only if you've already used the shell script provided by Dr. Anderson to create 'food_database.csv'. Copy 'food_database.csv' into the directory 'portfolio/data/' before using 'make'.
 
     3. Space Saver: enter 'make database' followed by 'make' at the command prompt.
-            Use this option if you've already downloaded the FDA data files. Copy them into 'portfolio/dataBuilder/' before running 'make database'.
+            Use this option if you've already downloaded the FDA data files. Copy them into 'portfolio/dataBuilder/' before running 'make database'. If you want to download them manually, they can be found at https://www.ars.usda.gov/ARSUserFiles/80400525/Data/BFPDB/BFPD_csv_07132018.zip 
 
 If you ever have questions about what the directory structure should look like, you can find a complete listing at the end of this document. 
 
@@ -19,78 +19,77 @@ When the project is built, use 'make run' to start the program.
 
 
 Help: 
-    This project was built using ncurses. In general, you have several options at any given prompt. 
-
-        1. Use the mouse to click on an option
-        2. Press a numeric key to select the corresponding option.
-        3. Use the up and down arrows and 'enter' key to select an option.
+    General: To use the program, type 'make run' and follow the directions on screen. You can use keyboard and mouse to navigate.
+    Quitting: The exit button is in the top left corner.
+    Username: If you've forgotten your username try 'make list-users'
 
 
 
 
-Final Directory Structure:
-    .
-    ├── README.md
-    ├── bin
-    │   ├── avlTree.o
-    │   ├── customString.o 
-    │   ├── displayHelper.o
-    │   ├── hashTable.o
-    │   ├── main.out
-    │   ├── main.out.dSYM
-    │   │   └── Contents
-    │   │       ├── Info.plist
-    │   │       └── Resources
-    │   │           └── DWARF
-    │   │               └── main.out
-    │   ├── mainMenu.o
-    │   ├── products.o
-    │   ├── read.o
-    │   └── vector.o
-    ├── data
-    │   └── food_database.csv
-    ├── dataBuilder
-    │   ├── BFPD_Doc.pdf
-    │   ├── BFPD_csv_07132018.zip
-    │   ├── Derivation_Code_Description.csv
-    │   ├── Nutrients.csv
-    │   ├── Products.csv
-    │   ├── Serving_size.csv
-    │   ├── carbs
-    │   ├── ec
-    │   ├── energy
-    │   ├── fat
-    │   ├── fp
-    │   ├── nutrients
-    │   ├── pn
-    │   ├── product
-    │   ├── protein
-    │   └── serving
-    ├── makefile
-    ├── shellScripts
-    │   ├── buildData.sh
-    │   └── download.sh
-    └── src
-        ├── library
-        │   ├── avlTree.c
-        │   ├── avlTree.h
-        │   ├── customString.c
-        │   ├── customString.h
-        │   ├── displayHelper.c
-        │   ├── displayHelper.h
-        │   ├── vector.c
-        │   └── vector.h
-        └── project
-            ├── hashTable.c
-            ├── hashTable.h
-            ├── main.c
-            ├── mainMenu.c
-            ├── mainMenu.h
-            ├── makefile
-            ├── products.c
-            ├── products.h
-            ├── read.c
-            ├── read.h
-            ├── serving.c
-            └── serving.h
 
+
+Final directory structure: 
+
+├── README.md
+├── basename
+├── bin
+│   ├── avlTree.o
+│   ├── customString.o
+│   ├── diary.o
+│   ├── displayHelper.o
+│   ├── main.out
+│   ├── main.out.dSYM
+│   │   └── Contents
+│   │       ├── Info.plist
+│   │       └── Resources
+│   │           └── DWARF
+│   │               └── main.out
+│   ├── mainMenu.o
+│   ├── products.o
+│   ├── read.o
+│   └── vector.o
+├── data
+│   ├── food_database.csv
+│   └── preston.log
+├── dataBuilder
+│   ├── BFPD_Doc.pdf
+│   ├── BFPD_csv_07132018.zip
+│   ├── Derivation_Code_Description.csv
+│   ├── Nutrients.csv
+│   ├── Products.csv
+│   ├── Serving_size.csv
+│   ├── carbs
+│   ├── ec
+│   ├── energy
+│   ├── fat
+│   ├── fp
+│   ├── nutrients
+│   ├── pn
+│   ├── product
+│   ├── protein
+│   └── serving
+├── ls
+├── makefile
+├── shellScripts
+│   ├── buildData.sh
+│   └── download.sh
+└── src
+    ├── library
+    │   ├── avlTree.c
+    │   ├── avlTree.h
+    │   ├── customString.c
+    │   ├── customString.h
+    │   ├── displayHelper.c
+    │   ├── displayHelper.h
+    │   ├── vector.c
+    │   └── vector.h
+    └── project
+        ├── diary.c
+        ├── diary.h
+        ├── main.c
+        ├── mainMenu.c
+        ├── mainMenu.h
+        ├── products.c
+        ├── products.h
+        ├── read.c
+        └── read.h
