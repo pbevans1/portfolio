@@ -4,6 +4,8 @@
 #include "products.h"
 #include "stdlib.h"
 #include "../library/avlTree.h"
+#include <stdio.h>
+
 
 typedef struct __entry {
     int isDeleted;

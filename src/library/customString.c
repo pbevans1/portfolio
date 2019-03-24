@@ -1,10 +1,7 @@
 #ifndef __STRING_CUST_C
 #define __STRING_CUST_C
-
-#include<stdio.h>
-#include<stdlib.h> 
-#include<string.h>
 #include "customString.h"
+
 
 string* newString() {
     string* new = malloc(sizeof(string));

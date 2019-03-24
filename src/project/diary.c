@@ -1,10 +1,6 @@
 #ifndef __DIARY__C
 #define __DIARY__C
 #include "diary.h"
-// FIXME - remove
-#include <stdio.h>
-#include <ncurses.h>
-
 
 entry* newEntry(string* productName, string* date, double numServings, struct Node* root) {
     
@@ -123,15 +119,18 @@ void saveDiary(vector* diary, string* username) {
     strcpy(location, "data/");
     strcat(location, username->contents);
     strcat(location, ".log");
+    remove(location);
+    if (diary->size > 0) {
+        fp = fopen(location, "w");
+        int i;
+        for(i = 0; i < diary->size; i++) {
+            entry* current = (entry*) diary->contents[i];
+            fprintf(fp, "%s~%s~%.2f\n", current->date->contents, 
+            current->product->name->contents, current->servings);
+        }
+        fclose(fp);
 
-    fp = fopen(location, "w+");
-    int i;
-    for(i = 0; i < diary->size; i++) {
-        entry* current = (entry*) diary->contents[i];
-        fprintf(fp, "%s~%s~%.2f\n", current->date->contents, 
-        current->product->name->contents, current->servings);
     }
-    fclose(fp);
 }
 
 #endif

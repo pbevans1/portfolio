@@ -1,10 +1,6 @@
-#include<stdio.h>
-#include <string.h>
-#include<stdlib.h> 
-#include "vector.h"
-
 #ifndef __VECTOR_INT_C
 #define __VECTOR_INT_C
+#include "vector.h"
 
 vector* newVector() {
     vector* new = malloc(sizeof(vector));
@@ -16,7 +12,7 @@ vector* newVector() {
     }
     return new;
 }
- 
+
 void pushToVec(vector* vec, void* value) {
     if (vec->size >= vec->capacity) {
         doubleVecSize(vec);

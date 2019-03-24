@@ -1,8 +1,6 @@
-#include "displayHelper.h"
-
-
 #ifndef __DISPLAY__HELP__C
 #define __DISPLAY__HELP__C
+#include "displayHelper.h"
 
 int centerHoriz(char message[], int numCols) {
     return ((numCols - strlen(message))/2);

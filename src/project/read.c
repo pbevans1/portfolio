@@ -1,11 +1,7 @@
-#include "read.h"
-#include "../project/products.h"
-#include "diary.h"
-#include<string.h>
-
 
 #ifndef __READ_CUST_C
 #define __READ_CUST_C
+#include "read.h"
 
 struct Node* readProductFile(char location[]) {
     FILE* fp = fopen(location, "r");

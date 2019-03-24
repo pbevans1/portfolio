@@ -4,8 +4,7 @@
 #include "avlTree.h"
 
 /*  C program to insert a node in AVL tree */
-#include<stdio.h> 
-#include<stdlib.h> 
+
 
   
 

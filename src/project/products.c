@@ -1,15 +1,13 @@
-#include "products.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 
 
+#ifndef __PRODUCTS__C
+#define __PRODUCTS__C
 #define GDSN 0
 #define LI 1
 #define UNKNOWN 2
 
-#ifndef __PRODUCTS__C
-#define __PRODUCTS__C
+#include "products.h"
+
 
 Product* getProductFromString(char* line) {
     Product* product = malloc(sizeof(Product));

@@ -1,6 +1,11 @@
 #ifndef __STRING_CUST_H
 #define __STRING_CUST_H
 
+#include<stdio.h>
+#include<stdlib.h> 
+#include<string.h>
+
+
 typedef struct _string {
     int size;
     int capacity;

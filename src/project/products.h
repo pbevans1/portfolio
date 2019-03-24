@@ -1,13 +1,11 @@
-#include "../library/customString.h"
 
 #ifndef __PRODUCTS__H 
 #define __PRODUCTS__H 
 
-enum units {
-    g = 0,
-    ml =  1,
-    UNKNOWN = 2
-};
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "../library/customString.h"
 
 
 typedef struct __product {

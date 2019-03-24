@@ -1,4 +1,6 @@
 
+#ifndef __MAIN__TRACKER__C
+#define __MAIN__TRACKER__C
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -6,9 +8,7 @@
 #include "../library/customString.h"
 #include "read.h"
 #include "products.h"
-#include "serving.h"
 #include "mainMenu.h"
-#include "hashTable.h"
 #include "../library/avlTree.h"
 
 
@@ -25,3 +25,5 @@ int main() {
 
     return 0;
 } 
+
+#endif
