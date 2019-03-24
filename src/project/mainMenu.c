@@ -26,7 +26,7 @@ string* displayMainMenu(struct Node* productRoot)  {
     username = currentUser->username;
     userDiary = currentUser->diary;
     diaryCrudMenu(userDiary, productRoot, username);
-    finish(0);
+    saveAndQuit(userDiary, username);
     return username;
 }
 
@@ -253,11 +253,16 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
     int choice, startx;
     char instructions[] = "Enter a username to continue: ";
     char* options[] = {"Start a new diary ", "Enter a different username"};
-    char* foundOptions[] = {"Open it", "Overwrite it", "Enter a different username"};
+    char* foundOptions[] = {"Open it", "Delete it", "Enter a different username"};
     struct user* currentUser = malloc(sizeof(struct user));
     string* username = NULL;
+    int deleted = 0;
     while (1) {
         clear();
+        if(deleted) {
+            printCentered(welcomeHeight - 1, "Success! File deleted.");
+            deleted = 0;
+        }
         printCentered(welcomeHeight, welcome);
         /* Get Username	*/
         printExitButton();
@@ -297,8 +302,11 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
             }
             if (choice == 2) {
                 destroyWindow(start_menu);
+                deleteFile(username);
+                deleted = 1;
                 currentUser->diary = newVector();
-                return currentUser;
+                continue;
+                // return currentUser;
             }
             if (choice == 3) continue;
             

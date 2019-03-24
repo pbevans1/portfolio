@@ -16,12 +16,4 @@ void saveAndQuit(vector* diary, string* username);
 
 
 
-
-
-
-
-
-
-
-
 #endif

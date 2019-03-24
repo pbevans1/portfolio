@@ -60,6 +60,7 @@ vector* readDiary(char* username, struct Node* productRoot) {
     
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
+        if (strcmp(line, "~~~") == 0) continue;
         insertIntoDiary(diary, entryFromString(line, productRoot));
     }
     

@@ -55,6 +55,7 @@ int binarySearchDiary(vector* diary, string* key, int low, int high) {
 }
 
 void insertIntoDiary(vector* diary, entry* new) {
+    if (new == NULL) return;
     int previousIndex = diary->size - 1;
     pushToVec(diary, new);
     // insertionSort the newest entry
@@ -120,17 +121,26 @@ void saveDiary(vector* diary, string* username) {
     strcat(location, username->contents);
     strcat(location, ".log");
     remove(location);
+    fp = fopen(location, "w");
+
     if (diary->size > 0) {
-        fp = fopen(location, "w");
         int i;
         for(i = 0; i < diary->size; i++) {
             entry* current = (entry*) diary->contents[i];
             fprintf(fp, "%s~%s~%.2f\n", current->date->contents, 
             current->product->name->contents, current->servings);
         }
-        fclose(fp);
-
     }
+    fclose(fp);
+
+}
+
+void deleteFile(string* username) {
+    char location[100] = {'\0'};
+    strcpy(location, "data/");
+    strcat(location, username->contents);
+    strcat(location, ".log");
+    remove(location);
 }
 
 #endif

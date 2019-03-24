@@ -26,4 +26,5 @@ int binarySearchDiary(vector* diary, string* key, int low, int high);
 entry* entryFromString(char*, struct Node*);
 void deleteAtIndex(vector* diary, int index);
 void saveDiary(vector* diary, string* username);
+void deleteFile(string* username);
 #endif
