@@ -8,7 +8,7 @@ int centerHoriz(char message[], int numCols) {
 
 // From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html 
 WINDOW *createWindow(int height, int width, int starty, int startx) {	
-    WINDOW *local_win;
+  WINDOW *local_win;
 	local_win = newwin(height, width, starty, startx);
 	box(local_win, 0 , 0);		/* 0, 0 gives default characters for the vertical and horizontal lines */
 	wrefresh(local_win);		/* Show that box */
@@ -91,6 +91,7 @@ void writeSpacesUntil(int x) {
 	for (int i = currentx; i < x; i++) {
 		addch(' ');
 	}
+	y--;
 }
 
 int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices) {
@@ -124,7 +125,7 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 				return choice;
 			}
 		}
-		if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
+		// if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
 	}
 	return choice; // return the choice
 }

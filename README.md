@@ -20,7 +20,7 @@ When the project is built, use 'make run' to start the program.
 
 
 Help: 
-    General: To use the program, type 'make run' and follow the directions on screen. You can use keyboard and mouse to navigate.
+    General: To use the program, type 'make run' and follow the directions on screen. Use the keyboard and mouse to navigate.
     
     Quitting: The exit button is in the top left corner.
     
@@ -28,3 +28,4 @@ Help:
     
     Help: You can use 'make help' to see these instructions again.
 
+Note: This project requires mouse input for navigation. Make sure that your terminal is configured to pass mouse input to programs. 
