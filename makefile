@@ -87,7 +87,7 @@ list-users:
 	@echo 
 
 give-help: 
-	$(info General: To use the program,  type "make run: and follow the directions on screen. You can use keyboard and mouse to navigate.)
+	$(info General - To use the program,  type "make run: and follow the directions on screen. You can use keyboard and mouse to navigate.)
 	$(info Quitting - The exit button is in the top left corner.)
 	$(info Username -If you've forgotten your username try "make list-users")
 
