@@ -85,7 +85,7 @@ list-users:
 	$(info Here's the list of users:)
 	@ls data/*.log 2> /dev/null | sed 's/\(.*\)\..*/\1/' | xargs -n 1 basename 
 
-# help: 
-# 	$(info General: To use the program,  type "make run: and follow the directions on screen. You can use keyboard and mouse to navigate.)
-#     $(info Quitting - The exit button is in the top left corner.)
-#     $(info Username -If you've forgotten your username try "make list-users")
+help: 
+	$(info General: To use the program,  type "make run: and follow the directions on screen. You can use keyboard and mouse to navigate.)
+    $(info Quitting - The exit button is in the top left corner.)
+    $(info Username -If you've forgotten your username try "make list-users")
