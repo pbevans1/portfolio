@@ -1,5 +1,12 @@
 
+Important Notes:
+
+1. This project requires mouse input for navigation. Make sure that your terminal is configured to pass mouse input to programs. 
+
+2. This project is intended to be run in full screen mode. If the terminal window is too small, some buttons may be invisible.
+
 Getting Started: 
+
 Clone this repository 'git clone https://github.com/pbevans1/portfolio.git'
 
 Change into the 'portfolio/' directory by entering 'cd portfolio'.
@@ -24,8 +31,7 @@ Help:
     
     Quitting: The exit button is in the top left corner.
     
-    Username: If you've forgotten your username try 'make list-users'
+    Username: If you've forgotten your username try 'make list-users.' If you want to make a new username, you can enter it just like you would enter an existing one.
     
     Help: You can use 'make help' to see these instructions again.
 
-Note: This project requires mouse input for navigation. Make sure that your terminal is configured to pass mouse input to programs. 
