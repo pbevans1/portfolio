@@ -5,6 +5,7 @@
 #include "stdlib.h"
 #include "../library/avlTree.h"
 #include <stdio.h>
+#include <string.h>
 
 
 typedef struct __entry {

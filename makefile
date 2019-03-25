@@ -10,6 +10,7 @@ LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o $(BIN)/a
 PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/diary.o $(PROJ)/main.c
 
 make: $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c $(DATA)
+	mkdir bin
 	gcc $(CFLAGS) -lcurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
 
 # Library Files
@@ -50,6 +51,7 @@ $(DOWNLOADS):
 
 # General 
 database: $(DOWNLOADS)
+	mkdir data
 	./shellScripts/buildData.sh
 
 download:
