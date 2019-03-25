@@ -82,8 +82,9 @@ user-list: list-users
 users: list-users
 
 list-users:
-	$(info Here's the list of users:)
-	@ls data/*.log 2> /dev/null | sed 's/\(.*\)\..*/\1/' | xargs -n 1 basename 
+	$(info this command may throw an error )
+	$(info Here's the list of users)
+	@ls data/*.log 2> /dev/null | sed 's/\(.*\)\..*/\1/' | xargs -n 1 basename 2> /dev/null
 
 help: 
 	$(info General: To use the program,  type "make run: and follow the directions on screen. You can use keyboard and mouse to navigate.)
