@@ -15,7 +15,7 @@ struct Node* readProductFile(char location[]) {
     char *line;
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
-        products = insert(products, getProductFromString(buffer));
+        products = insert(products, getProductFromString(line));
     }
     fclose(fp);
 

@@ -29,4 +29,5 @@ void trim(char[]);
 void trimStr(string*);
 void freeStr(string*);
 string* joinStr(string*, string*, char*);
+char* mystrsep(char** stringp, const char* delim);
 #endif

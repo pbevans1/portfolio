@@ -94,15 +94,15 @@ entry* entryFromString(char* line, struct Node* productRoot) {
     const char* delimiter = "~";
     int numServings;
     // Read Date
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     string* date = strFrom(nextField);
 
     // Read product name
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     string* productName = strFrom(nextField);
     
     // Read servings
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         numServings = atof(nextField);
     } else {

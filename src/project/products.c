@@ -15,65 +15,65 @@ Product* getProductFromString(char* line) {
     const char* delimiter = "~";
 
     
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         product->product_id = atoi(nextField);
     } else {
         product->product_id = -1;
     }
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     product->name = strFrom(nextField);
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     product->manufacturer = strFrom(nextField);
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         product->energy_units = atof(nextField);
     } else {
         product->energy_units = 0.0;
     }
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         product->carb_units = atof(nextField);
     } else {
         product->carb_units = 0.0;
     }
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         product->fat_units = atof(nextField);
     } else {
         product->fat_units = 0.0;
     }
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         product->protein_units = atof(nextField);
     } else {
         product->protein_units = 0.0;
     }
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         product->ml_g_size = atof(nextField);
     } else {
         product->ml_g_size = 0.0;
     }
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     strcpy(product->ml_g, nextField);
 
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     if (strlen(nextField)) {
         product->serving_size = atoi(nextField);
     } else {
         product->serving_size = 0.0;
     }
     
-    nextField = strsep(&line, delimiter);
+    nextField = mystrsep(&line, delimiter);
     product->serving_units = strFrom(nextField);
 
     return product;
