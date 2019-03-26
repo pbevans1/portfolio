@@ -1,18 +1,27 @@
+Overview:
+
+This project is a nutrition tracking program - it allows users to log their meals and track macro-nutrient intake using data from the FDA. It is built in ANSI C11, and depends on the curses library to implement its user interface. A video demonstration of the final product can be found at FIXME.
+
+
 
 Important Notes:
 
-1. This project requires mouse input for navigation. Make sure that your terminal is configured to pass mouse input to programs. 
+1. This project requires mouse input for navigation. Make sure that your terminal is configured to pass mouse input to programs. If you're running over ssh FIXME.
 
 2. This project is intended to be run in full screen mode. If the terminal window is too small, some buttons may be invisible.
 
+
+
+
 Getting Started: 
+
 
 Clone this repository 'git clone https://github.com/pbevans1/portfolio.git'
 
 Change into the 'portfolio/' directory by entering 'cd portfolio'.
 
 The project expects a tilde delimited csv file called 'food_database.csv' to be in the directory 'data'. The file is expected to be in the following format:
-        product id~product name~manufacturer~energy units~carb units~fat units~protein units~serving size in grams or ml~grams or ml~serving size~serving size units
+        product id\~product name\~manufacturer\~energy units\~carb units\~fat units\~protein units\~serving size in grams or ml\~grams or ml\~serving size\~serving size units
         Lines longer than 9000 characters are considered invalid. 
 
 
