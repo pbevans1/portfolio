@@ -154,7 +154,7 @@ void saveDiary(vector* diary, string* username) {
     if (diary->size == 0) return;
     FILE* fp;
     char location[100] = {'\0'};
-    strcpy(location, "data/");
+    strncpy(location, "data/\0", 6);
     strcat(location, username->contents);
     strcat(location, ".log");
     remove(location);
@@ -174,7 +174,7 @@ void saveDiary(vector* diary, string* username) {
 
 void deleteFile(string* username) {
     char location[100] = {'\0'};
-    strcpy(location, "data/");
+    strncpy(location, "data/\0", 6);    
     strcat(location, username->contents);
     strcat(location, ".log");
     remove(location);

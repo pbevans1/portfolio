@@ -26,6 +26,9 @@ int main(int argc, char** argv) {
         return 2;
     }
     //Read products into AVL tree
+    // An AVL tree provides O(log(n)) search and takes only O(n log n) time to build
+    // Since build runs just once (on program start) while search runs very frequently
+    // this tradeoff seems desirable.
     products = readProductFile("data/food_database.csv");
     if (products == NULL) {
         printf("data/food_database.csv has no valid entries. You can use 'make database' to rebuild it.\n");

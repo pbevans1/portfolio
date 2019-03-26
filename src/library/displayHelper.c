@@ -366,7 +366,7 @@ string* readString(int starty, int startx, int maxLength, char delimiter) {
 				return NULL;
 			}	
 			if(getmouse(&event) == OK && input->size != 0){
-				// printw("x, %d, y: %d", event.x, event.y);
+				printw("x, %d, y: %d. Target: x, %d, y: %d", event.x, event.y, starty, startx);
 				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
 				break;
 			}
