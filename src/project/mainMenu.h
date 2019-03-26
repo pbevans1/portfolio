@@ -10,7 +10,7 @@
 #include "read.h"
 #include "diary.h"
 
-string* displayMainMenu();
+void displayMainMenu();
 void finish(int);
 void saveAndQuit(vector* diary, string* username);
 

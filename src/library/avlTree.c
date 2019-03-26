@@ -4,10 +4,6 @@
 #include "avlTree.h"
 
 /*  C program to insert a node in AVL tree */
-
-
-  
-
   
 /* A utility function to get the height of the tree */
 int height(struct Node *N) 
@@ -88,20 +84,21 @@ int getBalance(struct Node *N)
   
 /* Recursive function to insert a key in the subtree rooted 
    with node and returns the new root of the subtree. */
+//    Modified to compare string keys
 struct Node* insert(struct Node* node, Product* prod) 
 { 
     /* 1.  Perform the normal BST insertion */
     if (node == NULL) 
         return(newNode(prod)); 
     char* key = prod->name->contents;
-  
-    if (strcmp(key,  node->key) < 0) {
+    int keysize = prod->name->size;
+    if (strncmp(key,  node->key, keysize) < 0) {
         node->left  = insert(node->left, prod); 
         node->left->parent = node;
         /* printf(" %s left of %s\n", node->) */
     }
         
-    else if (strcmp(key,  node->key) > 0) {
+    else if (strncmp(key,  node->key, keysize) > 0) {
         node->right = insert(node->right, prod); 
         node->right->parent = node;
     }
@@ -121,22 +118,22 @@ struct Node* insert(struct Node* node, Product* prod)
      there are 4 cases */
   
     /*  Left Left Case */
-    if (balance > 1 &&  (strcmp(key, node->left->key) < 0)) /* (balance > 1 && key < node->left->key) */
+    if (balance > 1 &&  (strncmp(key, node->left->key, keysize) < 0)) /* (balance > 1 && key < node->left->key) */
         return rightRotate(node); 
   
     /* Right Right Case */
-    if (balance < -1 && (strcmp(key, node->right->key) > 0))  /*(balance < -1 && key > node->right->key) */
+    if (balance < -1 && (strncmp(key, node->right->key, keysize) > 0))  /*(balance < -1 && key > node->right->key) */
         return leftRotate(node); 
   
     /* Left Right Case  */
-    if (balance > 1 && (strcmp(key, node->left->key) > 0)) /* (balance > 1 && key > node->left->key) */
+    if (balance > 1 && (strncmp(key, node->left->key, keysize) > 0)) /* (balance > 1 && key > node->left->key) */
     { 
         node->left =  leftRotate(node->left); 
         return rightRotate(node); 
     } 
   
     /* Right Left Case  */
-    if (balance < -1 && (strcmp(key, node->right->key) < 0)) /* (balance < -1 && key < node->right->key)*/
+    if (balance < -1 && (strncmp(key, node->right->key, keysize) < 0)) /* (balance < -1 && key < node->right->key)*/
     { 
         node->right = rightRotate(node->right); 
         return leftRotate(node); 
@@ -159,9 +156,7 @@ void preOrder(struct Node *root)
     } 
 } 
 
-/* A utility function to print inorder traversal 
- of the tree. 
-The function also prints height of every node */
+// Custom - inorder traversal of the tree
 void inOrder(struct Node *root) 
 { 
     if(root != NULL) 
@@ -173,10 +168,7 @@ void inOrder(struct Node *root)
 } 
 
 
-
-
 /*Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/ */
-
 struct Node * minValue(struct Node* node) { 
   struct Node* current = node; 
    
@@ -187,6 +179,7 @@ struct Node * minValue(struct Node* node) {
   return current; 
 } 
 
+/*Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/ */
 struct Node * maxValue(struct Node* node) { 
   struct Node* current = node; 
    
@@ -198,6 +191,7 @@ struct Node * maxValue(struct Node* node) {
 } 
   
   
+/*Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/ */
 struct Node* successor(struct Node *n) 
 { 
   if(n == NULL) return NULL;
@@ -216,6 +210,7 @@ struct Node* successor(struct Node *n)
   return p; 
 } 
 
+/*Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/ */
 struct Node* predecessor(struct Node *n) 
 { 
   if(n == NULL) return NULL;
@@ -233,10 +228,12 @@ struct Node* predecessor(struct Node *n)
   return p; 
 } 
 
+// Custom
 struct Node* findClosestNode(struct Node* root, char* key) {
     if (root == NULL) return NULL;
-    if (strcmp(key, root->key) == 0) return root;
-    if (strcmp(key, root->key) < 0) {
+    int keysize = strlen(key);
+    if (strncmp(key, root->key, keysize) == 0) return root;
+    if (strncmp(key, root->key, keysize) < 0) {
         //search left
         if (root->left == NULL) return root;
         return findClosestNode(root->left, key);
@@ -245,57 +242,7 @@ struct Node* findClosestNode(struct Node* root, char* key) {
         if (root->right == NULL) return root;
         return findClosestNode(root->right, key);
     }
-
 }
-  
-/* Drier program to test above function*/
-int testAVL(vector* products)  
-{ 
-  struct Node *root = NULL; 
-  
-  /* Constructing tree given in the above figure */
-  Product* p;
-  p = (Product*) popFromVec(products);
-  printf("Inserting: %s\n", p->name->contents);
-  root = insert(root, p); 
-  p = (Product*) popFromVec(products);
-  printf("Inserting: %s\n", p->name->contents);
-  root = insert(root, p); 
-  p = (Product*) popFromVec(products);
-  printf("Inserting: %s\n", p->name->contents);
-  root = insert(root, p); 
-  p = (Product*) popFromVec(products);
-  printf("Inserting: %s\n", p->name->contents);
-  root = insert(root, p); 
-  p = (Product*) popFromVec(products);
-  printf("Inserting: %s\n", p->name->contents);
-  root = insert(root, p); 
-  p = (Product*) popFromVec(products);
-  printf("Inserting: %s\n", p->name->contents);
-  root = insert(root, p);  
-  
-  /* The constructed AVL Tree would be 
-            30 
-           /  \ 
-         20   40 
-        /  \     \ 
-       10  25    50 
-  */
-  
-  printf("Preorder traversal of the constructed AVL"
-         " tree is \n"); 
-  preOrder(root); 
-
- printf("\n\nInorder traversal of the constructed AVL"
-         " tree is \n"); 
-  inOrder(root); 
-  
-//   checkBSTForward(root);
-//   printf("\n");
-//   checkBSTback(root);
-  return 0; 
-}
-
 
 
 #endif

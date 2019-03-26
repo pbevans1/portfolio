@@ -16,12 +16,19 @@ int len(string* str) {
     return str->size;
 }
 
+int minInt(int a, int b) {
+    if (a < b) return a;
+    return b;
+}
+
 int strEquals(string* str1, string* str2) {
-    return (strcmp(str1->contents, str2->contents) == 0);
+    int size = minInt(str1->size, str2->size);
+    return (strncmp(str1->contents, str2->contents, size) == 0);
 }
 
 int strComesBefore(string* str1, string* str2) {
-    return (strcmp(str1->contents, str2->contents) < 0);
+    int size = minInt(str1->size, str2->size);
+    return (strncmp(str1->contents, str2->contents, size) < 0);
 }
 
 
@@ -34,7 +41,8 @@ string* strFrom(char* str) {
     int capacity = strlen(str) + 1;
     int size = capacity - 1;
     new->contents = malloc(sizeof(char) * capacity);
-    strcpy(new->contents, str);
+    strncpy(new->contents, str, size);
+    new->contents[size] = '\0';
     new->capacity = capacity;
     new->size = size;
     return new;
@@ -95,39 +103,6 @@ string* destroyStr(string* str) {
     return NULL;
 }
 
-void test_string() {
-    string* a;
-    string* b;
-    a = newString();
-    b = newString();
-    int i;
-
-    for (i = 0; i < 20; i++) {
-        pushToStr(a, (char)(i + 97));
-    }
-    pushToStr(a, 'z');
-    for (i = 0; i < 80; i++) {
-        pushToStr(b, (char)(i + 97));
-    }
-    string* c = copyStr(b); 
-    if (!strEquals(c, b)) {
-        printf("Error in customString line 102!\n");
-        return;
-    }
-    
-    for (i = 0; i < 60; i++) {
-        popFromStr(b);
-    }
-    
-    pushToStr(b, 'y');
-    popFromStr(a);
-    popFromStr(b);
-    if (!strEquals(a, b)) {
-        printf("Error in customString line 113!\n");
-        return;
-    }
-    printf("Finished testing customstring... All tests passed\n");
-}
 
 void uppercase(char target[]) {
     int i;

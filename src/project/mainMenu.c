@@ -12,14 +12,15 @@ void diaryCrudMenu(vector* diary, struct Node*, string* username);
 char** formatNextTenEntries(vector* diary, int startNum, char* button);
 int numEntries(char** formattedEntries);
 
-string* displayMainMenu(struct Node* productRoot)  {
+void displayMainMenu(struct Node* productRoot)  {
     /* From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html */
     initscr();			    /* Start curses mode */
     start_color();			/* Start color functionality */
     keypad(stdscr, TRUE);   /* Accept keyboard input  */
     cbreak();               /* Don't wait for newline when reading characters */
     noecho();			    /* Don't echo while we do getch */
-    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    /* end borrow */
+    
     string* username = NULL;
     vector* userDiary = NULL;
 
@@ -28,9 +29,10 @@ string* displayMainMenu(struct Node* productRoot)  {
         username = currentUser->username;
         userDiary = currentUser->diary;
         diaryCrudMenu(userDiary, productRoot, username);
+        freeStr(currentUser->username);
+        destroyVec(currentUser->diary);
+        free(currentUser);
     }
-    saveAndQuit(userDiary, username);
-    return username;
 }
 
 void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
@@ -70,9 +72,11 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
     }
     while (1) {
         clear();
-        char* productInfo = malloc(sizeof(char) * 500);
-        sprintf(productInfo, "A serving of %s is %.2f %s", 
-            product->name->contents, product->serving_size, product->serving_units->contents);
+        char* productInfo = malloc(sizeof(char) * (product->name->size + 
+            product->serving_units->size + 55));
+        sprintf(productInfo, "A serving of %s is %.2f %s or %.2f %s", 
+            product->name->contents, product->ml_g_size, product->ml_g,
+            product->serving_size, product->serving_units->contents);
         printCentered(instructionHeight - 1, servingInstructions);
         printCentered(instructionHeight, productInfo);
         free(productInfo);
@@ -89,10 +93,8 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
     }
     insertIntoDiary(diary, new);
 }
-void reSort(vector*diary, int index, string* username) {
-    entry* ent = diary->contents[index];
-    deleteAtIndex(diary, index);
-    insertIntoDiary(diary, ent);
+void reSort(vector* diary, int index, string* username) {
+    sortAtIndex(diary, index);
     saveDiary(diary, username);
     if (diary->size == 0) deleteFile(username);
 }
@@ -113,7 +115,7 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
     int numServings;
     int changeMade = 0;
     while(1) {
-        char* itemInfo = malloc(sizeof (char) * 500);
+        char* itemInfo = malloc(sizeof (char) * (ent->productName->size + 200));
         clear();
         printBackButton();
         sprintf(itemInfo,  "On %s you ate %.1f servings of %s.", ent->date->contents, 
@@ -180,9 +182,10 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
             /* Get new servings*/
             while (1) {
                 clear();
-                char* productInfo = malloc(sizeof(char) * 500);
-                sprintf(productInfo, "A serving of %s is %.2f %s", 
-                    ent->product->name->contents, ent->product->serving_size, ent->product->serving_units->contents);
+                char* productInfo = malloc(sizeof(char) * (ent->product->name->size + 200));
+                sprintf(productInfo, "A serving of %s is %.2f %s or %.2f %s", 
+                    ent->product->name->contents, ent->product->ml_g_size, ent->product->ml_g,
+                    ent->product->serving_size, ent->product->serving_units->contents);
                 printCentered(instructionHeight - 1, servingInstructions);
                 printCentered(instructionHeight, productInfo);
                 free(productInfo);
@@ -214,16 +217,25 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
 
 }
 
+void freeLastTenEntries(char** formatted) {
+    int i;
+    for (i = 1; i < 11; i++) {
+        if (formatted[i] == NULL) break;
+        free(formatted[i]);
+    }
+}
 
 
 void diaryCrudMenu(vector* diary, struct Node* productRoot, string* username) {
     int instructionHeight = LINES / 6;
     char instructions[] = "Click any entry view, modify, or delete it, or press the button to add a new one.";
     int lastEntryDisplayed = 0;
-    char addButton[] = " New Entry";
+    char addButton[] = " New Entry ";
     char** currentPage;
     int numToDisplay, x, choice;
+
     while(1) {
+
         clear();
         printBackButton();
         printPreviousButton(diary, lastEntryDisplayed, instructionHeight);
@@ -231,23 +243,37 @@ void diaryCrudMenu(vector* diary, struct Node* productRoot, string* username) {
         printCentered(instructionHeight, instructions);
         currentPage = formatNextTenEntries(diary, lastEntryDisplayed, addButton);
         numToDisplay = numEntries(currentPage);
-         x = (COLS / 4);
-        
+        x = (COLS / 4);
         choice = selectFromDiary(instructionHeight + 2, x, currentPage, numToDisplay + 1);
+
         if (choice == -5) {
+            // Exit
             saveDiary(diary, username);
+            freeLastTenEntries(currentPage);
+            free(currentPage);
             return;
         }
         if (choice == -3 && lastEntryDisplayed > 0) {
+            // Previous
             lastEntryDisplayed = max(lastEntryDisplayed - 10, 0);
+            freeLastTenEntries(currentPage);
             continue;
         }
          if (choice == -1 && (lastEntryDisplayed + 10) < diary->size) {
+            //  Next
             lastEntryDisplayed = min(lastEntryDisplayed + 10, diary->size);
+            freeLastTenEntries(currentPage);
             continue;
         }
-        if (choice == 0) diaryAddMenu(diary, productRoot, username);
-        if (choice >= 1 && choice <= 10) diaryUpdateMenu(diary, (choice - 1 + lastEntryDisplayed), productRoot, username);
+        if (choice == 0) {
+            // New Entry
+            diaryAddMenu(diary, productRoot, username);
+            freeLastTenEntries(currentPage);
+        }   
+        if (choice >= 1 && choice <= 10) {
+            diaryUpdateMenu(diary, (choice - 1 + lastEntryDisplayed), productRoot, username);
+            freeLastTenEntries(currentPage);
+        }
     }
 }
 
@@ -281,7 +307,6 @@ char** formatNextTenEntries(vector* diary, int startNum, char* button) {
 
 struct user* getUserDiaryMenu(struct Node* productRoot) {
     /* Open Welcome Screen */
-    WINDOW* start_menu = newwin(0, 0, LINES, COLS);
     char welcome[] = "Welcome to NutritionTracker!";
     int welcomeHeight = LINES / 6;
     int choice, startx;
@@ -315,27 +340,26 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
         /*Check for log file */
         if (!logFileExists(username->contents)) {
             printCentered(welcomeHeight+2, "We couldn't find any old log files for you");
-            choice = selectFromChoices(start_menu, welcomeHeight+4, (COLS - 30) / 2, options, 2);
+            choice = selectFromChoices(stdscr, welcomeHeight+4, (COLS - 30) / 2, options, 2);
             if (choice == -5) finish(0);
             choice++; /* Convert choice from index to counting number; */
             if (choice == 1) {
-                destroyWindow(start_menu);
                 currentUser->diary = newVector();
                 return currentUser;
             }    
             if (choice == 2) continue;
-        } else {
+        } 
+        
+        else {
             printCentered(welcomeHeight+2, "We found your last save! Would you like to... ");
-            choice = selectFromChoices(start_menu, welcomeHeight+4, (COLS - 30) / 2, foundOptions, 3);
+            choice = selectFromChoices(stdscr, welcomeHeight+4, (COLS - 30) / 2, foundOptions, 3);
             if (choice == -5) finish(0);
             choice++; /*  Convert choice from index to counting number; */
             if (choice == 1) {
-                destroyWindow(start_menu);
                 currentUser->diary = readDiary(username->contents, productRoot);
                 return currentUser;
             }
             if (choice == 2) {
-                destroyWindow(start_menu);
                 deleteFile(username);
                 deleted = 1;
                 currentUser->diary = newVector();
@@ -346,12 +370,11 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
             
         }
     }
-    
+
+    /* Unreachable */    
     getch();
-    /* Unreachable */
     printf("Uh-oh! We reached unreachable!");
     getch();
-    destroyWindow(start_menu);
 
     return currentUser;
 } 

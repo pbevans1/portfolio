@@ -52,7 +52,4 @@ vector* destroyVec(vector* vec) {
 }
 
 
-// int main() {
-//     test_vector();
-// }
 #endif

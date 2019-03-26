@@ -6,22 +6,6 @@ int centerHoriz(char message[], int numCols) {
     return ((numCols - strlen(message))/2);
 }
 
-// From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html 
-WINDOW *createWindow(int height, int width, int starty, int startx) {	
-  WINDOW *local_win;
-	local_win = newwin(height, width, starty, startx);
-	box(local_win, 0 , 0);		/* 0, 0 gives default characters for the vertical and horizontal lines */
-	wrefresh(local_win);		/* Show that box */
-	return local_win;
-}
-
-// From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html
-void destroyWindow(WINDOW *local_win) {	
-	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' '); // Erase borders
-	wrefresh(local_win);
-	delwin(local_win);
-}
-
 string* createButtonString(char* text, int size) {
 	string* new = malloc(sizeof(string));
 	new->size = size;
@@ -44,6 +28,7 @@ string* createButtonString(char* text, int size) {
 }
 
 /* Report the choice according to mouse position */
+// From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html
 int report_choice(int mouse_x, int mouse_y, int startx, int endx, int y, int numChoices, char* choices[])
 {	
 	int choice;
@@ -57,7 +42,9 @@ int report_choice(int mouse_x, int mouse_y, int startx, int endx, int y, int num
 	return -2;
 }
 
-int reportDiaryChoice(int mouse_x, int mouse_y, int startx, int endx , int y, int numChoices, char* choices[]) //corrects for double spacing
+
+int reportDiaryChoice(int mouse_x, int mouse_y, int startx, int endx , int y, int numChoices, char* choices[]) 
+//corrects for double spacing
 {	
 	int choice;
 	if(mouse_y == y && mouse_x >= (COLS / 2) - 5  && mouse_x <= (COLS / 2) + 5) return 0; // handle add button
@@ -95,8 +82,8 @@ void writeSpacesUntil(int x) {
 }
 
 int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices) {
-	cbreak();               /* Don't wait for newline when reading characters */
-    noecho();
+	cbreak(); 
+	noecho();
 	int input, choice;
 	/* Get all the mouse events */
 	mousemask(ALL_MOUSE_EVENTS, NULL);
@@ -125,7 +112,6 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 				return choice;
 			}
 		}
-		// if ((input) > 48 && (input - 1) <= (48 + numChoices)) return input - 48; // if input between 0 and numchoices, convert to int
 	}
 	return choice; // return the choice
 }
@@ -387,22 +373,8 @@ string* readString(int starty, int startx, int maxLength, char delimiter) {
 		refresh();
     }
 
-    // // restore your cbreak / echo settings here
-	// trimStr(input);
     return input;
-	// return NULL;
 }
-
-
-// void printBackButton() {
-// 	char back[] =  "    Back   ";
-// 	attron(A_REVERSE);
-// 	int x_coordinate = max(0, (COLS / 2  - 50));
-// 	// int x_coordinate = ;
-// 	int y_coordinate = (LINES / 6) + 4;
-// 	mvprintw(y_coordinate, x_coordinate, back);
-// 	attroff(A_REVERSE);
-// }
 
 void printBackButton() {
 	char exit[] =  "   Back   ";
@@ -498,7 +470,7 @@ int updateMenuButtonClicked(int input, MEVENT event) {
 				return - 9;
 			if (event.y ==  y + 2 && event.x >=  deletex && event.x <= deletex + 16)
 				return - 8;
-			if (event.y ==  y + 25 && event.x >=  donex && event.x <= donex + 16)
+			if (event.y ==  y + 15 && event.x >=  donex && event.x <= donex + 16)
 				return - 7;
 		}
 	}
@@ -542,15 +514,14 @@ void printUpdateMenuButtons() {
 	mvprintw(y, datex, date);
 	mvprintw(y, servingsx, servings);
 	mvprintw(y+2, deletex, delete);
-	mvprintw(y+25,donex, done);
+	mvprintw(y+15,donex, done);
 	attroff(A_REVERSE);
 }
 
 void printEntry(entry* ent) {
-	int y = (LINES / 6 + 10);
+	int y = (LINES / 6 + 7);
 	int x = (COLS / 2 - 8);
 	Product* prod = ent->product;
-	mvprintw(y-1, x-4, "%.1f Servings has: ", ent->servings); 
 	mvprintw(y, x, "Calories: %.1f", gramsCaloriesPerServing(prod) * ent->servings);
 	mvprintw(y+1, x, "Carbs: %.1f g", gramsCarbsPerServing(prod)  * ent->servings);
 	mvprintw(y+2, x, "Fat: %.1f g", gramsFatPerServing(prod)  * ent->servings);

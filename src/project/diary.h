@@ -28,4 +28,5 @@ entry* entryFromString(char*, struct Node*);
 void deleteAtIndex(vector* diary, int index);
 void saveDiary(vector* diary, string* username);
 void deleteFile(string* username);
+void sortAtIndex(vector* diary, int index);
 #endif

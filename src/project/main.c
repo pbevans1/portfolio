@@ -25,8 +25,9 @@ int main(int argc, char** argv) {
         printf("\tUsername: If you've forgotten your username try 'make list-users'\n");
         return 2;
     }
-    
+    //Read products into AVL tree
     products = readProductFile("data/food_database.csv");
+    // Display menu using AVL tree for lookup
     displayMainMenu(products);
  
 
