@@ -129,6 +129,7 @@ entry* entryFromString(char* line, struct Node* productRoot) {
     // Read Date
     nextField = mystrsep(&line, delimiter);
     if (nextField == NULL) return NULL;
+    if (strlen(nextField) != 10) return NULL;
     string* date = strFrom(nextField);
 
     // Read product name

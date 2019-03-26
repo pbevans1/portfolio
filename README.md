@@ -13,7 +13,7 @@ Change into the 'portfolio/' directory by entering 'cd portfolio'.
 
 The project expects a tilde delimited csv file called 'food_database.csv' to be in the directory 'data'. The file is expected to be in the following format:
         product id~product name~manufacturer~energy units~carb units~fat units~protein units~serving size in grams or ml~grams or ml~serving size~serving size units
-
+        Lines longer than 9000 characters are considered invalid. 
 
 
 Once the download is complete you have several options to build the project.
@@ -49,4 +49,5 @@ Technical Notes:
         The nutrition database is stored in memory as a self-balancing binary search tree (AVL Tree). It can run search in log n time, and builds in n log n time. 
 
         The user diary is stored as a dynamic array of entries. It maintains a sorted list, running a modified insertion sort on each entry as it is added. This allows constant time read and update access at the expense of O(n) insert and delete. Since the diary needs to be displayed in order, an array was a natural choice. In addition, since every entry is made manually through the user interface, the size of the diary is expected to be reasonably small so the cost of linear insert and delete is not expected to impact the user experience.
+
 
