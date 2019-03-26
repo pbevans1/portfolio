@@ -27,7 +27,11 @@ int main(int argc, char** argv) {
     }
     //Read products into AVL tree
     products = readProductFile("data/food_database.csv");
-    // Display menu using AVL tree for lookup
+    if (products == NULL) {
+        printf("data/food_database.csv has no valid entries. You can use 'make database' to rebuild it.\n");
+        return 1;
+    }
+    // Enter menu
     displayMainMenu(products);
  
 

@@ -15,7 +15,9 @@ struct Node* readProductFile(char location[]) {
     char *line;
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
-        products = insert(products, getProductFromString(line));
+        Product* prod = getProductFromString(line);
+        if (prod == NULL) continue;
+        products = insert(products, prod);
     }
     fclose(fp);
 
@@ -46,7 +48,7 @@ int fileExists(char* filename) {
 vector* readDiary(char* username, struct Node* productRoot) {
     vector* diary = newVector();
     char location[100] = {'\0'};
-    const int BUFFER_SIZE = 1000;
+    const int BUFFER_SIZE = 9000;
     char buffer[BUFFER_SIZE];
     char *line;
    
@@ -61,7 +63,9 @@ vector* readDiary(char* username, struct Node* productRoot) {
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
         if (strncmp(line, "~~~", 3) == 0) continue;
-        insertIntoDiary(diary, entryFromString(line, productRoot));
+        entry* new = entryFromString(line, productRoot);
+        if (new == NULL) continue;
+        insertIntoDiary(diary, new);
     }
     
     fclose(fp);

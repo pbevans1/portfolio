@@ -168,6 +168,7 @@ Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
 	char backButton[] = "   Back   ";
 	productNames[0] = backButton;
 	for (int i = 0; i < 5; i++) {
+		if (nearestProducts[i] == NULL) nearestProducts[i] = closest;
 		char* name = nearestProducts[i]->product->name->contents;
 		// printw("%d: %s\n", i, name);
 		int nameLen = strlen(name);

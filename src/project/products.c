@@ -16,6 +16,7 @@ Product* getProductFromString(char* line) {
 
     
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         product->product_id = atoi(nextField);
     } else {
@@ -23,12 +24,15 @@ Product* getProductFromString(char* line) {
     }
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     product->name = strFrom(nextField);
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     product->manufacturer = strFrom(nextField);
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         product->energy_units = atof(nextField);
     } else {
@@ -36,6 +40,7 @@ Product* getProductFromString(char* line) {
     }
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         product->carb_units = atof(nextField);
     } else {
@@ -43,6 +48,7 @@ Product* getProductFromString(char* line) {
     }
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         product->fat_units = atof(nextField);
     } else {
@@ -50,6 +56,7 @@ Product* getProductFromString(char* line) {
     }
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         product->protein_units = atof(nextField);
     } else {
@@ -57,6 +64,7 @@ Product* getProductFromString(char* line) {
     }
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         product->ml_g_size = atof(nextField);
     } else {
@@ -64,9 +72,12 @@ Product* getProductFromString(char* line) {
     }
 
     nextField = mystrsep(&line, delimiter);
-    strcpy(product->ml_g, nextField);
+    if (nextField == NULL) return NULL;
+    strncpy(product->ml_g, nextField, 2);
+    product->ml_g[2] = '\0';
 
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         product->serving_size = atoi(nextField);
     } else {
@@ -74,6 +85,7 @@ Product* getProductFromString(char* line) {
     }
     
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     product->serving_units = strFrom(nextField);
 
     return product;

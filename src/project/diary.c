@@ -5,6 +5,7 @@
 entry* newEntry(string* productName, string* date, double numServings, struct Node* root) {
     
     struct Node* productNode = findClosestNode(root, productName->contents);
+    if(productNode == NULL) return NULL;
     Product* closestProduct = productNode->product;
     if (!strEquals(closestProduct->name, productName)) {
         return NULL;
@@ -19,6 +20,7 @@ entry* newEntry(string* productName, string* date, double numServings, struct No
     new->key = joinStr(date, productName, ": ");
     return new;
 }
+
 entry* entryFromProduct(Product* prod, string* date, double numServings) {
     entry* new = malloc(sizeof(entry));
     new->product = prod;
@@ -126,14 +128,17 @@ entry* entryFromString(char* line, struct Node* productRoot) {
     int numServings;
     // Read Date
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     string* date = strFrom(nextField);
 
     // Read product name
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     string* productName = strFrom(nextField);
     
     // Read servings
     nextField = mystrsep(&line, delimiter);
+    if (nextField == NULL) return NULL;
     if (strlen(nextField)) {
         numServings = atof(nextField);
     } else {

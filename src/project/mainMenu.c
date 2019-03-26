@@ -356,10 +356,12 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
             if (choice == -5) finish(0);
             choice++; /*  Convert choice from index to counting number; */
             if (choice == 1) {
+                // open it
                 currentUser->diary = readDiary(username->contents, productRoot);
                 return currentUser;
             }
             if (choice == 2) {
+                // open it
                 deleteFile(username);
                 deleted = 1;
                 currentUser->diary = newVector();
