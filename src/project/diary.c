@@ -77,12 +77,15 @@ void insertIntoDiary(vector* diary, entry* new) {
 
 void deleteAtIndex(vector* diary, int index) {
     if (index < 0 || index >= diary->size) return;
+    // Save a pointer to the entry to delete
+    entry* del = (entry*) diary->contents[index];
     // shift contents left
     for(int i = index; i < diary->size - 1; i++) {
         diary->contents[i] = diary->contents[i+1];
     }
     // remove the last entry (which is now duplicated)
-    entry* del = (entry*) popFromVec(diary);
+    popFromVec(diary);
+    // Free the  entry to delete
     freeEntry(del);
 }
 

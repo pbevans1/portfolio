@@ -36,6 +36,7 @@ void printStr(string* str) {
     printf("%s", str->contents);
 }
 
+// Create new string from char*
 string* strFrom(char* str) {
     string* new = malloc(sizeof(string));
     int capacity = strlen(str) + 1;
@@ -47,7 +48,8 @@ string* strFrom(char* str) {
     new->size = size;
     return new;
 }
- 
+
+// Append to string class 
 void pushToStr(string* str, char value) {
     int i;
     char* temp_contents ;
@@ -68,6 +70,7 @@ void pushToStr(string* str, char value) {
     str->size++;
 }
 
+// Create a deep copy of a string
 string* copyStr(string* str) {
     int i;
     string* new = newString();
@@ -77,6 +80,7 @@ string* copyStr(string* str) {
     return new;
 }
 
+// Pop from a string
 char popFromStr(string* str) {
     int i;
     if (str->size == 0) return '\0';
@@ -97,13 +101,14 @@ char popFromStr(string* str) {
     return last;
 }
 
+// Deep free a string
 string* destroyStr(string* str) {
     free(str->contents);
     free(str);
     return NULL;
 }
 
-
+// Uppercase a target char array
 void uppercase(char target[]) {
     int i;
     int size = strlen(target);
@@ -113,6 +118,7 @@ void uppercase(char target[]) {
     }
 }
 
+// Trime whitespace from target char array
 void trim(char target[]) {
     int size = strlen(target);
     int lastIndex = 0;
@@ -122,6 +128,8 @@ void trim(char target[]) {
     }
     target[lastIndex + 1] = '\0';
 }
+
+// Trim whitespace from target string
 void trimStr(string* target) {
     //FIXME: Double check that size is correct
     int lastIndex = 0;
@@ -132,11 +140,13 @@ void trimStr(string* target) {
     target->size = lastIndex+1;
 }
 
+// Deep free a string
 void freeStr(string* target) {
     free(target->contents);
     free(target);
 }
 
+// Concatenate two strings with a separating charactor. Returns a new string
 string* joinStr(string* s1, string* s2, char* separator) {
     int i, size;
     string* new;
@@ -146,13 +156,15 @@ string* joinStr(string* s1, string* s2, char* separator) {
     new->size = size;
     new->capacity = size + 1;
     new->contents = malloc(sizeof(char) * new->capacity);
-    // Copy str1
+    // Copy str1 to new
     for (i = 0; i < s1->size; i++) {
         new->contents[i] = s1->contents[i];
     }
+    // Insert separator
     for (i = 0; i < strlen(separator); i++) {
         new->contents[i + s1->size] = separator[i];
     }
+    // Append str2
     for (i = 0; i < s2->size; i++) {
         new->contents[i + s1->size + strlen(separator)] = s2->contents[i];
     }

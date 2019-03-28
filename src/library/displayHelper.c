@@ -6,6 +6,8 @@ int centerHoriz(char message[], int numCols) {
     return ((numCols - strlen(message))/2);
 }
 
+// Helper method to pad a char* with whitespace
+// Returns result as a string
 string* createButtonString(char* text, int size) {
 	string* new = malloc(sizeof(string));
 	new->size = size;
@@ -28,7 +30,7 @@ string* createButtonString(char* text, int size) {
 }
 
 /* Report the choice according to mouse position */
-// From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html
+// Modified From http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html
 int report_choice(int mouse_x, int mouse_y, int startx, int endx, int y, int numChoices, char* choices[])
 {	
 	int choice;
@@ -43,8 +45,9 @@ int report_choice(int mouse_x, int mouse_y, int startx, int endx, int y, int num
 }
 
 
+// Specialized helper function for selecting items from the diary screen
+// Corrects for double spacing of diary entries
 int reportDiaryChoice(int mouse_x, int mouse_y, int startx, int endx , int y, int numChoices, char* choices[]) 
-//corrects for double spacing
 {	
 	int choice;
 	if(mouse_y == y && mouse_x >= (COLS / 2) - 5  && mouse_x <= (COLS / 2) + 5) return 0; // handle add button
@@ -57,12 +60,14 @@ int reportDiaryChoice(int mouse_x, int mouse_y, int startx, int endx , int y, in
 	return -2;
 }
 
+// Prints a message centered horizontally at height y
 void printCentered(int y, char* message) {
 	int x = (COLS - strlen(message)) / 2;
 	mvprintw(y, x, message);
 	refresh();
 }
 
+// Gets the length of the longest string the user might click
 int maxLen(char** choices, int numChoices) {
 	int max = -1;
 	for (int i = 0; i < numChoices; i++) {
@@ -72,6 +77,7 @@ int maxLen(char** choices, int numChoices) {
 	return max;
 }
 
+// Print spaces until the cursor reaches the given x-coordinate
 void writeSpacesUntil(int x) {
 	int currentx, y;
 	getyx(stdscr, y, currentx);
@@ -81,6 +87,8 @@ void writeSpacesUntil(int x) {
 	y--;
 }
 
+// Displays all of the users choices, reports the number of the choice selected
+// -5 signifies exit, all other integers signify a choice
 int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices) {
 	cbreak(); 
 	noecho();
@@ -116,6 +124,8 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 	return choice; // return the choice
 }
 
+// Displays all of the users choices on the diary screen, reports the number of the choice selected
+// -5 signifies exit, all other integers signify a choice
 int selectFromDiary(int y, int x, char** choices, int numChoices) {
 	cbreak();               /* Don't wait for newline when reading characters */
     noecho();
@@ -152,6 +162,8 @@ int selectFromDiary(int y, int x, char** choices, int numChoices) {
 	return choice; // return the choice
 }
 
+// Displays produts similar to the string entered by the user
+// Returns the product whose name is clicked
 Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
 	clear();
 	printBackButton();
@@ -182,7 +194,7 @@ Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
 
 }
 
-
+// Reads a string to search. Handles clicks on the 'search' button and 'exit' buttons
 string* readProductName(int startx, int starty, int maxLength, char delimiter, struct Node* productRoot) {
 	noecho(); 
 	string* input = newString();
@@ -230,6 +242,7 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 	return input;
 }
 
+// Reads a date. Handles clicks on the 'Enter' and 'Back' buttons
 string* readDate(int startx, int starty, char delimiter, struct Node* productRoot) {
 	noecho(); 
 	string* input = newString();

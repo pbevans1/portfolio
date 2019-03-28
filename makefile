@@ -1,18 +1,17 @@
+# Define Variables
 CFLAGS = -std=c11 -g -Wall
 LIB = src/library
 PROJ = src/project
 BIN = bin
 DATA = data/food_database.csv
 DOWNLOADS = dataBuilder/Nutrients.csv dataBuilder/Serving_size.csv dataBuilder/Products.csv
-# PROJ_OBJS missing $(BIN)/serving.o 
-
 LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o $(BIN)/avlTree.o
 PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/diary.o $(PROJ)/main.c
 
 make: bin $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c $(DATA)
 	gcc $(CFLAGS) -lcurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
 
-# Library Files
+# Library File Recipes
 $(BIN)/customString.o: $(LIB)/customString.h $(LIB)/customString.c
 	gcc $(CFLAGS) -c $(LIB)/customString.c -o $(BIN)/customString.o
 
@@ -25,7 +24,7 @@ $(BIN)/vector.o: $(LIB)/vector.h $(LIB)/vector.c
 $(BIN)/avlTree.o: $(LIB)/avlTree.h $(LIB)/avlTree.c
 	gcc $(CFLAGS) -c $(LIB)/avlTree.c -o $(BIN)/avlTree.o
 
-# Project Files
+# Project File Recipes
 $(BIN)/mainMenu.o: $(PROJ)/mainMenu.h $(PROJ)/mainMenu.c
 	gcc $(CFLAGS) -c $(PROJ)/mainMenu.c -o $(BIN)/mainMenu.o
 
@@ -38,7 +37,7 @@ $(BIN)/read.o: 	$(PROJ)/read.h $(PROJ)/read.c
 $(BIN)/diary.o:  $(PROJ)/diary.h $(PROJ)/diary.c
 	gcc $(CFLAGS) -c $(PROJ)/diary.c -o $(BIN)/diary.o
 
-# data 
+# Data Check Recipes
 $(DATA): $(DOWNLOADS)
 	$(info echo 'data/food_database.csv' is missing. Add it or use 'make database' to build it.")
 	$(error missing data file)
@@ -48,14 +47,16 @@ $(DOWNLOADS):
 	$(info Add them to the directory or use 'make download 'to download them.)
 	$(error missing data file)
 
-# General 
+# Build Database Recipe
 database: $(DOWNLOADS)
 	mkdir data
 	./shellScripts/buildData.sh
 
+# Download Database Recipe
 download:
 	./shellScripts/download.sh
 
+# Helpful Commands
 test: make 
 	$(BIN)/main.out
 
