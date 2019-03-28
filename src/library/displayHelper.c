@@ -138,6 +138,7 @@ int selectFromDiary(int y, int x, char** choices, int numChoices) {
 	printCentered(y, choices[0]);
 	attroff(A_REVERSE);
 	
+    // Print each of the user's options
 	int maxlength = maxLen(choices, numChoices);
 	for (int i = 1; i < numChoices; i++) {
 		mvprintw(y+(i*2), x, choices[i]); //double space
@@ -167,10 +168,12 @@ int selectFromDiary(int y, int x, char** choices, int numChoices) {
 Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
 	clear();
 	printBackButton();
-	char instructions[] = "Click a product to select it, or back to search again.";
+	char instructions[] = "Click a product to select it, or 'back' to search again.";
 	printCentered(y, instructions);
 	struct Node* nearestProducts[5];
 	char* productNames[6];
+
+    // Find two predecessors and two succesors of the given AVL node
 	nearestProducts[0] = closest;
 	nearestProducts[1] = predecessor(closest);
 	nearestProducts[2] = predecessor(nearestProducts[1]);
@@ -179,6 +182,8 @@ Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
 	int maxLength = 0;
 	char backButton[] = "   Back   ";
 	productNames[0] = backButton;
+    
+    // Put the names of the products into a char** 
 	for (int i = 0; i < 5; i++) {
 		if (nearestProducts[i] == NULL) nearestProducts[i] = closest;
 		char* name = nearestProducts[i]->product->name->contents;
@@ -187,8 +192,9 @@ Product* selectFromNearbyProducts(int x, int y, struct Node* closest) {
 		if (nameLen > maxLength) maxLength = nameLen;
 		productNames[i + 1] = name;
 	}
+    // Pass the product names to a helper that will print and allow selections
 	int choice = selectFromDiary(y + 4, x, productNames, 6);
-	choice--; // convert to index into products
+	choice--; // convert user choice to index into products
 	if (choice < 0) return NULL;
 	return nearestProducts[choice]->product;
 
@@ -217,19 +223,21 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 			getyx(stdscr, y, x);
 			mvprintw(y, x-1, " ");
 			mvprintw(y, x-1, "\0");
-		} else if (ch >= 97 && ch <= 122 && input->size < maxLength) {
+		} else if (ch >= 97 && ch <= 122 && input->size < maxLength) { 
+            // Handle lowercase letters
 			ch -= 32;
-			pushToStr(input, ch);
-			addch(ch);
-		} else if (((ch == 32) || (ch >= 65 && ch <= 90)) && input->size < maxLength) {
-			pushToStr(input, ch);
-			addch(ch);
-		} else if (ch >= 48 && ch <= 57 && input->size < maxLength) {
 			pushToStr(input, ch);
 			addch(ch);
 		} else if (ch == '\n' && input->size != 0) {
 			break;
-		} else if (ch == KEY_MOUSE) {
+		} else if (ch >= 32 && ch<126 && input->size < maxLength) {
+            // Handle all other valid character codes
+			pushToStr(input, ch);
+			addch(ch);
+		// } else if (ch >= 48 && ch <= 57 && input->size < maxLength) {
+		// 	pushToStr(input, ch);
+		// 	addch(ch);
+		}  else if (ch == KEY_MOUSE) {
 			if (exitButtonWasClicked(ch, event)) {
 				return NULL;
 			}
@@ -237,7 +245,11 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
 					break;
 			}
-		}
+        }
+		// } else if () {
+        //     pushToStr(input, ch);
+		// 	addch(ch);
+        // }
     }
 	return input;
 }
