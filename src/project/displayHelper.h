@@ -1,12 +1,12 @@
 #ifndef __DISPLAY__HELP__H
 #define __DISPLAY__HELP__H
 #include <curses.h>
-#include "customString.h"
-#include "../project/products.h"
 #include <string.h>
 #include <stdlib.h>
+#include "../library/customString.h"
+#include "products.h"
 #include "../library/avlTree.h"
-#include "../project/diary.h"
+#include "diary.h"
 
 typedef struct __button {
     char* text;
@@ -15,7 +15,6 @@ typedef struct __button {
     int size;
 } Button;
 
-int backButtonWasClicked(int, MEVENT);
 void printExitButton();
 void printBackButton();
 int exitButtonWasClicked(int, MEVENT); 

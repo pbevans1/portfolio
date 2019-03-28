@@ -189,7 +189,7 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
                 printCentered(instructionHeight - 1, servingInstructions);
                 printCentered(instructionHeight, productInfo);
                 free(productInfo);
-                printExitButton();
+                printBackButton();
                 mvprintw(instructionHeight + 1, COLS/2 - 22, "Servings (i.e 1.0): ");
                 numServings = readFloat((COLS / 2) - 5, instructionHeight + 3, '\n', productRoot); 
                 if (numServings < 0) {

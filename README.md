@@ -1,15 +1,15 @@
 # Overview:
 
-This project is a nutrition tracking program - it allows users to log their meals and track macro-nutrient intake using data from the FDA. It is built in ANSI C11, and depends on the curses library to implement its user interface. If curses isn't installed on your machine, you'll need to download it. A video demonstration of the final product can be found at FIXME.
+This project is a nutrition tracking program - it allows users to log their meals and track macro-nutrient intake using data from the FDA's branded food product database. It is built in ANSI C11, and depends on the curses library to implement its user interface. If curses isn't installed on your machine, you'll need to download it. A video demonstration of the installation and running process can be found at FIXME.
 
 # Important Set up:
 1. Downloading curses - if curses isn't installed on your machine, you can follow these directions to install it: https://www.cyberciti.biz/faq/linux-install-ncurses-library-headers-on-debian-ubuntu-centos-fedora/
 
-2. Entering full screen - This project is intended to be run in full screen mode. If the terminal window is too small, some buttons may be invisible.
+2. Entering full screen - This project is intended to be run in full screen mode. If your terminal window is too small, some buttons may be invisible.
 
-3. (Hopefully done by default) Configuring you terminal - This project requires mouse input for navigation. If you can't click buttons inside the program, make sure that your terminal is configured to pass mouse input to programs. Unfortunately, this setting is specific to each terminal so I can't provide general directions. Thankfully, it seems to be enabled by default in most setups, so you probably don't need to worry about it. If you do need to change your settings, try searching for 'enable mouse input {your terminal name}'
+3. (Hopefully done by default) Configuring you terminal - This project requires mouse input for navigation. If you can't click buttons inside the program, make sure that your terminal is configured to pass mouse input to programs. Unfortunately, this setting is specific to each terminal so I can't provide general directions. Thankfully, it seems to be enabled by default in most setups, so you probably don't need to worry about it. If you do need to change your settings, try searching the web for 'enable mouse input {your terminal name}'
 
-4. (If you're running over ssh) Enable X11 Forwarding - ensure that both server and client are configured for X11 forwarding, and be sure to use the -Y option on you ssh comand. 'ssh -Y hostname@address'. Directions for configuring  X11 forwarding can be found at https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely
+4. (If you're running over ssh) Enable X11 Forwarding - ensure that both server and client are configured for X11 forwarding, and be sure to use the -Y option on you ssh comand ('ssh -Y hostname@address'). Directions for configuring  X11 forwarding can be found at https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely
 
 
 
@@ -36,7 +36,7 @@ This project is a nutrition tracking program - it allows users to log their meal
 
 
 ## Expected Inputs: 
-* The project expects a tilde delimited csv file called 'food_database.csv' to be in the directory 'data/'. The file is expected to be in the following format:
+* The project expects a tilde delimited .csv file called 'food_database.csv' to be in the directory 'data/'. The file is expected to be in the following format:
         product id\~product name\~manufacturer\~energy units\~carb units\~fat units\~protein units\~serving size in grams or ml\~grams or ml\~serving size\~serving size units  
 * Lines longer than 9000 characters are considered invalid, and will not be read by the program.
 
@@ -53,7 +53,9 @@ This project is a nutrition tracking program - it allows users to log their meal
 
 The nutrition database is stored in memory as a self-balancing binary search tree (AVL Tree). It can run search in log n time, and builds in n log n time. 
 
-The user diary is stored as a dynamic array of entries. It maintains a sorted list, running a modified insertion sort on each entry as it is added. This allows constant time read and update access at the expense of O(n) insert and delete. Since the diary needs to be displayed in order, an array was a natural choice. Since every entry is made manually through the user interface, the size of the diary is expected to be reasonably small so the cost of linear insert and delete is not expected to impact the user experience.
+The user diary is stored as a dynamic array of entries. It maintains a sorted list, running a modified insertion sort on each entry as it is added. This allows constant time read and update access at the expense of O(n) insert and delete.  Since every entry is made manually through the user interface, the size of the diary is expected to be reasonably small so the cost of linear insert and delete is not expected to impact the user experience.
+
+In fact, testing on OSX with a 2.3GHz Intel i5 and 8GB of RAM,  diary inserts and deletes happened in negligble time even when the diary had been programmatically expanded to over 100,000 entries. Since a diary of this size would be imply that a single user logs 5 entries a day every day for over 50 years, this performance tradeoff seems to be acceptable in practice.
 
 
 ## Some Helpful Commands:
@@ -73,13 +75,14 @@ The user diary is stored as a dynamic array of entries. It maintains a sorted li
 - All C source code is found in the 'portfolio/src/' directory. Code is split between 'library/', which contains code that is general (as opposed to being tied tightly to this project), and 'project/', which contains application specific code.    
 - Shell scripts, which are used to download and unzip the FDA files, as well as to build 'food_database.csv' can be found in the 'shellScripts/' directory. 
 - The 'data/' directory is where 'food_database.csv' should be. It will also hold user log files once they are created.
-- The 'dataBuilder/' directory is where the FDA files live. It also contains some intermediate files created by 'buildData.sh'
-- Dont' worry if not all of these directories are present on download. The Makefile will create them when they're needed.
+- The 'dataBuilder/' directory is where the raw FDA data files live. It also contains some intermediate files created by 'buildData.sh'
+- Dont' worry if not all of these directories are present on download. The Makefile will create them as they're needed.
         
         
 
 ## Final Directory Structure:
 <pre>
+.
 ├── README.md
 ├── bin
 │   ├── avlTree.o
@@ -98,7 +101,7 @@ The user diary is stored as a dynamic array of entries. It maintains a sorted li
 │   ├── read.o
 │   └── vector.o
 ├── data
-│   └──food_database.csv
+│   └── food_database.csv
 ├── dataBuilder
 │   ├── BFPD_Doc.pdf
 │   ├── BFPD_csv_07132018.zip
@@ -126,13 +129,13 @@ The user diary is stored as a dynamic array of entries. It maintains a sorted li
     │   ├── avlTree.h
     │   ├── customString.c
     │   ├── customString.h
-    │   ├── displayHelper.c
-    │   ├── displayHelper.h
     │   ├── vector.c
     │   └── vector.h
     └── project
         ├── diary.c
         ├── diary.h
+        ├── displayHelper.c
+        ├── displayHelper.h
         ├── main.c
         ├── mainMenu.c
         ├── mainMenu.h

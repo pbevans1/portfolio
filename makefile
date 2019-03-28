@@ -5,8 +5,8 @@ PROJ = src/project
 BIN = bin
 DATA = data/food_database.csv
 DOWNLOADS = dataBuilder/Nutrients.csv dataBuilder/Serving_size.csv dataBuilder/Products.csv
-LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/displayHelper.o $(BIN)/avlTree.o
-PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/diary.o $(PROJ)/main.c
+LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/avlTree.o
+PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/diary.o $(BIN)/displayHelper.o $(PROJ)/main.c
 
 make: bin $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c $(DATA)
 	gcc $(CFLAGS) -lcurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
@@ -14,9 +14,6 @@ make: bin $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c $(DATA)
 # Library File Recipes
 $(BIN)/customString.o: $(LIB)/customString.h $(LIB)/customString.c
 	gcc $(CFLAGS) -c $(LIB)/customString.c -o $(BIN)/customString.o
-
-$(BIN)/displayHelper.o: $(LIB)/displayHelper.c $(LIB)/displayHelper.h
-	gcc $(CFLAGS) -c $(LIB)/displayHelper.c -o $(BIN)/displayHelper.o
 
 $(BIN)/vector.o: $(LIB)/vector.h $(LIB)/vector.c
 	gcc $(CFLAGS) -c $(LIB)/vector.c -o $(BIN)/vector.o
@@ -27,6 +24,9 @@ $(BIN)/avlTree.o: $(LIB)/avlTree.h $(LIB)/avlTree.c
 # Project File Recipes
 $(BIN)/mainMenu.o: $(PROJ)/mainMenu.h $(PROJ)/mainMenu.c
 	gcc $(CFLAGS) -c $(PROJ)/mainMenu.c -o $(BIN)/mainMenu.o
+
+$(BIN)/displayHelper.o: $(PROJ)/displayHelper.c $(PROJ)/displayHelper.h
+	gcc $(CFLAGS) -c $(PROJ)/displayHelper.c -o $(BIN)/displayHelper.o
 
 $(BIN)/products.o: 	$(PROJ)/products.h $(PROJ)/products.c
 	gcc $(CFLAGS) -c $(PROJ)/products.c -o $(BIN)/products.o

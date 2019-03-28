@@ -5,7 +5,7 @@
 #include "../library/avlTree.h"
 #include <signal.h>
 #include <stdlib.h>
-#include "../library/displayHelper.h"
+#include "displayHelper.h"
 #include "string.h"
 #include "read.h"
 #include "diary.h"
