@@ -1,6 +1,6 @@
 # Overview:
 
-This project is a nutrition tracking program - it allows users to log their meals and track macro-nutrient intake using data from the FDA's branded food product database. It is built in ANSI C11, and depends on the curses library to implement its user interface. If curses isn't installed on your machine, you'll need to download it. A video demonstration of the installation and running process can be found at FIXME.
+This project is a nutrition tracking program - it allows users to log their meals and track macro-nutrient intake using data from the FDA's branded food product database. It is built in ANSI C11, and depends on the curses library to implement its user interface. If curses isn't installed on your machine, you'll need to download it. A video demonstration of the running process can be found at https://youtu.be/nMw8eHx4nZE.
 
 # Important Set up:
 1. Downloading curses - if curses isn't installed on your machine, you can follow these directions to install it: https://www.cyberciti.biz/faq/linux-install-ncurses-library-headers-on-debian-ubuntu-centos-fedora/
