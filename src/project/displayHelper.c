@@ -436,18 +436,7 @@ void printBackButton() {
 	mvprintw(y_coordinate, x_coordinate, exit);
 	attroff(A_REVERSE);
 }
-
-// int backButtonWasClicked(int input, MEVENT event) {
-// 	int backHeight  = (LINES / 6) + 4;
-// 	int backX = max((COLS / 2  - 30), 0);
-// 	if (input == KEY_MOUSE) {
-// 		if(getmouse(&event) == OK){
-// 			if (event.y ==  backHeight && event.x >=  backX && event.x <= backX + 10)
-// 				return 1;
-// 		}
-// 	}
-// 	return 0;
-// }	
+	
 
 int exitButtonWasClicked(int input, MEVENT event) {
 	int backHeight  = 0;

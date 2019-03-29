@@ -92,13 +92,13 @@ struct Node* insert(struct Node* node, Product* prod)
         return(newNode(prod)); 
     char* key = prod->name->contents;
     int keysize = prod->name->size;
-    if (strncmp(key,  node->key, keysize) < 0) {
+    if (strncmp(key,  node->key, keysize + 1) < 0) {
         node->left  = insert(node->left, prod); 
         node->left->parent = node;
         /* printf(" %s left of %s\n", node->) */
     }
         
-    else if (strncmp(key,  node->key, keysize) > 0) {
+    else if (strncmp(key,  node->key, keysize + 1) > 0) {
         node->right = insert(node->right, prod); 
         node->right->parent = node;
     }
@@ -118,22 +118,22 @@ struct Node* insert(struct Node* node, Product* prod)
      there are 4 cases */
   
     /*  Left Left Case */
-    if (balance > 1 &&  (strncmp(key, node->left->key, keysize) < 0)) /* (balance > 1 && key < node->left->key) */
+    if (balance > 1 &&  (strncmp(key, node->left->key, keysize + 1) < 0)) /* (balance > 1 && key < node->left->key) */
         return rightRotate(node); 
   
     /* Right Right Case */
-    if (balance < -1 && (strncmp(key, node->right->key, keysize) > 0))  /*(balance < -1 && key > node->right->key) */
+    if (balance < -1 && (strncmp(key, node->right->key, keysize + 1) > 0))  /*(balance < -1 && key > node->right->key) */
         return leftRotate(node); 
   
     /* Left Right Case  */
-    if (balance > 1 && (strncmp(key, node->left->key, keysize) > 0)) /* (balance > 1 && key > node->left->key) */
+    if (balance > 1 && (strncmp(key, node->left->key, keysize + 1) > 0)) /* (balance > 1 && key > node->left->key) */
     { 
         node->left =  leftRotate(node->left); 
         return rightRotate(node); 
     } 
   
     /* Right Left Case  */
-    if (balance < -1 && (strncmp(key, node->right->key, keysize) < 0)) /* (balance < -1 && key < node->right->key)*/
+    if (balance < -1 && (strncmp(key, node->right->key, keysize + 1) < 0)) /* (balance < -1 && key < node->right->key)*/
     { 
         node->right = rightRotate(node->right); 
         return leftRotate(node); 
@@ -191,7 +191,7 @@ struct Node * maxValue(struct Node* node) {
 } 
   
   
-/*Adapted from https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/ */
+/*From https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/ */
 struct Node* successor(struct Node *n) 
 { 
   if(n == NULL) return NULL;
@@ -232,8 +232,9 @@ struct Node* predecessor(struct Node *n)
 struct Node* findClosestNode(struct Node* root, char* key) {
     if (root == NULL) return NULL;
     int keysize = strlen(key);
-    if (strncmp(key, root->key, keysize) == 0) return root;
-    if (strncmp(key, root->key, keysize) < 0) {
+    // if ((strncmp(key, root->key, keysize) == 0)) return root;
+    if ((strncmp(key, root->key, keysize + 1) == 0) && strlen(root->key) == keysize) return root;
+    if (strncmp(key, root->key, keysize + 1) <= 0) {
         //search left
         if (root->left == NULL) return root;
         return findClosestNode(root->left, key);

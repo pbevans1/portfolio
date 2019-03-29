@@ -11,7 +11,6 @@
 #include "mainMenu.h"
 #include "../library/avlTree.h"
 
-
 int main(int argc, char** argv) {
     struct Node* products;
     if (!fileExists("data/food_database.csv")) {
@@ -25,10 +24,10 @@ int main(int argc, char** argv) {
         printf("\tUsername: If you've forgotten your username try 'make list-users'\n");
         return 2;
     }
-    //Read products into AVL tree
-    // An AVL tree provides O(log(n)) search and takes only O(n log n) time to build
-    // Since build runs just once (on program start) while search runs very frequently
-    // this tradeoff seems desirable.
+    // Read products into AVL tree
+    //   An AVL tree provides O(log(n)) search and takes only O(n log n) time to build
+    //   Since build runs just once (on program start) while search runs very frequently
+    //   this tradeoff seems desirable.
     products = readProductFile("data/food_database.csv");
     if (products == NULL) {
         printf("data/food_database.csv has no valid entries. You can use 'make database' to rebuild it.\n");
@@ -36,8 +35,6 @@ int main(int argc, char** argv) {
     }
     // Enter menu
     displayMainMenu(products);
- 
-
     return 0;
 } 
 

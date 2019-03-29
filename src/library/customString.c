@@ -23,12 +23,12 @@ int minInt(int a, int b) {
 
 int strEquals(string* str1, string* str2) {
     int size = minInt(str1->size, str2->size);
-    return (strncmp(str1->contents, str2->contents, size) == 0);
+    return (strncmp(str1->contents, str2->contents, size + 1) == 0);
 }
 
 int strComesBefore(string* str1, string* str2) {
     int size = minInt(str1->size, str2->size);
-    return (strncmp(str1->contents, str2->contents, size) < 0);
+    return (strncmp(str1->contents, str2->contents, size + 1) < 0);
 }
 
 

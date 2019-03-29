@@ -64,7 +64,7 @@ void insertIntoDiary(vector* diary, entry* new) {
     while(previousIndex >= 0) {
         entry* previousEntry = (entry*) diary->contents[previousIndex];
         int strSize = min(previousEntry->key->size, new->key->size);
-        if (strncmp(previousEntry->key->contents, new->key->contents, strSize) < 0) {
+        if (strncmp(previousEntry->key->contents, new->key->contents, strSize + 1) < 0) {
             //if entries are out of order
             swapEntriesAt(diary, previousIndex, (previousIndex + 1));
             previousIndex--;
@@ -97,7 +97,7 @@ void sortAtIndex(vector* diary, int index) {
     while(previousIndex >= 0) {
         entry* previousEntry = (entry*) diary->contents[previousIndex];
         int strSize = min(previousEntry->key->size, new->key->size);
-        if (strncmp(previousEntry->key->contents, new->key->contents, strSize) < 0) {
+        if (strncmp(previousEntry->key->contents, new->key->contents, strSize + 1) < 0) {
             //if entries are out of order
             swapEntriesAt(diary, previousIndex, (previousIndex + 1));
             previousIndex--;
@@ -108,7 +108,7 @@ void sortAtIndex(vector* diary, int index) {
      while(nextIndex < diary->size) {
         entry* nextEntry = (entry*) diary->contents[nextIndex];
         int strSize = min(nextEntry->key->size, new->key->size);
-        if (strncmp(nextEntry->key->contents, new->key->contents, strSize) > 0) {
+        if (strncmp(nextEntry->key->contents, new->key->contents, strSize + 1) > 0) {
             //if entries are out of order
             swapEntriesAt(diary, nextIndex, (nextIndex - 1));
             nextIndex++;
