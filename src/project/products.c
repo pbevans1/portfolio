@@ -2,9 +2,6 @@
 
 #ifndef __PRODUCTS__C
 #define __PRODUCTS__C
-#define GDSN 0
-#define LI 1
-#define UNKNOWN 2
 
 #include "products.h"
 
@@ -25,10 +22,12 @@ Product* getProductFromString(char* line) {
 
     nextField = mystrsep(&line, delimiter);
     if (nextField == NULL) return NULL;
+    uppercase(nextField);
     product->name = strFrom(nextField);
 
     nextField = mystrsep(&line, delimiter);
     if (nextField == NULL) return NULL;
+    uppercase(nextField);
     product->manufacturer = strFrom(nextField);
 
     nextField = mystrsep(&line, delimiter);

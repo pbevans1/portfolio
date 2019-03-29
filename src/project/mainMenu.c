@@ -62,6 +62,7 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
         if (product != NULL) break;
     }
     while (1) {
+        // Get Date
         clear();
         printBackButton();
         printCentered(instructionHeight, dateInstructions);
@@ -71,6 +72,7 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
         break;
     }
     while (1) {
+        // Get servings
         clear();
         char* productInfo = malloc(sizeof(char) * (product->name->size + 
             product->serving_units->size + 55));
@@ -93,6 +95,7 @@ void diaryAddMenu(vector* diary, struct Node* productRoot, string* username) {
     }
     insertIntoDiary(diary, new);
 }
+
 void reSort(vector* diary, int index, string* username) {
     sortAtIndex(diary, index);
     saveDiary(diary, username);
@@ -210,6 +213,7 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
             break;
         }
         if (choice == -7) {
+            // Done
             if (changeMade) reSort(diary, index, username);
             return;
         }

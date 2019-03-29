@@ -85,7 +85,7 @@ int getBalance(struct Node *N)
 /* Recursive function to insert a key in the subtree rooted 
    with node and returns the new root of the subtree. */
 //    Modified to compare string keys
-struct Node* insert(struct Node* node, Product* prod) 
+struct Node* insert(struct Node* root, struct Node* node, Product* prod, struct Result* todo) 
 { 
     /* 1.  Perform the normal BST insertion */
     if (node == NULL) 
@@ -93,17 +93,92 @@ struct Node* insert(struct Node* node, Product* prod)
     char* key = prod->name->contents;
     int keysize = prod->name->size;
     if (strncmp(key,  node->key, keysize + 1) < 0) {
-        node->left  = insert(node->left, prod); 
+        node->left  = insert(root, node->left, prod, todo); 
         node->left->parent = node;
         /* printf(" %s left of %s\n", node->) */
     }
         
     else if (strncmp(key,  node->key, keysize + 1) > 0) {
-        node->right = insert(node->right, prod); 
+        node->right = insert(root, node->right, prod, todo); 
         node->right->parent = node;
     }
-    else /* Equal keys are not allowed in BST */
+
+    else  {/* Equal keys are not allowed in BST */
+        string* temp = joinStr(prod->name, prod->manufacturer, " BY ");
+        // freeStr(prod->name);
+        prod->name = temp;
+        // printf("ROOT: %s\n", root->key);
+        todo->todo = prod;
+        // printf("CRASH?!\n");
+        // fflush(stdout);
         return node; 
+    }
+  
+    /* 2. Update height of this ancestor node */
+    node->height = 1 + max(height(node->left), 
+                           height(node->right)); 
+  
+    /* 3. Get the balance factor of this ancestor 
+          node to check whether this node became 
+          unbalanced */
+    int balance = getBalance(node); 
+  
+    /*If this node becomes unbalanced, then 
+     there are 4 cases */
+  
+    /*  Left Left Case */
+    if (balance > 1 &&  (strncmp(key, node->left->key, keysize + 1) < 0)) /* (balance > 1 && key < node->left->key) */
+        return rightRotate(node); 
+  
+    /* Right Right Case */
+    if (balance < -1 && (strncmp(key, node->right->key, keysize + 1) > 0))  /*(balance < -1 && key > node->right->key) */
+        return leftRotate(node); 
+  
+    /* Left Right Case  */
+    if (balance > 1 && (strncmp(key, node->left->key, keysize + 1) > 0)) /* (balance > 1 && key > node->left->key) */
+    { 
+        node->left =  leftRotate(node->left); 
+        return rightRotate(node); 
+    } 
+  
+    /* Right Left Case  */
+    if (balance < -1 && (strncmp(key, node->right->key, keysize + 1) < 0)) /* (balance < -1 && key < node->right->key)*/
+    { 
+        node->right = rightRotate(node->right); 
+        return leftRotate(node); 
+    } 
+  
+    /* return the (unchanged) node pointer */
+    return node; 
+} 
+
+struct Node* insertWithBrand(struct Node* root, struct Node* node, Product* prod) 
+{ 
+    // printf("CALLED!\n");
+    // fflush(stdout);
+    /* 1.  Perform the normal BST insertion */
+    if (node == NULL) 
+        return(newNode(prod)); 
+    char* key = prod->name->contents;
+    int keysize = prod->name->size;
+    if (strncmp(key,  node->key, keysize + 1) < 0) {
+        node->left = insertWithBrand(root, node->left, prod); 
+        node->left->parent = node;
+        /* printf(" %s left of %s\n", node->) */
+    }
+        
+    else if (strncmp(key,  node->key, keysize + 1) > 0) {
+        node->right = insertWithBrand(root, node->right, prod); 
+        node->right->parent = node;
+    }
+    else  {/* Equal keys are not allowed in BST */
+        // printf("%s matches %s", node->key, key);
+        // printf("CRASH?!\n");
+        // fflush(stdout);
+        return node; 
+    }
+    // printf("Back to %s\n", node->key);
+    // fflush(stdout);
   
     /* 2. Update height of this ancestor node */
     node->height = 1 + max(height(node->left), 

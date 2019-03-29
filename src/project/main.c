@@ -11,6 +11,16 @@
 #include "mainMenu.h"
 #include "../library/avlTree.h"
 
+void inOrderFile(struct Node *root) 
+{ 
+    if(root != NULL) 
+    { 
+        inOrder(root->left); 
+        printf("%s\n", root->key);
+        inOrder(root->right); 
+    } 
+} 
+
 int main(int argc, char** argv) {
     struct Node* products;
     if (!fileExists("data/food_database.csv")) {
@@ -35,6 +45,9 @@ int main(int argc, char** argv) {
     }
     // Enter menu
     displayMainMenu(products);
+    // FILE* fp = fopen("tree.txt", "w");
+    // inOrderFile(products);
+    // fclose(fp);
     return 0;
 } 
 

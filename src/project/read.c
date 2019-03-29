@@ -3,6 +3,8 @@
 #define __READ_CUST_C
 #include "read.h"
 
+
+
 struct Node* readProductFile(char location[]) {
     FILE* fp = fopen(location, "r");
     if (fp == NULL) {
@@ -16,8 +18,16 @@ struct Node* readProductFile(char location[]) {
     while (fgets(buffer, BUFFER_SIZE, fp)) {
         line = buffer;
         Product* prod = getProductFromString(line);
+        struct Result todo;
+        todo.todo = NULL;
+
         if (prod == NULL) continue;
-        products = insert(products, prod);
+        products = insert(products, products, prod, &todo);
+        // If the product already exists, try appending the " BY {manufacturer}"  and reinserting. 
+        // If that product exists too, we don't try any more. This allows one product per manufacturer with any given name
+        if (todo.todo != NULL){
+            products = insertWithBrand(products, products, todo.todo);
+        }     
     }
     fclose(fp);
 

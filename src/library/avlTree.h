@@ -9,6 +9,10 @@
 #include<stdlib.h> 
 
 
+struct Result {
+    Product* todo;
+};
+
 struct Node 
 { 
     char* key;
@@ -26,13 +30,14 @@ struct Node* newNode(Product* product);
 struct Node *rightRotate(struct Node *y);
 struct Node *leftRotate(struct Node *x);
 int getBalance(struct Node *N);
-struct Node* insert(struct Node* node, Product* prod);
+struct Node* insert(struct Node* root, struct Node* node, Product* prod, struct Result* todo);
 void preOrder(struct Node *root);
 void inOrder(struct Node *root);
 struct Node* findClosestNode(struct Node* root, char* key);
 struct Node* predecessor(struct Node *n) ;
 struct Node* successor(struct Node *n);
 int testAVL();
+struct Node* insertWithBrand(struct Node* root, struct Node* node, Product* prod);
 
 
 

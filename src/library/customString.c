@@ -42,7 +42,10 @@ string* strFrom(char* str) {
     int capacity = strlen(str) + 1;
     int size = capacity - 1;
     new->contents = malloc(sizeof(char) * capacity);
-    strncpy(new->contents, str, size);
+    for (int i = 0; i < size; i++) {
+        new->contents[i] = str[i];
+    }
+    // strncpy(new->contents, str, size);
     new->contents[size] = '\0';
     new->capacity = capacity;
     new->size = size;
@@ -131,7 +134,6 @@ void trim(char target[]) {
 
 // Trim whitespace from target string
 void trimStr(string* target) {
-    //FIXME: Double check that size is correct
     int lastIndex = 0;
     for(int i=0; i<target->size;i++) {
         if (target->contents[i] != ' ' && target->contents[i] != '\n' && target->contents[i] != '\t') lastIndex = i;
