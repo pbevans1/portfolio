@@ -13,7 +13,6 @@ entry* newEntry(string* productName, string* date, double numServings, struct No
     entry* new = malloc(sizeof(entry));
     new->isDeleted = 0;
     new->date = date;
-    // new->username = username;
     new->productName = productName;
     new->product = closestProduct;
     new->servings = numServings;
@@ -45,16 +44,6 @@ void freeEntry(entry* ent) {
     freeStr(ent->key);
     free(ent);
 }
-
-// int binarySearchDiary(vector* diary, string* key, int low, int high) {
-//     if (low > (high)) return -1;
-//     int mid = low + ((high - low) / 2);
-//     entry* current = (entry*) diary->contents[mid];
-//     int ordering = strcmp(key->contents, current->key->contents);
-//     if (ordering == 0) return mid;
-//     if (ordering < 0) return binarySearchDiary(diary, key, low, mid -1);
-//     return binarySearchDiary(diary, key, mid+1, high);
-// }
 
 void insertIntoDiary(vector* diary, entry* new) {
     if (new == NULL) return;

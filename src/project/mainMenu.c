@@ -388,7 +388,6 @@ struct user* getUserDiaryMenu(struct Node* productRoot) {
 
 void finish(int sig) {
         endwin();
-        /* do your non-curses wrapup here */
         exit(0);
 }
 

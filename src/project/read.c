@@ -39,7 +39,6 @@ int logFileExists(char* username) {
     strcpy(location, "data/");
     strcat(location, username);
     strcat(location, ".log");
-    // printf("Looking in: %s\n", location);
     FILE* logFile;
     logFile = fopen(location, "r");
     if (logFile == NULL) return 0;

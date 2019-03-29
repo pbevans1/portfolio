@@ -95,7 +95,6 @@ struct Node* insert(struct Node* root, struct Node* node, Product* prod, struct 
     if (strncmp(key,  node->key, keysize + 1) < 0) {
         node->left  = insert(root, node->left, prod, todo); 
         node->left->parent = node;
-        /* printf(" %s left of %s\n", node->) */
     }
         
     else if (strncmp(key,  node->key, keysize + 1) > 0) {
@@ -104,13 +103,13 @@ struct Node* insert(struct Node* root, struct Node* node, Product* prod, struct 
     }
 
     else  {/* Equal keys are not allowed in BST */
+        // Create a new product called {name} BY {manufacturer}
+
         string* temp = joinStr(prod->name, prod->manufacturer, " BY ");
-        // freeStr(prod->name);
+        freeStr(prod->name);
         prod->name = temp;
-        // printf("ROOT: %s\n", root->key);
+        // Store that product in the todo field
         todo->todo = prod;
-        // printf("CRASH?!\n");
-        // fflush(stdout);
         return node; 
     }
   
@@ -154,8 +153,6 @@ struct Node* insert(struct Node* root, struct Node* node, Product* prod, struct 
 
 struct Node* insertWithBrand(struct Node* root, struct Node* node, Product* prod) 
 { 
-    // printf("CALLED!\n");
-    // fflush(stdout);
     /* 1.  Perform the normal BST insertion */
     if (node == NULL) 
         return(newNode(prod)); 
@@ -164,7 +161,6 @@ struct Node* insertWithBrand(struct Node* root, struct Node* node, Product* prod
     if (strncmp(key,  node->key, keysize + 1) < 0) {
         node->left = insertWithBrand(root, node->left, prod); 
         node->left->parent = node;
-        /* printf(" %s left of %s\n", node->) */
     }
         
     else if (strncmp(key,  node->key, keysize + 1) > 0) {
@@ -172,13 +168,8 @@ struct Node* insertWithBrand(struct Node* root, struct Node* node, Product* prod
         node->right->parent = node;
     }
     else  {/* Equal keys are not allowed in BST */
-        // printf("%s matches %s", node->key, key);
-        // printf("CRASH?!\n");
-        // fflush(stdout);
         return node; 
     }
-    // printf("Back to %s\n", node->key);
-    // fflush(stdout);
   
     /* 2. Update height of this ancestor node */
     node->height = 1 + max(height(node->left), 
@@ -307,7 +298,6 @@ struct Node* predecessor(struct Node *n)
 struct Node* findClosestNode(struct Node* root, char* key) {
     if (root == NULL) return NULL;
     int keysize = strlen(key);
-    // if ((strncmp(key, root->key, keysize) == 0)) return root;
     if ((strncmp(key, root->key, keysize + 1) == 0) && strlen(root->key) == keysize) return root;
     if (strncmp(key, root->key, keysize + 1) <= 0) {
         //search left

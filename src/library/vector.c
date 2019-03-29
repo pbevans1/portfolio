@@ -35,13 +35,6 @@ void doubleVecSize(vector* vec) {
 void* popFromVec(vector* vec) {
     if (vec->size == 0) return NULL;
     void* last = vec->contents[--vec->size];
-    // if (vec->size <= (vec->capacity / 4)) {
-    //     vec->capacity /= 2;
-    //     void** temp_contents = malloc(sizeof(void*) * (vec)->capacity);
-    //     memcpy(temp_contents, vec->contents, sizeof(void*) * vec->capacity / 2);
-    //     free(vec->contents);
-    //     vec->contents = temp_contents;
-    // }
     return last;
 }
 

@@ -5,11 +5,15 @@ This project is a nutrition tracking program - it allows users to log their meal
 # Important Set up:
 1. Downloading curses - if curses isn't installed on your machine, you can follow these directions to install it: https://www.cyberciti.biz/faq/linux-install-ncurses-library-headers-on-debian-ubuntu-centos-fedora/
 
-2. Entering full screen - This project is intended to be run in full screen mode. If your terminal window is too small, some buttons may be invisible.
+1. Downloading unzip - if unzip isn't installed on your machine, you can follow these directions to install it: https://webhostinggeeks.com/howto/how-to-install-unzip-to-extract-zip-file-on-linux-rhel-centos-oracle-linux-67/
 
-3. (Hopefully done by default) Configuring you terminal - This project requires mouse input for navigation. If you can't click buttons inside the program, make sure that your terminal is configured to pass mouse input to programs. Unfortunately, this setting is specific to each terminal so I can't provide general directions. Thankfully, it seems to be enabled by default in most setups, so you probably don't need to worry about it. If you do need to change your settings, try searching the web for 'enable mouse input {your terminal name}'
+1. Downloading wget - if wget isn't installed on your machine, you can follow these directions to install it: https://www.cyberciti.biz/faq/how-to-install-wget-togetrid-of-error-bash-wget-command-not-found/
 
-4. (If you're running over ssh) Enable X11 Forwarding - ensure that both server and client are configured for X11 forwarding, and be sure to use the -Y option on you ssh comand ('ssh -Y hostname@address'). Directions for configuring  X11 forwarding can be found at https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely
+1. Entering full screen - This project is intended to be run in full screen mode. If your terminal window is too small, some buttons may be invisible.
+
+1. (Hopefully done by default) Configuring you terminal - This project requires mouse input for navigation. If you can't click buttons inside the program, make sure that your terminal is configured to pass mouse input to programs. Unfortunately, this setting is specific to each terminal so I can't provide general directions. Thankfully, it seems to be enabled by default in most setups, so you probably don't need to worry about it. If you do need to change your settings, try searching the web for 'enable mouse input {your terminal name}'
+
+1. (If you're running over ssh) Enable X11 Forwarding - ensure that both server and client are configured for X11 forwarding, and be sure to use the -Y option on you ssh comand ('ssh -Y hostname@address'). Directions for configuring  X11 forwarding can be found at https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely
 
 
 
