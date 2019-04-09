@@ -130,13 +130,13 @@ void diaryUpdateMenu(vector* diary, int index, struct Node* productRoot, string*
         int input = getch();
         if (input == KEY_MOUSE) {
             if(getmouse(&event) == OK){
-                choice = exitButtonWasClicked(input, event);
+                choice = exitButtonWasClicked(event.y, event.x);
                 if (choice == 1) {
                     if (changeMade)
                     saveDiary(diary, username);
                     return;
                 }
-                choice = updateMenuButtonClicked(input, event);
+                choice = updateMenuButtonClicked(event.y, event.x);
             }
         }
         if (choice == -11) {
@@ -399,3 +399,4 @@ void saveAndQuit(vector* diary, string* username) {
 
 
 #endif
+

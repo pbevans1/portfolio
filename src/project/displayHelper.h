@@ -17,7 +17,7 @@ typedef struct __button {
 
 void printExitButton();
 void printBackButton();
-int exitButtonWasClicked(int, MEVENT); 
+int exitButtonWasClicked(int, int); 
 int centerHoriz(char*, int);
 WINDOW *createWindow(int, int, int, int);
 void destroyWindow(WINDOW*);
@@ -34,10 +34,10 @@ string* readDate(int startx, int starty, char delimiter, struct Node* productRoo
 double readFloat(int startx, int starty, char delimiter, struct Node* productRoot);
 void printPreviousButton(vector* diary, int lastDisplayed, int instructionHeight);
 void printNextButton(vector* diary, int lastDisplayed, int instructionHeight);
-int previousButtonClicked(int input, MEVENT event);
-int nextButtonClicked(int input, MEVENT event);
+int previousButtonClicked(int input, int event);
+int nextButtonClicked(int input, int event);
 void printUpdateMenuButtons();
-int updateMenuButtonClicked(int input, MEVENT event);
+int updateMenuButtonClicked(int, int);
 void printEntry(entry*);
 void printCancelButton();
 #endif

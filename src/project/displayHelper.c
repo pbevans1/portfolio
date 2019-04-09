@@ -34,7 +34,6 @@ string* createButtonString(char* text, int size) {
 int report_choice(int mouse_x, int mouse_y, int startx, int endx, int y, int numChoices, char* choices[])
 {	
 	int choice;
- 
 	for(choice = 0; choice < numChoices; ++choice) {
 		if(mouse_y == (y + (choice * 2)) && mouse_x >= startx && mouse_x <= endx)
 		{	
@@ -115,10 +114,9 @@ int selectFromChoices(WINDOW* win, int y, int x, char** choices, int numChoices)
 		input = getch();
 		if (input == KEY_MOUSE) {
             // Handle click events
-			if (exitButtonWasClicked(input, event)) {
-				return -5;
-				}
+			MEVENT copy = event;
 			if(getmouse(&event) == OK){
+				if (exitButtonWasClicked(event.y, event.x)) return -5;
 				int mouseChoice = report_choice(event.x, event.y, x, x+maxlength, y, numChoices, choices);
 				if (mouseChoice < 0) continue;
 				choice = mouseChoice;
@@ -157,10 +155,11 @@ int selectFromDiary(int y, int x, char** choices, int numChoices) {
 		input = getch();
 		if (input == KEY_MOUSE) {
             // Handle click events
-			if (exitButtonWasClicked(input, event)) return -5;
-			if (previousButtonClicked(input, event)) return -3;
-			if (nextButtonClicked(input, event)) return -1;
 			if(getmouse(&event) == OK){
+				if (exitButtonWasClicked(event.y, event.x)) return -5;
+				if (previousButtonClicked(event.y, event.x)) return -3;
+				if (nextButtonClicked(event.y, event.x)) return -1;
+
 				int mouseChoice = reportDiaryChoice(event.x, event.y, x, x + maxlength, y, numChoices, choices);
 				if (mouseChoice < 0) continue;
 				choice = mouseChoice;
@@ -227,7 +226,7 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
     {
 		ch = getch();
 		if (ch == delimiter && input->size != 0) break;
-		if ((ch == 127 || ch == 8) && input->size > 0) { 
+		if ((ch == 127 || ch == 8 || ch == KEY_BACKSPACE) && input->size > 0) { 
             //Handle backspace or delete
 			popFromStr(input);
 			getyx(stdscr, y, x);
@@ -246,11 +245,9 @@ string* readProductName(int startx, int starty, int maxLength, char delimiter, s
 			addch(ch);
 		}  else if (ch == KEY_MOUSE) {
             // Handle click events
-			if (exitButtonWasClicked(ch, event)) {
-				return NULL;
-			}
-			if(getmouse(&event) == OK && input->size != 0){
-				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
+			if(getmouse(&event) == OK){
+				if (exitButtonWasClicked(event.y, event.x)) return NULL;
+				if ((event.y == starty && event.x >= startx- 5 && event.x <= startx + 5) && input->size != 0)
 					break;
 			}
         }
@@ -279,7 +276,7 @@ string* readDate(int startx, int starty, char delimiter, struct Node* productRoo
     {
 		ch = getch();
 		if (ch == delimiter && input->size == 10) break;
-		if ((ch == 127 || ch == 8) && input->size > 0) {
+		if ((ch == 127 || ch == 8 || ch == KEY_BACKSPACE) && input->size > 0) {
              // Handle backspace or delete
 			if (input->size == 5 || input->size == 8) {
                 // Automatically remove '/' characters
@@ -303,8 +300,10 @@ string* readDate(int startx, int starty, char delimiter, struct Node* productRoo
 			}
 		} else if (ch == KEY_MOUSE ) {
             // Handle click events
-			if (exitButtonWasClicked(ch, event)) return NULL;
+			
 			if(getmouse(&event) == OK && input->size == 10){
+				if (exitButtonWasClicked(event.y, event.x)) return NULL;
+
 				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
 				break;
 			}
@@ -335,7 +334,7 @@ double readFloat(int startx, int starty, char delimiter, struct Node* productRoo
     {
 		ch = getch();
 		if (ch == delimiter && input->size > 0) break;
-		if ((ch == 127 || ch == 8) && input->size > 0) { 
+		if ((ch == 127 || ch == 8 || ch == KEY_BACKSPACE) && input->size > 0) { 
             // Handle backspace or delete
 			popFromStr(input);
 			getyx(stdscr, y, x);
@@ -359,10 +358,9 @@ double readFloat(int startx, int starty, char delimiter, struct Node* productRoo
 		}
 		else if (ch == KEY_MOUSE ) {
             // Handle click events
-			if (exitButtonWasClicked(ch, event)) return -5;
-			if(getmouse(&event) == OK && input->size != 0){
-				// printw("x, %d, y: %d", event.x, event.y);
-				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
+			if(getmouse(&event) == OK){
+				if (exitButtonWasClicked(event.y, event.x)) return -5;
+				if ((event.y == starty && event.x >= startx- 5 && event.x <= startx + 5) && input->size != 0)
 				break;
 			}
 		}
@@ -396,7 +394,7 @@ string* readString(int starty, int startx, int maxLength, char delimiter) {
 		ch = getch();
 		
 		if (ch == delimiter && input->size != 0) break;
-		if ((ch == 127 || ch == 8) && input->size > 0) { 
+		if ((ch == 127 || ch == 8 || ch == KEY_BACKSPACE) && input->size > 0) { 
             // Handle backspace or delete
 			popFromStr(input);
 			getyx(stdscr, y, x);
@@ -413,11 +411,9 @@ string* readString(int starty, int startx, int maxLength, char delimiter) {
 			addch(ch);
 		} else if (ch == KEY_MOUSE) {
             // Handle click events
-			if (exitButtonWasClicked(ch, event)) {
-				return NULL;
-			}	
-			if(getmouse(&event) == OK && input->size != 0){
-				if (event.y == starty && event.x >= startx- 5 && event.x <= startx + 5)
+			if(getmouse(&event) == OK){
+				if (exitButtonWasClicked(event.y, event.x)) return NULL;
+				if ((event.y == starty && event.x >= startx- 5 && event.x <= startx + 5) && input->size != 0)
 				break;
 			}
 		} 
@@ -438,15 +434,11 @@ void printBackButton() {
 }
 	
 
-int exitButtonWasClicked(int input, MEVENT event) {
+int exitButtonWasClicked(int y, int x) {
 	int backHeight  = 0;
 	int backX = 0;
-	if (input == KEY_MOUSE) {
-		if(getmouse(&event) == OK){
-			if (event.y ==  backHeight && event.x >=  backX && event.x <= backX + 10)
+			if (y ==  backHeight && x >=  backX && x <= backX + 10)
 				return 1;
-		}
-	}
 	return 0;
 }	
 
@@ -467,52 +459,43 @@ void printNextButton(vector* diary, int lastDisplayed, int instructionHeight) {
 	}
 }
 
-int previousButtonClicked(int input, MEVENT event) {
+int previousButtonClicked(int inY, int inX) {
 	int x = ( 2 * COLS / 7);
 	int y = (LINES / 6 + 2);
-	if (input == KEY_MOUSE) {
-		if(getmouse(&event) == OK){
-			if (event.y ==  y && event.x >=  x && event.x <= x + 10)
-				return 1;
-		}
+	if (inY ==  y && inX >=  x && inX <= x + 10) {
+		return 1;
 	}
 	return 0;
 }
 
-int nextButtonClicked(int input, MEVENT event) {
+int nextButtonClicked(int inY, int inX) {
 	int x = ( 4 * COLS / 7 + 10);
 	int y = (LINES / 6 + 2);
-	if (input == KEY_MOUSE) {
-		if(getmouse(&event) == OK){
-			if (event.y ==  y && event.x >=  x && event.x <= x + 10)
-				return 1;
-		}
+	if (inY ==  y && inX >=  x && inX <= x + 10) {
+		return 1;
 	}
 	return 0;
 }
 
 // Report which button was clicked on the update menu
-int updateMenuButtonClicked(int input, MEVENT event) {
+int updateMenuButtonClicked(int inY, int inX) {
 	int y = (LINES / 6 + 2);
 	int itemx = ( 2 * COLS / 7);
 	int datex = (COLS / 2 -8);
 	int servingsx = ( 4 * COLS / 7 + 12);
 	int donex= (COLS / 2 -8);
 	int deletex = (COLS / 2 -8);
-	if (input == KEY_MOUSE) {
-		if(getmouse(&event) == OK){
-			if (event.y ==  y && event.x >=  itemx && event.x <= itemx + 16)
-				return -11;
-			if (event.y ==  y && event.x >=  datex && event.x <= datex + 16)
-				return - 10;
-			if (event.y ==  y && event.x >=  servingsx && event.x <= servingsx + 16)
-				return - 9;
-			if (event.y ==  y + 2 && event.x >=  deletex && event.x <= deletex + 16)
-				return - 8;
-			if (event.y ==  y + 15 && event.x >=  donex && event.x <= donex + 16)
-				return - 7;
-		}
-	}
+
+	if (inY ==  y && inX >=  itemx && inX <= itemx + 16)
+		return -11;
+	if (inY ==  y && inX >=  datex && inX <= datex + 16)
+		return - 10;
+	if (inY ==  y && inX >=  servingsx && inX <= servingsx + 16)
+		return - 9;
+	if (inY ==  y + 2 && inX >=  deletex && inX <= deletex + 16)
+		return - 8;
+	if (inY ==  y + 15 && inX >=  donex && inX <= donex + 16)
+		return - 7;
 	return 0;
 }
 
