@@ -9,7 +9,7 @@ LIB_OBJS = $(BIN)/vector.o $(BIN)/customString.o $(BIN)/avlTree.o
 PROJ_OBJS = $(BIN)/mainMenu.o $(BIN)/products.o $(BIN)/read.o $(BIN)/diary.o $(BIN)/displayHelper.o $(PROJ)/main.c
 
 make: bin $(PROJ_OBJS) $(LIB_OBJS) $(PROJ)/main.c $(DATA)
-	gcc $(CFLAGS) -lcurses $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out
+	gcc $(CFLAGS) $(PROJ_OBJS) $(LIB_OBJS) -o $(BIN)/main.out -lcurses 
 
 # Library File Recipes
 $(BIN)/customString.o: $(LIB)/customString.h $(LIB)/customString.c
